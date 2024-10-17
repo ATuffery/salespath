@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.iutrodez</groupId>
-    <artifactId>SalesPathApp</artifactId>
+    <artifactId>SalesPathAPI</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SalesPathApp</name>
-    <description>SalesPathApp</description>
+    <name>SalesPathAPI</name>
+    <description>SalesPathAPI</description>
     <url/>
     <licenses>
         <license/>
