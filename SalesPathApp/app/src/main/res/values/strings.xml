@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SalesPath</string>
+    <string name="newAccount">Créez un compte</string>
 </resources>
