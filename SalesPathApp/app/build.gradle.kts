@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "fr.iutrodez.salespathapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "fr.iutrodez.salespathapp"
