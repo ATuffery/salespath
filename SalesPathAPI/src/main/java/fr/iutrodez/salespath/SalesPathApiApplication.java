@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapi;
+package fr.iutrodez.salespath;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
