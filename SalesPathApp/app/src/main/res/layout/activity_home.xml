@@ -1,0 +1,77 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Carte OSMDroid -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
+    <!-- Section itinéraires -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Itinéraires"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_ajouter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter"
+            android:layout_marginTop="8dp" />
+
+        <!-- Liste d'itinéraires -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tv_itineraire_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Itinéraire 1"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_itineraire_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Créé le 10/10/2024" />
+
+            <TextView
+                android:id="@+id/tv_itineraire_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5 clients/prospects à visiter"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btn_commencer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Commencer" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
