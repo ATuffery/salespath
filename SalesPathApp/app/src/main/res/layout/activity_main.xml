@@ -15,6 +15,16 @@
         android:src="@drawable/logo"
         android:layout_marginBottom="@dimen/margin_bottom_large" />
 
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginBottom="@dimen/margin_bottom_extra_large"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        android:textColor="@color/alert"/>
+
     <!-- Email Input -->
     <EditText
         android:id="@+id/email"
@@ -64,7 +74,8 @@
         android:padding="@dimen/padding_default"
         android:backgroundTint="@color/primary"
         android:textColor="@color/white"
-        android:layout_marginTop="@dimen/margin_bottom_extra_large"/>
+        android:layout_marginTop="@dimen/margin_bottom_extra_large"
+        android:onClick="connect"/>
 
     <!-- Create Account Text -->
     <TextView
