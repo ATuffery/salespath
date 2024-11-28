@@ -23,6 +23,8 @@
         android:layout_marginBottom="@dimen/margin_bottom_extra_large"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginHorizontal="@dimen/margin_horizontal"
         android:textColor="@color/alert"/>
 
     <!-- Email Input -->

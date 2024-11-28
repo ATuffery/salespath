@@ -54,7 +54,13 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEntry.getText().toString();
 
         if (login.isEmpty() || password.isEmpty()) {
-            goToHomePage();
+            errorMsg.post(new Runnable() {
+                public void run() {
+                    errorMsg.setText(getString(R.string.error_login));
+                }
+            });
+
+            return;
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
