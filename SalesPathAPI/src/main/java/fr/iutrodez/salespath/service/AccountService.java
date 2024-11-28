@@ -49,4 +49,13 @@ public class AccountService {
             throw new RuntimeException("Error while saving the account : " + e.getMessage());
         }
     }
+
+    /**
+     * Permet de vérifier si une clé API existe en base de données
+     * @param apiKey la clé API à vérifier
+     * @return true si la clé API existe
+     */
+    public boolean existsByApiKey(String apiKey) {
+        return accountRepository.existsByApiKey(apiKey).isPresent();
+    }
 }

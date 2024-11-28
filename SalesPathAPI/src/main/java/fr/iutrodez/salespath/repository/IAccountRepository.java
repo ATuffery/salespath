@@ -25,4 +25,12 @@ public interface IAccountRepository extends JpaRepository<SalesPerson, Long> {
      */
     @Query("SELECT email FROM SalesPerson  WHERE email = :email")
     Optional<String> findByEmail(String email);
+
+    /**
+     * Permet de vérifier si une clé API existe en base de données
+     * @param apiKey la clé API à vérifier
+     * @return la clé API si elle existe
+     */
+    @Query("SELECT apiKey FROM SalesPerson WHERE apiKey = :apiKey")
+    Optional<String> existsByApiKey(String apiKey);
 }
