@@ -56,7 +56,7 @@
         android:id="@+id/forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mot de passe oublié ?"
+        android:text="@string/forgotPass"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:layout_gravity="end"
@@ -77,13 +77,15 @@
         android:layout_marginTop="@dimen/margin_bottom_extra_large"
         android:onClick="connect"/>
 
-    <!-- Create Account Text -->
-    <TextView
+    <!-- Create Account -->
+    <Button
         android:id="@+id/create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pas de compte ? Créez-en un."
+        android:text="@string/createAccount"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:backgroundTint="@color/white"
+        android:onClick="goToCreateAccount"/>
 </LinearLayout>

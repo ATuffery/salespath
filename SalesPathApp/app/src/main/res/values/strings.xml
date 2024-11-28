@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">SalesPath</string>
     <string name="newAccount">Créez un compte</string>
-    <string name="error_server">"Une erreur innatendue s'est produite."</string>
+    <string name="error_server">"Une erreur inatendue s'est produite."</string>
     <string name="error_login">"Vos informations de connexion semblent incorrectes. Veuillez réessayer."</string>
+    <string name="forgotPass">Mot de passe oublié ?</string>
+    <string name="createAccount">Pas de compte ? Créez-en un.</string>
+    <string name="login">Déjà un compte ? Connectez-vous.</string>
 </resources>

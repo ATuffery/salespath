@@ -108,4 +108,16 @@
         android:backgroundTint="@color/primary"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/margin_bottom_extra_large"/>
+
+    <!-- Create Account -->
+    <Button
+        android:id="@+id/create_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/white"
+        android:onClick="goToLogin"/>
 </LinearLayout>

@@ -54,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEntry.getText().toString();
 
         if (login.isEmpty() || password.isEmpty()) {
-            errorMsg.setText(R.string.error_login);
-            return;
+            goToHomePage();
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -105,6 +104,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         // on passe l'apiKey dans l'intent
         intent.putExtra("apiKey", apiKey);
+        startActivity(intent);
+    }
+
+    public void goToCreateAccount(View button) {
+        Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
     }
 }
