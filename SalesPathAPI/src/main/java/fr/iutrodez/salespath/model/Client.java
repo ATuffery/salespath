@@ -1,21 +1,118 @@
 package fr.iutrodez.salespath.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="Client")
 public class Client {
 
-    private String enterprise_name;
-
+    private String enterpriseName;
     private String address;
-
     private String description;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private Boolean isClient;
+    private Double latitude;
+    private Double longitude;
+    @Id
+    @GeneratedValue
+    private ObjectId id;
 
-    private String first_name;
+    public Client(String enterpriseName, String address, String description,
+                  String firstName, String lastName, String phoneNumber,
+                  Boolean isClient, Double latitude, Double longitude) {
+        this.enterpriseName = enterpriseName;
+        this.address = address;
+        this.description = description;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.isClient = isClient;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
-    private String last_name;
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
 
-    private String phone_number;
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
 
-    private Boolean is_client;
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean getClient() {
+        return isClient;
+    }
+
+    public void setClient(Boolean client) {
+        isClient = client;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
 }

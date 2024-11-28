@@ -1,11 +1,21 @@
 package fr.iutrodez.salespath.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class SalesPerson {
     private String firstName;
     private String lastName;
     private String password;
     private String email;
     private String address;
+    private String apiKey;
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     public SalesPerson() {
     }
@@ -48,5 +58,21 @@ public class SalesPerson {
 
     public void setAdress(String adress) {
         this.address = adress;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
