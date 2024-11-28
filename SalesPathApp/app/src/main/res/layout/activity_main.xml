@@ -53,17 +53,6 @@
         android:textColor="@color/black"
         android:textColorHint="@color/black" />
 
-    <!-- Forgot Password Text -->
-    <TextView
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forgotPass"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
-        android:layout_gravity="end"
-        android:layout_marginEnd="@dimen/margin_bottom_extra_large"
-        android:layout_marginBottom="@dimen/margin_bottom_large" />
 
     <!-- Login Button -->
     <Button
