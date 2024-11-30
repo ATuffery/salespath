@@ -87,7 +87,6 @@ public class AccountService {
      * @param id l'id du commercial à mettre à jour
      * @param salesPerson les nouvelles informations du commercial
      * @return true si la mise à jour a réussi
-     *         false si la personne n'est pas trouvé
      * @throws RuntimeException si une erreur est survenue lors de la mise à jour
      */
     public boolean updateSalesPerson(Long id, SalesPerson salesPerson) {
