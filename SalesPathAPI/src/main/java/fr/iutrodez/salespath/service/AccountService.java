@@ -64,24 +64,25 @@ public class AccountService {
      * @param id l'id du commercial à mettre à jour
      * @param salesPerson les nouvelles informations du commercial
      * @return true si la mise à jour a réussi
+     *         false si la personne n'est pas trouvé
      * @throws RuntimeException si une erreur est survenue lors de la mise à jour
      */
     public boolean updateSalesPerson(Long id, SalesPerson salesPerson) {
         return accountRepository.findById(id)
                                 .map(existing -> {
-                                    salesPerson.setFirstName(salesPerson.getFirstName());
-                                    salesPerson.setLastName(salesPerson.getLastName());
-                                    salesPerson.setAdress(salesPerson.getAdress());
-                                    salesPerson.setEmail(salesPerson.getEmail());
-                                    salesPerson.setPassword(salesPerson.getPassword());
+                                    existing.setFirstName(salesPerson.getFirstName());
+                                    existing.setLastName(salesPerson.getLastName());
+                                    existing.setAddress(salesPerson.getAddress());
+                                    existing.setEmail(salesPerson.getEmail());
+                                    existing.setPassword(salesPerson.getPassword());
 
                                     try {
-                                        accountRepository.save(salesPerson);
+                                        accountRepository.save(existing);
                                         return true;
                                     } catch (Exception e) {
                                         throw new RuntimeException("Error while saving the account : " + e.getMessage());
                                     }
                                 })
-                                .orElse(false);
+                                .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
     }
 }
