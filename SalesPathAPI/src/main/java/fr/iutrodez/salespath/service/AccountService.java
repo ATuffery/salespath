@@ -58,4 +58,30 @@ public class AccountService {
     public boolean existsByApiKey(String apiKey) {
         return accountRepository.existsByApiKey(apiKey).isPresent();
     }
+
+    /**
+     * Permet de mettre à jour les informations d'un commercial
+     * @param id l'id du commercial à mettre à jour
+     * @param salesPerson les nouvelles informations du commercial
+     * @return true si la mise à jour a réussi
+     * @throws RuntimeException si une erreur est survenue lors de la mise à jour
+     */
+    public boolean updateSalesPerson(Long id, SalesPerson salesPerson) {
+        return accountRepository.findById(id)
+                                .map(existing -> {
+                                    salesPerson.setFirstName(salesPerson.getFirstName());
+                                    salesPerson.setLastName(salesPerson.getLastName());
+                                    salesPerson.setAdress(salesPerson.getAdress());
+                                    salesPerson.setEmail(salesPerson.getEmail());
+                                    salesPerson.setPassword(salesPerson.getPassword());
+
+                                    try {
+                                        accountRepository.save(salesPerson);
+                                        return true;
+                                    } catch (Exception e) {
+                                        throw new RuntimeException("Error while saving the account : " + e.getMessage());
+                                    }
+                                })
+                                .orElse(false);
+    }
 }

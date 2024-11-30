@@ -18,13 +18,15 @@ public class Client {
     private Boolean isClient;
     private Double latitude;
     private Double longitude;
+    private Long idPerson;
+
     @Id
     @GeneratedValue
     private ObjectId id;
 
     public Client(String enterpriseName, String address, String description,
                   String firstName, String lastName, String phoneNumber,
-                  Boolean isClient, Double latitude, Double longitude) {
+                  Boolean isClient, Double latitude, Double longitude, Long idPerson) {
         this.enterpriseName = enterpriseName;
         this.address = address;
         this.description = description;
@@ -34,6 +36,7 @@ public class Client {
         this.isClient = isClient;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.idPerson = idPerson;
     }
 
     public String getEnterpriseName() {
@@ -115,4 +118,8 @@ public class Client {
     public ObjectId getId() {
         return id;
     }
+
+    public Long getIdPerson(){return idPerson;}
+
+    public void setIdPerson(Long idPerson){this.idPerson = idPerson;}
 }

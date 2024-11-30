@@ -20,12 +20,20 @@ public class ClientService {
         }
     }
 
-    //public List<Client> GetClientsById(int id) {
-    //    try {
-    //        return clientRepository.findAllById(id);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error get clients by id : " + e.getMessage());
-//        }
-//    }
+    public List<Client> GetClientsById(Long idPerson) {
+        try {
+            return clientRepository.findByIdPerson(idPerson);
+        } catch (Exception e) {
+           throw new RuntimeException("Error get clients by id : " + e.getMessage());
+        }
+    }
+
+    public Client GetClientById(Long id) {
+        try {
+            return clientRepository.findById(id);
+        } catch (Exception e){
+            throw new RuntimeException("Error get client by id : " + e.getMessage());
+        }
+    }
 
 }
