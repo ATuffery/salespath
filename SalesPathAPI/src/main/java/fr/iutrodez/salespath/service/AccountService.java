@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.repository.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,15 +15,32 @@ public class AccountService {
 
     @Autowired
     private IAccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AccountService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Permet de récupérer la clé API d'un utilisateur en fonction de son email et de son mot de passe
      * @param email l'email de l'utilisateur
      * @param password le mot de passe de l'utilisateur
-     * @return la clé API de l'utilisateur si l'utilisateur existe
+     * @return la clé API de l'utilisateur si l'utilisateur existe,
+     *         vide sinon
      */
     public Optional<String> login(String email, String password) {
-        return accountRepository.findByUsernameAndPassword(email, password);
+        Optional<SalesPerson> userOpt = accountRepository.findByEmail(email);
+
+        if (userOpt.isPresent()) {
+            SalesPerson user = userOpt.get();
+
+            // On vérifie que le mot de passe soit correct
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return Optional.of(user.getApiKey());
+            }
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -40,10 +58,15 @@ public class AccountService {
                          });
 
         try {
+            // On génère l'API Key à l'aide de l'UUID
             String uuid = UUID.randomUUID().toString();
             String apiKey = uuid.replace("-", "").substring(0, 30);
 
             salesPerson.setApiKey(apiKey);
+
+            // On hash le mot de passe
+            salesPerson.setPassword(passwordEncoder.encode(salesPerson.getPassword()));
+
             return accountRepository.save(salesPerson);
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the account : " + e.getMessage());
