@@ -6,6 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -17,11 +19,8 @@ import java.io.IOException;
 @Component
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
-    private final AccountService accountService;
-
-    public ApiKeyAuthFilter(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    @Autowired
+    private ObjectProvider<AccountService> accountServiceProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -32,7 +31,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         // Vérifier si l'API key est nécessaire pour cette requête
         String path = request.getRequestURI();
-        if (!"/account/login".equals(path)) { // Si ce n'est pas la route de login
+        if (!"/account/login".equals(path) && !"/account/add".equals(path)) { // Si ce n'est pas la route de login
             if (apiKey == null || apiKey.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Missing API Key");
@@ -40,7 +39,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             }
 
             // Vérifier que la clé existe dans la base de données
-            boolean isValid = accountService.existsByApiKey(apiKey);
+            boolean isValid = accountServiceProvider.getIfAvailable().existsByApiKey(apiKey);
             if (!isValid) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().write("Invalid API Key");

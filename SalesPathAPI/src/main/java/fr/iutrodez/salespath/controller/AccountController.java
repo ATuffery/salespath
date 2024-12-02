@@ -51,4 +51,25 @@ public class AccountController {
 
         return ResponseEntity.status(201).body("");
     }
+
+    /**
+     * Endpoint pour mettre à jour un commercial
+     * @param id l'id du commercial à mettre à jour
+     * @param salesPerson les infos du commercial à mettre à jour
+     * @return un code 200 si le commercial a été mis à jour
+     *         un code 404 si l'id en paramètre est invalide
+     *         un code 500 si une erreur est survenue lors de la mise à jour
+     */
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody SalesPerson salesPerson) {
+        try {
+            accountService.updateSalesPerson(id, salesPerson);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(201).body("");
+    }
 }
