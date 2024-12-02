@@ -36,4 +36,12 @@ public class ClientService {
         }
     }
 
+    public void DeleteClientById(Long id) {
+        try {
+            clientRepository.deleteClientById(id);
+        } catch (Exception e) {
+            thow new RuntimeException("Error delete client by id : " + e.getMessage());
+        }
+    }
+
 }

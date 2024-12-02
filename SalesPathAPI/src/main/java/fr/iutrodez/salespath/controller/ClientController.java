@@ -45,4 +45,13 @@ public class ClientController {
         }
     }
 
+    @DeleteMapping(value="/deleteOne")
+    public ResponseEntity<String> deleteClient(@RequestParam Long id) {
+        try {
+            return ResponseEntity.status(200).body(clientService.DeleteClientById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Supprssion non effectué");
+        }
+    }
+
 }
