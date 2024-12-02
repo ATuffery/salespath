@@ -9,8 +9,8 @@
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_height="50dp"
+        android:layout_weight="1" />
 
     <!-- Section itinéraires -->
     <LinearLayout
@@ -34,43 +34,14 @@
             android:text="Ajouter"
             android:layout_marginTop="8dp" />
 
-        <!-- Liste d'itinéraires -->
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/white"
-            android:elevation="4dp"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/tv_itineraire_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Itinéraire 1"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_itineraire_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Créé le 10/10/2024" />
-
-            <TextView
-                android:id="@+id/tv_itineraire_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="5 clients/prospects à visiter"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_commencer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Commencer" />
-        </LinearLayout>
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false" />
 
     </LinearLayout>
 

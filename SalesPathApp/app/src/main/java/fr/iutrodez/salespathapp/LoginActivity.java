@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final static String URL = "";
+    private final static String URL = "35.180.135.144:8080/account/login";
 
     public EditText loginEntry;
     public EditText passwordEntry;
@@ -60,12 +60,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            goToHomePage();
+
             return;
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        queue.add(requestAuth(this.URL + login + "/" + password));
+        queue.add(requestAuth(this.URL + "?email=" + login + "&password=" + password));
     }
 
     private JsonObjectRequest requestAuth(String url) {

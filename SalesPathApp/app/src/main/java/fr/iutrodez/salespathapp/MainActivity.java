@@ -1,6 +1,8 @@
 package fr.iutrodez.salespathapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +44,28 @@ public class MainActivity extends AppCompatActivity {
 
         // Ajouter des marqueurs
         addMarkers();
+
+        // Initialiser le RecyclerView horizontal
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewHorizontal);
+
+        // Exemple de liste d'itinéraires
+        List<CardWithTwoLines> itineraryList = Arrays.asList(
+                new CardWithTwoLines("IUT Rodez", "Enregistré", "Créé le 01/05/2021", "4 clients/prospects à visiter"),
+                new CardWithTwoLines("Itinéraire 1", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
+                new CardWithTwoLines("Itinéraire 2", "Brouillon", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
+                new CardWithTwoLines("Itinéraire 3", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter")
+                // Ajouter d'autres cartes ici
+        );
+
+        // Configurer l'adaptateur
+        CardWithTwoLinesAdapteur adapter = new CardWithTwoLinesAdapteur(itineraryList);
+        recyclerView.setAdapter(adapter);
+
+        // Configurer un LinearLayoutManager en mode horizontal
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
     }
+
 
     private void addMarkers() {
         ArrayList<GeoPoint> points = new ArrayList<>();
