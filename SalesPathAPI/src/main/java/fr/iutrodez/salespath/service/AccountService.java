@@ -107,4 +107,14 @@ public class AccountService {
                                 })
                                 .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
     }
+
+    /**
+     * Permet de récupérer un commercial en fonction de sa clé API
+     * @param apiKey la clé API du commercial
+     * @return le commercial correspondant
+     * @throws IllegalArgumentException si le commercial n'existe pas
+     */
+    public Optional<SalesPerson> getSalesPerson(String apiKey) {
+        return accountRepository.findByApiKey(apiKey);
+    }
 }
