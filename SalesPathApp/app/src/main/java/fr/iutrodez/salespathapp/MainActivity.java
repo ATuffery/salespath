@@ -4,18 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toolbar;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MapView map;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 new CardWithTwoLines("Itinéraire 1", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
                 new CardWithTwoLines("Itinéraire 2", "Brouillon", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
                 new CardWithTwoLines("Itinéraire 3", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter")
-                // Ajouter d'autres cartes ici
         );
 
         // Configurer l'adaptateur
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
-
 
     private void addMarkers() {
         ArrayList<GeoPoint> points = new ArrayList<>();
@@ -84,14 +82,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Inflater le menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        new MenuInflater(this).inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu); // "menu" est le nom de votre fichier XML
+        return true; // Retourner true pour afficher le menu
     }
+
+    // Gestion des éléments du menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
+        int id = item.getItemId();
+
+        // Utilisation de 'if' pour vérifier quel item a été sélectionné
+        if (id == R.id.nav_home) {
+            // Action pour la page d'accueil
+            // Par exemple, démarrer une nouvelle activité ou afficher un fragment
+            return true;
+        } else if (id == R.id.nav_account) {
+            Intent intent = new Intent(this, MyAccountActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_contacts) {
+            // Action pour "Mes contacts"
+            return true;
+        } else if (id == R.id.nav_parcours) {
+            // Action pour "Mes parcours"
+            return true;
+        } else if (id == R.id.nav_itineraires) {
+            // Action pour "Mes itinéraires"
+            return true;
+        } else if (id == R.id.nav_logout) {
+            // Action pour "Se déconnecter"
+            // Exemple : Finir l'activité ou naviguer vers un écran de déconnexion
+            return true;
+        }
+
+        // Si aucun des cas ne correspond, appelle la méthode parent.
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -105,5 +134,4 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         map.onPause(); // Nécessaire pour OSMDroid
     }
-
 }
