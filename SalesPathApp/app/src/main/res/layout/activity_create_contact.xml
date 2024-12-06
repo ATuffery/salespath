@@ -169,7 +169,9 @@
                 android:id="@+id/typeProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/prospect" />
+                android:text="@string/prospect"
+                android:textColor="@color/black"
+                android:buttonTint="@color/primary"/>
 
             <RadioButton
                 android:id="@+id/typeContact"
@@ -177,7 +179,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_horizontal"
                 android:layout_marginBottom="@dimen/margin_bottom_large"
-                android:text="@string/contact" />
+                android:text="@string/contact"
+                android:textColor="@color/black"
+                android:buttonTint="@color/primary"/>
+
         </RadioGroup>
 
         <!-- Créer Button -->
