@@ -6,7 +6,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class CreateContactActivity extends AppCompatActivity {
+public class CreateContactActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +17,5 @@ public class CreateContactActivity extends AppCompatActivity {
     public void create(View button) {
         // Not implemented
     }
-
 
 }

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private MapView map;
 
@@ -126,48 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Inflater le menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu); // "menu" est le nom de votre fichier XML
-        return true; // Retourner true pour afficher le menu
-    }
-
-    // Gestion des éléments du menu
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        // Utilisation de 'if' pour vérifier quel item a été sélectionné
-        if (id == R.id.nav_home) {
-            // Action pour la page d'accueil
-            // Par exemple, démarrer une nouvelle activité ou afficher un fragment
-            return true;
-        } else if (id == R.id.nav_account) {
-            Intent intent = new Intent(this, MyAccountActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.nav_contacts) {
-            Intent intent = new Intent(this, ContactsActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.nav_parcours) {
-            // Action pour "Mes parcours"
-            return true;
-        } else if (id == R.id.nav_itineraires) {
-            // Action pour "Mes itinéraires"
-            return true;
-        } else if (id == R.id.nav_logout) {
-            // Action pour "Se déconnecter"
-            // Exemple : Finir l'activité ou naviguer vers un écran de déconnexion
-            return true;
-        }
-
-        // Si aucun des cas ne correspond, appelle la méthode parent.
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -179,4 +137,10 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         map.onPause(); // Nécessaire pour OSMDroid
     }
+
+    @Override
+    public void onBackPressed() {
+        // Ne rien faire ici pour bloquer l'action du bouton de retour
+    }
+
 }

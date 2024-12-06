@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.List;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,36 +53,6 @@ public class ContactsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            finish();
-            return true;
-        } else if (id == R.id.nav_account) {
-            return true;
-        } else if (id == R.id.nav_contacts) {
-            return true;
-        } else if (id == R.id.nav_parcours) {
-            return true;
-        } else if (id == R.id.nav_itineraires) {
-            return true;
-        } else if (id == R.id.nav_logout) {
-            return true;
-        }
-
-        // Si aucun des cas ne correspond, appelle la méthode parent.
-        return super.onOptionsItemSelected(item);
     }
 
     public void goToCreateContact(View btn) {
