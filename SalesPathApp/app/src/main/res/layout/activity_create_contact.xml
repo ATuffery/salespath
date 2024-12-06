@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/prospect"
                 android:textColor="@color/black"
-                android:buttonTint="@color/radio_btn"/>
+                android:buttonTint="@color/primary"/>
 
             <RadioButton
                 android:id="@+id/typeContact"
@@ -181,7 +181,7 @@
                 android:layout_marginBottom="@dimen/margin_bottom_large"
                 android:text="@string/contact"
                 android:textColor="@color/black"
-                android:buttonTint="@color/radio_btn"/>
+                android:buttonTint="@color/primary"/>
 
         </RadioGroup>
 
