@@ -18,7 +18,7 @@
         android:textColor="@color/black"/>
 
     <Button
-        android:id="@+id/create_account"
+        android:id="@+id/create_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add"

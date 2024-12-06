@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final static String URL = "35.180.135.144:8080/account/login";
+    private final static String URL = "15.188.63.99:8080/account/login";
 
     public EditText loginEntry;
     public EditText passwordEntry;

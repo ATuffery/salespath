@@ -1,10 +1,12 @@
 package fr.iutrodez.salespathapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,4 +84,11 @@ public class ContactsActivity extends AppCompatActivity {
         // Si aucun des cas ne correspond, appelle la méthode parent.
         return super.onOptionsItemSelected(item);
     }
+
+    public void goToCreateContact(View btn) {
+        Log.d("test", "onclick");
+        Intent intent = new Intent(this, CreateContactActivity.class);
+        startActivity(intent);
+    }
+
 }

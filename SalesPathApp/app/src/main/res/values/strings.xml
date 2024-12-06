@@ -7,4 +7,18 @@
     <string name="login">Déjà un compte ? Connectez-vous.</string>
     <string name="contacts">Mes contacts</string>
     <string name="add">Ajouter</string>
+    <string name="addContact">Ajouter un contact</string>
+    <string name="type">Type</string>
+    <string name="company">Entreprise</string>
+    <string name="contact">Contact</string>
+    <string name="companyName">"Nom de l'entreprise"</string>
+    <string name="companyAddress">"Adresse de l'entreprise"</string>
+    <string name="companyDescription">"Description de l'entreprise"</string>
+    <string name="lat">Latitude</string>
+    <string name="lon">Longitude</string>
+    <string name="contactFirstName">Prénom du contact</string>
+    <string name="contactLastName">Nom du contact</string>
+    <string name="contactPhoneNumber">Numéro de téléphone du contact</string>
+    <string name="customer">Client</string>
+    <string name="prospect">Prospect</string>
 </resources>
