@@ -48,12 +48,51 @@ public class MainActivity extends AppCompatActivity {
         // Initialiser le RecyclerView horizontal
         RecyclerView recyclerView = findViewById(R.id.recyclerViewHorizontal);
 
-        // Exemple de liste d'itinéraires
         List<CardWithTwoLines> itineraryList = Arrays.asList(
-                new CardWithTwoLines("IUT Rodez", "Enregistré", "Créé le 01/05/2021", "4 clients/prospects à visiter"),
-                new CardWithTwoLines("Itinéraire 1", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
-                new CardWithTwoLines("Itinéraire 2", "Brouillon", "Créé le 10/10/2024", "5 clients/prospects à visiter"),
-                new CardWithTwoLines("Itinéraire 3", "Enregistré", "Créé le 10/10/2024", "5 clients/prospects à visiter")
+                new CardWithTwoLines(
+                        "IUT Rodez",
+                        "Enregistré",
+                        "Créé le 01/05/2021",
+                        "4 clients/prospects à visiter",
+                        "Détails",
+                        () -> {
+                            // Action pour l'itinéraire "IUT Rodez"
+                            System.out.println("Action pour IUT Rodez exécutée !");
+                        }
+                ),
+                new CardWithTwoLines(
+                        "Itinéraire 1",
+                        "Enregistré",
+                        "Créé le 10/10/2024",
+                        "5 clients/prospects à visiter",
+                        "Détails",
+                        () -> {
+                            // Action pour l'itinéraire "Itinéraire 1"
+                            System.out.println("Action pour Itinéraire 1 exécutée !");
+                        }
+                ),
+                new CardWithTwoLines(
+                        "Itinéraire 2",
+                        "Brouillon",
+                        "Créé le 10/10/2024",
+                        "5 clients/prospects à visiter",
+                        "Détails",
+                        () -> {
+                            // Action pour l'itinéraire "Itinéraire 2"
+                            System.out.println("Action pour Itinéraire 2 exécutée !");
+                        }
+                ),
+                new CardWithTwoLines(
+                        "Itinéraire 3",
+                        "Enregistré",
+                        "Créé le 10/10/2024",
+                        "5 clients/prospects à visiter",
+                        "Détails",
+                        () -> {
+                            // Action pour l'itinéraire "Itinéraire 3"
+                            System.out.println("Action pour Itinéraire 3 exécutée !");
+                        }
+                )
         );
 
         // Configurer l'adaptateur
@@ -105,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.nav_contacts) {
-            // Action pour "Mes contacts"
+            Intent intent = new Intent(this, ContactsActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.nav_parcours) {
             // Action pour "Mes parcours"

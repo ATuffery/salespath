@@ -5,4 +5,6 @@
     <string name="error_login">"Vos informations de connexion semblent incorrectes. Veuillez réessayer."</string>
     <string name="createAccount">Pas de compte ? Créez-en un.</string>
     <string name="login">Déjà un compte ? Connectez-vous.</string>
+    <string name="contacts">Mes contacts</string>
+    <string name="add">Ajouter</string>
 </resources>

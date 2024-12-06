@@ -38,5 +38,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.13")
     implementation("com.android.volley:volley:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
 
 }

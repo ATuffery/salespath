@@ -17,8 +17,8 @@
         android:text="Enregistré"
         android:textSize="14sp"
         android:textColor="@color/primary"
-        android:paddingVertical="@dimen/padding_default"
-        android:layout_marginTop="4dp" />
+        android:paddingBottom="@dimen/margin_bottom_small"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/cardName"
