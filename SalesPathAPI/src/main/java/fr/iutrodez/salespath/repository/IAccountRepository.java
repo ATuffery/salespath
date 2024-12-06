@@ -24,4 +24,12 @@ public interface IAccountRepository extends JpaRepository<SalesPerson, Long> {
      */
     @Query("SELECT apiKey FROM SalesPerson WHERE apiKey = :apiKey")
     Optional<String> existsByApiKey(String apiKey);
+
+    /**
+     * Permet de récupérer un utilisateur en fonction de sa clé API
+     * @param apiKey la clé API de l'utilisateur
+     * @return l'utilisateur si il existe
+     */
+    @Query("SELECT s FROM SalesPerson s WHERE s.apiKey = :apiKey")
+    Optional<SalesPerson> findByApiKey(String apiKey);
 }

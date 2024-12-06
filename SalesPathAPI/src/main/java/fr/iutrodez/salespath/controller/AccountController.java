@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,13 +23,36 @@ public class AccountController {
      * @return la clé API de l'utilisateur si l'utilisateur existe
      */
     @GetMapping(value="/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         Optional<String> apiKey = accountService.login(email, password);
 
         if (apiKey.isPresent()) {
-            return ResponseEntity.ok(apiKey.get());
+            return ResponseEntity.ok(Map.of("apiKey", apiKey.get()));
         } else {
-            return ResponseEntity.status(404).body("Account not found");
+            return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
+        }
+    }
+
+    /**
+     * Endpoint pour se récupérer les informations d'un utilisateur
+     * @param apiKey la clé API de l'utilisateur
+     * @return les informations si l'utilisateur existe
+     */
+    @GetMapping(value="/infos/{apiKey}")
+    public ResponseEntity<?> infos(@PathVariable String apiKey) {
+        Optional<SalesPerson> salesPersonOptional = accountService.getSalesPerson(apiKey);
+
+        if (salesPersonOptional.isPresent()) {
+            SalesPerson salesPerson = salesPersonOptional.get();
+            Map<String, Object> response = Map.of (
+                    "firstName", salesPerson.getFirstName(),
+                    "lastName", salesPerson.getLastName(),
+                    "email", salesPerson.getEmail(),
+                    "address", salesPerson.getAddress()
+            );
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(404).body(Map.of("error", "Account not found for API Key : " + apiKey));
         }
     }
 
@@ -40,13 +64,13 @@ public class AccountController {
      *        un code 500 si une erreur est survenue lors de l'ajout
      */
     @PostMapping(value = "/add")
-    public ResponseEntity<String> add(@RequestBody SalesPerson salesPerson) {
+    public ResponseEntity<?> add(@RequestBody SalesPerson salesPerson) {
         try {
             accountService.addSalesPerson(salesPerson);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
 
         return ResponseEntity.status(201).body("");
@@ -61,13 +85,13 @@ public class AccountController {
      *         un code 500 si une erreur est survenue lors de la mise à jour
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody SalesPerson salesPerson) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SalesPerson salesPerson) {
         try {
             accountService.updateSalesPerson(id, salesPerson);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
 
         return ResponseEntity.status(201).body("");
