@@ -1,10 +1,12 @@
 package fr.iutrodez.salespathapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -112,11 +114,14 @@ public class MainActivity extends AppCompatActivity {
         points.add(new GeoPoint(44.3550, 2.5700));
         points.add(new GeoPoint(44.3450, 2.5800));
 
+        Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
+
         for (GeoPoint point : points) {
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setTitle("Point d'intérêt");
+            marker.setIcon(markerIcon);
             map.getOverlays().add(marker);
         }
     }
