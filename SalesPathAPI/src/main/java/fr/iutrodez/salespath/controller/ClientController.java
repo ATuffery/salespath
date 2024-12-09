@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Contrôleur REST pour gérer les opérations relatives aux clients.
@@ -28,7 +29,7 @@ public class ClientController {
     public ResponseEntity<String> createNewClient(@RequestBody Client client) {
         try {
             clientService.CreateClient(client);
-            return ResponseEntity.status(201).body("");
+            return ResponseEntity.status(201).body(Map.of("success", "Client ajouté avec succès").toString());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erreur lors de la requête à la base de données (500)");
         }
@@ -71,7 +72,7 @@ public class ClientController {
     public ResponseEntity<String> deleteClient(@RequestParam ObjectId id) {
         try {
             clientService.DeleteClientById(id);
-            return ResponseEntity.status(200).body("");
+            return ResponseEntity.status(200).body(Map.of("success", "Suppression effectuée").toString());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Suppression non effectuée");
         }
@@ -87,7 +88,7 @@ public class ClientController {
     public ResponseEntity<String> updateClient(@RequestBody Client client, @RequestParam ObjectId id) {
         try {
             clientService.UpdateClient(client, id);
-            return ResponseEntity.status(200).body("");
+            return ResponseEntity.status(200).body(Map.of("success", "Mise à jour effectuée").toString());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erreur lors de la requête à la base de données (500)");
         }

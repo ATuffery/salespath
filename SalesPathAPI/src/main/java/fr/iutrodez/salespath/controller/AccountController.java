@@ -73,7 +73,7 @@ public class AccountController {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
 
-        return ResponseEntity.status(201).body("");
+        return ResponseEntity.status(201).body(Map.of("success", "Account created"));
     }
 
     /**
@@ -94,6 +94,6 @@ public class AccountController {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
 
-        return ResponseEntity.status(201).body("");
+        return ResponseEntity.status(201).body(Map.of("success", "Account updated"));
     }
 }
