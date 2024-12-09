@@ -1,0 +1,52 @@
+name: Deploiement sur EC2
+
+on:
+#  push:
+#    branches:
+#      - prod
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        default: "DEV"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Vérifier que le code source correspond à la branche spécifiée
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.inputs.branch }}
+
+    # 2. Se déplacer dans le répertoire SalesPathAPI
+    - name: Navigate to API folder
+      run: |
+        cd SalesPathAPI
+
+    # 3. Se connecter à AWS pour pull l'image Docker (ECR)
+    - name: Login to AWS ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
+    # 4. Construire et pousser l'image Docker depuis le dossier SalesPathAPI
+    - name: Build and push Docker image
+      run: |
+        cd SalesPathAPI
+        IMAGE_NAME=345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath
+        docker build -t $IMAGE_NAME:latest .
+        docker push $IMAGE_NAME:latest
+
+    # 5. Déployer l'application sur l'instance EC2
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: <IP de l'instance EC2>
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker pull 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+          docker stop api-container || true
+          docker rm api-container || true
+          docker run -d -p 8080:8080 --name api-container 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
