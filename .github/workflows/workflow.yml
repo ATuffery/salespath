@@ -50,3 +50,5 @@ jobs:
           docker stop api-container || true
           docker rm api-container || true
           docker run -d -p 8080:8080 --name api-container 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+      env:
+        AWS_REGION: eu-west-3
