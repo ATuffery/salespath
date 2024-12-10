@@ -28,7 +28,7 @@ public class AccountService {
      * @return la clé API de l'utilisateur si l'utilisateur existe,
      *         vide sinon
      */
-    public Optional<String> login(String email, String password) {
+    public Optional<SalesPerson> login(String email, String password) {
         Optional<SalesPerson> userOpt = accountRepository.findByEmail(email);
 
         if (userOpt.isPresent()) {
@@ -36,7 +36,7 @@ public class AccountService {
 
             // On vérifie que le mot de passe soit correct
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return Optional.of(user.getApiKey());
+                return Optional.of(user);
             }
         }
 

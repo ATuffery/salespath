@@ -24,10 +24,11 @@ public class AccountController {
      */
     @GetMapping(value="/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        Optional<String> apiKey = accountService.login(email, password);
+        Optional<SalesPerson> salesPersonOptional = accountService.login(email, password);
 
-        if (apiKey.isPresent()) {
-            return ResponseEntity.ok(Map.of("apiKey", apiKey.get()));
+        if (salesPersonOptional.isPresent()) {
+            SalesPerson salesPerson = salesPersonOptional.get();
+            return ResponseEntity.ok(Map.of("apiKey", salesPerson.getApiKey(), "id", salesPerson.getId()));
         } else {
             return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
         }
@@ -38,8 +39,8 @@ public class AccountController {
      * @param apiKey la clé API de l'utilisateur
      * @return les informations si l'utilisateur existe
      */
-    @GetMapping(value="/infos/{apiKey}")
-    public ResponseEntity<?> infos(@PathVariable String apiKey) {
+    @GetMapping(value="/infos")
+    public ResponseEntity<?> infos(@RequestHeader("X-API-KEY") String apiKey) {
         Optional<SalesPerson> salesPersonOptional = accountService.getSalesPerson(apiKey);
 
         if (salesPersonOptional.isPresent()) {
