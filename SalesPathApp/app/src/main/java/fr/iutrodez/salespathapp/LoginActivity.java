@@ -2,13 +2,17 @@ package fr.iutrodez.salespathapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -19,12 +23,10 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final static String URL = "15.188.63.99:8080/account/login";
-
+    private final static String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/login";
     public EditText loginEntry;
     public EditText passwordEntry;
     public TextView errorMsg;
-
     public static String apiKey;
 
     @Override
@@ -53,15 +55,12 @@ public class LoginActivity extends AppCompatActivity {
         String login = loginEntry.getText().toString();
         String password = passwordEntry.getText().toString();
 
-        if (login.isEmpty() || password.isEmpty()) {
+        if (login.trim().isEmpty() || password.trim().isEmpty()) {
             errorMsg.post(new Runnable() {
                 public void run() {
-                    errorMsg.setText(getString(R.string.error_login));
+                    errorMsg.setText(getString(R.string.error_loginEmpty));
                 }
             });
-
-            goToHomePage();
-
             return;
         }
 
@@ -88,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
-                            if (statusCode == 401) {
+                            if (statusCode == 404) {
                                 errorMsg.setText(getString(R.string.error_login));
                             } else {
                                 displayServerError();

@@ -3,6 +3,8 @@
     <string name="newAccount">Créez un compte</string>
     <string name="error_server">"Une erreur inatendue s'est produite."</string>
     <string name="error_login">"Vos informations de connexion semblent incorrectes. Veuillez réessayer."</string>
+    <string name="error_loginEmpty">"Veuillez saisir votre email et mot de passe pour vous connecter."</string>
+    <string name="error_emailAlreadyUsed">"Cette adresse email est déjà rattachée à un compte. Connectez-vous ou utilisez une autre email."</string>
     <string name="createAccount">Pas de compte ? Créez-en un.</string>
     <string name="login">Déjà un compte ? Connectez-vous.</string>
     <string name="contacts">Mes contacts</string>
@@ -21,4 +23,5 @@
     <string name="contactPhoneNumber">Numéro de téléphone du contact</string>
     <string name="customer">Client</string>
     <string name="prospect">Prospect</string>
+    <string name="typing_error">Des champs sont invalides, veuillez vérifier votre saisie.</string>
 </resources>
