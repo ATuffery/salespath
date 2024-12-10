@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+/**
+ * Représentation d'un commercial en Base de données
+ */
 @Entity
 public class SalesPerson {
     private String firstName;

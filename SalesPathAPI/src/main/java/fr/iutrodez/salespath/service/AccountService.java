@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service permettant de gérer les comptes utilisateurs
+ */
 @Service
 public class AccountService {
 
@@ -17,6 +20,11 @@ public class AccountService {
     private IAccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Constructeur du service
+     *
+     * @param passwordEncoder l'encodeur de mot de passe
+     */
     public AccountService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Interface permettant de gérer les requêtes SQL pour les utilisateurs
+ */
 @Repository
 public interface IAccountRepository extends JpaRepository<SalesPerson, Long> {
     /**

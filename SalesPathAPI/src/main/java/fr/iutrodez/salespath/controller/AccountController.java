@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controller pour les endpoints liés aux comptes
+ */
 @RestController
 @RequestMapping(value="/account")
 public class AccountController {
