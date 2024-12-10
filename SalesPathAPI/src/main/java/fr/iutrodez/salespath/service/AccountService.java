@@ -22,8 +22,10 @@ public class AccountService {
     }
 
     /**
-     * Permet de récupérer la clé API d'un utilisateur en fonction de son email et de son mot de passe
-     * @param email l'email de l'utilisateur
+     * Permet de récupérer la clé API d'un utilisateur en fonction de son email et
+     * de son mot de passe
+     * 
+     * @param email    l'email de l'utilisateur
      * @param password le mot de passe de l'utilisateur
      * @return la clé API de l'utilisateur si l'utilisateur existe,
      *         vide sinon
@@ -46,16 +48,17 @@ public class AccountService {
     /**
      * Permet d'ajouter un commercial en base de données
      * Vérifie que l'email ne soit pas utilisé dans un autre compte
+     * 
      * @param salesPerson les infos de la personne à ajouter
      * @return sauvegarde les infos de la personne en base de données
      * @throws IllegalArgumentException si l'email est déjà utilisé
      */
-    public SalesPerson addSalesPerson (SalesPerson salesPerson) {
+    public SalesPerson addSalesPerson(SalesPerson salesPerson) {
         // On vérifie que l'email n'est pas déjà utilisé
         accountRepository.findByEmail(salesPerson.getEmail())
-                         .ifPresent(existing -> {
-                            throw new IllegalArgumentException("An account with this email already exists");
-                         });
+                .ifPresent(existing -> {
+                    throw new IllegalArgumentException("An account with this email already exists");
+                });
 
         try {
             // On génère l'API Key à l'aide de l'UUID
@@ -75,6 +78,7 @@ public class AccountService {
 
     /**
      * Permet de vérifier si une clé API existe en base de données
+     * 
      * @param apiKey la clé API à vérifier
      * @return true si la clé API existe
      */
@@ -84,32 +88,33 @@ public class AccountService {
 
     /**
      * Permet de mettre à jour les informations d'un commercial
-     * @param id l'id du commercial à mettre à jour
+     * 
+     * @param id          l'id du commercial à mettre à jour
      * @param salesPerson les nouvelles informations du commercial
      * @return true si la mise à jour a réussi
      * @throws RuntimeException si une erreur est survenue lors de la mise à jour
      */
     public boolean updateSalesPerson(Long id, SalesPerson salesPerson) {
         return accountRepository.findById(id)
-                                .map(existing -> {
-                                    existing.setFirstName(salesPerson.getFirstName());
-                                    existing.setLastName(salesPerson.getLastName());
-                                    existing.setAddress(salesPerson.getAddress());
-                                    existing.setEmail(salesPerson.getEmail());
-                                    existing.setPassword(salesPerson.getPassword());
+                .map(existing -> {
+                    existing.setFirstName(salesPerson.getFirstName());
+                    existing.setLastName(salesPerson.getLastName());
+                    existing.setAddress(salesPerson.getAddress());
+                    existing.setEmail(salesPerson.getEmail());
 
-                                    try {
-                                        accountRepository.save(existing);
-                                        return true;
-                                    } catch (Exception e) {
-                                        throw new RuntimeException("Error while saving the account : " + e.getMessage());
-                                    }
-                                })
-                                .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
+                    try {
+                        accountRepository.save(existing);
+                        return true;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error while saving the account : " + e.getMessage());
+                    }
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
     }
 
     /**
      * Permet de récupérer un commercial en fonction de sa clé API
+     * 
      * @param apiKey la clé API du commercial
      * @return le commercial correspondant
      * @throws IllegalArgumentException si le commercial n'existe pas

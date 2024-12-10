@@ -1,12 +1,11 @@
 package fr.iutrodez.salespath.model;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="Client")
+@Document(collection = "Client")
 public class Client {
 
     private String enterpriseName;
@@ -16,8 +15,7 @@ public class Client {
     private String lastName;
     private String phoneNumber;
     private Boolean isClient;
-    private Double latitude;
-    private Double longitude;
+    private Double[] coordonates;
     private Long idPerson;
 
     @Id
@@ -25,18 +23,21 @@ public class Client {
     private ObjectId id;
 
     public Client(String enterpriseName, String address, String description,
-                  String firstName, String lastName, String phoneNumber,
-                  Boolean isClient, Double latitude, Double longitude, Long idPerson) {
+            String firstName, String lastName, String phoneNumber,
+            String isClient, String latitude, String longitude, String idPerson) {
+
+        Boolean client = Boolean.parseBoolean(isClient);
+
         this.enterpriseName = enterpriseName;
         this.address = address;
         this.description = description;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.isClient = isClient;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.idPerson = idPerson;
+        this.isClient = client;
+        this.coordonates[0] = Double.parseDouble(latitude);
+        this.coordonates[1] = Double.parseDouble(longitude);
+        this.idPerson = Long.parseLong(idPerson);
     }
 
     public String getEnterpriseName() {
@@ -95,20 +96,12 @@ public class Client {
         isClient = client;
     }
 
-    public Double getLatitude() {
-        return latitude;
+    public Double[] getCoordonates() {
+        return coordonates;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public void setCoordonates(Double[] coordonates) {
+        this.coordonates = coordonates;
     }
 
     public void setId(ObjectId id) {
@@ -119,7 +112,11 @@ public class Client {
         return id;
     }
 
-    public Long getIdPerson(){return idPerson;}
+    public Long getIdPerson() {
+        return idPerson;
+    }
 
-    public void setIdPerson(Long idPerson){this.idPerson = idPerson;}
+    public void setIdPerson(Long idPerson) {
+        this.idPerson = idPerson;
+    }
 }

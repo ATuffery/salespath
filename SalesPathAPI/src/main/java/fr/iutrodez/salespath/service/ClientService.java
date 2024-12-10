@@ -19,6 +19,7 @@ public class ClientService {
 
     /**
      * Crée un nouveau client et l'enregistre dans la base de données.
+     * 
      * @param client L'objet Client à créer.
      * @throws RuntimeException En cas d'erreur lors de la création.
      */
@@ -32,6 +33,7 @@ public class ClientService {
 
     /**
      * Récupère la liste des clients associés à une personne spécifique.
+     * 
      * @param idPerson L'ID de la personne.
      * @return Une liste de clients.
      * @throws RuntimeException En cas d'erreur lors de la récupération.
@@ -46,6 +48,7 @@ public class ClientService {
 
     /**
      * Récupère un client spécifique à partir de son ID.
+     * 
      * @param id L'ID du client.
      * @return L'objet Client correspondant.
      * @throws RuntimeException En cas d'erreur lors de la récupération.
@@ -60,6 +63,7 @@ public class ClientService {
 
     /**
      * Supprime un client à partir de son ID.
+     * 
      * @param id L'ID du client à supprimer.
      * @throws RuntimeException En cas d'erreur lors de la suppression.
      */
@@ -73,9 +77,11 @@ public class ClientService {
 
     /**
      * Met à jour un client existant avec de nouvelles informations.
+     * 
      * @param updatedClient L'objet Client contenant les nouvelles données.
-     * @param id L'ID du client à mettre à jour.
-     * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe pas.
+     * @param id            L'ID du client à mettre à jour.
+     * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe
+     *                                  pas.
      */
     public void UpdateClient(Client updatedClient, ObjectId id) {
         Optional<Client> cli;
@@ -92,8 +98,7 @@ public class ClientService {
             existingClient.setLastName(updatedClient.getLastName());
             existingClient.setPhoneNumber(updatedClient.getPhoneNumber());
             existingClient.setClient(updatedClient.getClient());
-            existingClient.setLatitude(updatedClient.getLatitude());
-            existingClient.setLongitude(updatedClient.getLongitude());
+            existingClient.setCoordonates(updatedClient.getCoordonates());
             existingClient.setIdPerson(updatedClient.getIdPerson());
 
             // Sauvegarde des modifications
