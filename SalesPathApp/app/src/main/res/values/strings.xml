@@ -24,4 +24,6 @@
     <string name="customer">Client</string>
     <string name="prospect">Prospect</string>
     <string name="typing_error">Des champs sont invalides, veuillez vérifier votre saisie.</string>
+    <string name="success_account_update">Votre compte a bien été mis à jour.</string>
+    <string name="error_find_account">Le compte n\'existe pas.</string>
 </resources>
