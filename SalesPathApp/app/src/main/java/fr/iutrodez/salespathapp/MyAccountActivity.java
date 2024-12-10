@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +26,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Permet de gérer la page de d'information d'un compte d'un commercial
+ */
 public class MyAccountActivity extends BaseActivity {
 
     private EditText lastNameInput;
     private EditText firstNameInput;
     private EditText addressInput;
     private EditText emailInput;
+    private TextView userInitials;
 
     private static final String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/";
 
@@ -47,6 +52,7 @@ public class MyAccountActivity extends BaseActivity {
         firstNameInput = findViewById(R.id.firstName);
         addressInput = findViewById(R.id.address);
         emailInput = findViewById(R.id.email);
+        userInitials = findViewById(R.id.userInitials);
 
         intent = getIntent();
         queue = Volley.newRequestQueue(this);
@@ -54,20 +60,33 @@ public class MyAccountActivity extends BaseActivity {
         initialDisplayUpdate();
     }
 
-    public void initialDisplayUpdate() {
+    /**
+     * Permet de récupérer les informations du compte courant
+     */
+    private void initialDisplayUpdate() {
         queue.add(requestInfo(this.URL + "infos"));
     }
 
-    public JsonObjectRequest requestInfo(String url) {
+    /**
+     * Créer une requête Volley pour récupérer les informations du compte avec l'API
+     * @param url l'url de l'API
+     * @return le JSON avec les informations du compte en cas de succès
+     */
+    private JsonObjectRequest requestInfo(String url) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            lastNameInput.setText(response.getString("lastName"));
-                            firstNameInput.setText(response.getString("firstName"));
+                            String lastName = response.getString("lastName");
+                            String firstName = response.getString("firstName");
+
+                            lastNameInput.setText(lastName);
+                            firstNameInput.setText(firstName);
                             addressInput.setText(response.getString("address"));
                             emailInput.setText(response.getString("email"));
+
+                            updateInitials(firstName, lastName);
                         } catch (JSONException e) {
                             displayServerError();
                         }
@@ -100,10 +119,17 @@ public class MyAccountActivity extends BaseActivity {
         return jsonObjectRequest;
     }
 
-    public void displayServerError() {
+    /**
+     * Affiche un message d'erreur du serveur en cas de problème
+     */
+    private void displayServerError() {
         Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Permet de mettre à jour les informations du compte courant
+     * @param button
+     */
     public void updateAccount(View button) {
         String lastName = lastNameInput.getText().toString().trim();
         String firstName = firstNameInput.getText().toString().trim();
@@ -133,13 +159,22 @@ public class MyAccountActivity extends BaseActivity {
                                 jsonBody));
     }
 
+    /**
+     * Créer une requête Volley pour mettre à jour les informations du compte à l'aide de l'API
+     * @param url l'url de l'API
+     * @param body le Json contenant les informations du compte
+     * @return Un toast en fonction du résultat de la requête
+     */
     private JsonObjectRequest requestUpdate(String url, JSONObject body) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, body,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, body,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getBaseContext(), R.string.success_account_update,
                                        Toast.LENGTH_LONG).show();
+
+                        updateInitials(firstNameInput.getText().toString(),
+                                       lastNameInput.getText().toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -169,5 +204,15 @@ public class MyAccountActivity extends BaseActivity {
             }
         };
         return jsonObjectRequest;
+    }
+
+    /**
+     * Permet de mettre à jour les initiales du profil
+     * @param firstName le prénom de l'utilisateur
+     * @param lastName le nom de l'utilisateur
+     */
+    private void updateInitials(String firstName, String lastName) {
+        String initials = firstName.charAt(0) + "" + lastName.charAt(0);
+        userInitials.setText(initials.toUpperCase());
     }
 }
