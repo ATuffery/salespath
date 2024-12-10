@@ -27,10 +27,20 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.nav_account) {
             Intent intent = new Intent(this, MyAccountActivity.class);
+
+            Intent intentParent = getIntent();
+            intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+            intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+
             startActivity(intent);
             return true;
         } else if (id == R.id.nav_contacts) {
             Intent intent = new Intent(this, ContactsActivity.class);
+
+            Intent intentParent = getIntent();
+            intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+            intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+
             startActivity(intent);
             return true;
         } else if (id == R.id.nav_parcours) {
