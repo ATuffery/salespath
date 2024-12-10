@@ -108,6 +108,7 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("idPerson", accountId);
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
+            Log.d("JSON", "def");
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -126,6 +127,7 @@ public class CreateContactActivity extends BaseActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         msgError.setText(getString(R.string.error_server));
+                        Log.d("API", "PAI");
                     }
                 }) {
             @Override

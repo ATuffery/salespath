@@ -90,5 +90,6 @@
         android:padding="@dimen/button_padding"
         android:backgroundTint="@color/primary"
         android:textColor="@color/white"
-        android:layout_marginTop="@dimen/margin_bottom_extra_large"/>
+        android:layout_marginTop="@dimen/margin_bottom_extra_large"
+        android:onClick="updateAccount"/>
 </LinearLayout>
