@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     public EditText passwordEntry;
     public TextView errorMsg;
     public static String apiKey;
+    public static String accountId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             apiKey = response.getString("apiKey");
+                            accountId = response.getString("id");
                             goToHomePage();
                         } catch (JSONException e) {
                             displayServerError();
@@ -109,8 +111,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void goToHomePage() {
         Intent intent = new Intent(this, MainActivity.class);
-        // on passe l'apiKey dans l'intent
         intent.putExtra("apiKey", apiKey);
+        intent.putExtra("accountId", accountId);
         startActivity(intent);
     }
 
