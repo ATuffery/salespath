@@ -61,6 +61,7 @@ public class CreateContactActivity extends BaseActivity {
         this.typeInput = findViewById(R.id.contactType);
         this.msgError = findViewById(R.id.msgError);
 
+        findViewById(R.id.typeProspect).setSelected(true);
     }
 
     public void goToContacts() {
@@ -101,7 +102,7 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("firstName", firstName);
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
-            jsonBody.put("isClient", type.equals("client"));
+            jsonBody.put("isClient", type.equals("Client"));
             jsonBody.put("latitude", lat);
             jsonBody.put("longitude", lon);
             jsonBody.put("idPerson", accountId);
