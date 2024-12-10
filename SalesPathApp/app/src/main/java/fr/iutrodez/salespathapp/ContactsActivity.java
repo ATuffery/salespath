@@ -56,8 +56,12 @@ public class ContactsActivity extends BaseActivity  {
     }
 
     public void goToCreateContact(View btn) {
-        Log.d("test", "onclick");
         Intent intent = new Intent(this, CreateContactActivity.class);
+
+        Intent intentParent = getIntent();
+        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+
         startActivity(intent);
     }
 
