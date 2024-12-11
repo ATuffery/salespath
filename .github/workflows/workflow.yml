@@ -56,8 +56,9 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           docker pull 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
-          docker stop api-container || true
-          docker rm api-container || true
-          docker run -d -p 8080:8080 --name api-container 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+          docker stop intelligent_ellis || true
+          docker rm intelligent_ellis || true
+          docker run -d -p 8080:8080 --name intelligent_ellis 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+
       env:
         AWS_REGION: eu-west-3
