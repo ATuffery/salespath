@@ -12,12 +12,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +34,10 @@ public class ContactsActivity extends BaseActivity {
     private RequestQueue queue;
     private Intent intent;
     private static final String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/get?id=";
-
     private String id;
     private String apiKey;
+
+    private ArrayList<CardWithTwoLines> contacts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +50,22 @@ public class ContactsActivity extends BaseActivity {
         this.id = intent.getStringExtra("accountId");
         this.apiKey = intent.getStringExtra("apiKey");
 
-       this. queue = Volley.newRequestQueue(this);
+        this. queue = Volley.newRequestQueue(this);
 
-        List<CardWithTwoLines> clientList = getClientList();
+        getClientList();
 
-        CardWithTwoLinesAdapteur adapter = new CardWithTwoLinesAdapteur(clientList);
+        CardWithTwoLinesAdapteur adapter = new CardWithTwoLinesAdapteur(contacts);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private List<CardWithTwoLines> getClientList() {
+    private void getClientList() {
         this.queue.add(requestClientList(this.URL + this.id));
-        return null;
+    }
+
+    public void displayServerError() {
+        Toast.makeText(this, R.string.error_server, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -67,21 +73,36 @@ public class ContactsActivity extends BaseActivity {
      * @param url l'url de l'API
      * @return le JSON avec les informations du compte en cas de succès
      */
-    private JsonObjectRequest requestClientList(String url) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+    private JsonArrayRequest requestClientList(String url) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         try {
-                            String lastName = response.getString("lastName");
-                            String firstName = response.getString("firstName");
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject data = response.getJSONObject(i);
+                                contacts.add(new CardWithTwoLines(
+                                        data.getString("firstName") + " " + data.getString("lastName"),
+                                        data.getBoolean("client") ? "Client" : "Prospect",
+                                        data.getString("address"),
+                                        data.getString("entrepriseName"),
+                                        "Modifier",
+                                        () -> {
+                                            Intent intent = new Intent(ContactsActivity.this, UpdateContactActivity.class);
 
-                            lastNameInput.setText(lastName);
-                            firstNameInput.setText(firstName);
-                            addressInput.setText(response.getString("address"));
-                            emailInput.setText(response.getString("email"));
+                                            Intent intentParent = getIntent();
+                                            intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+                                            intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+                                            try {
+                                                intent.putExtra("contactId", intentParent.getStringExtra(data.getString("id")));
+                                            } catch (JSONException e) {
+                                                throw new RuntimeException(e);
+                                            }
 
-                            updateInitials(firstName, lastName);
+                                            startActivity(intent);
+                                        }
+                                ));
+                            }
                         } catch (JSONException e) {
                             displayServerError();
                         }
@@ -107,11 +128,11 @@ public class ContactsActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", intent.getStringExtra("apiKey"));
+                headers.put("X-API-KEY", apiKey);
                 return headers;
             }
         };
-        return jsonObjectRequest;
+        return jsonArrayRequest;
     }
 
     public void goToCreateContact(View btn) {

@@ -11,6 +11,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/addContact"
@@ -199,7 +200,7 @@
 
         <!-- Créer Button -->
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/create_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Créer"
@@ -210,6 +211,18 @@
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/margin_bottom_extra_large"
             android:onClick="create"/>
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Supprimer"
+            android:layout_marginHorizontal="@dimen/margin_horizontal"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/button_padding"
+            android:backgroundTint="@color/alert"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/margin_bottom_small"/>
 
     </LinearLayout>
 </android.widget.ScrollView>

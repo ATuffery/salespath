@@ -64,6 +64,7 @@ public class CreateContactActivity extends BaseActivity {
         this.msgError = findViewById(R.id.msgError);
 
         findViewById(R.id.typeProspect).setSelected(true);
+        findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
     }
 
     public void goToContacts() {
@@ -109,7 +110,6 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("idPerson", accountId);
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
-            Log.d("JSON", "def");
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);

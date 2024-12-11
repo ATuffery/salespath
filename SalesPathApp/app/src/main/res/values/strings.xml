@@ -10,6 +10,7 @@
     <string name="contacts">Mes contacts</string>
     <string name="add">Ajouter</string>
     <string name="addContact">Ajouter un contact</string>
+    <string name="editContact">Modifier un contact</string>
     <string name="type">Type</string>
     <string name="company">Entreprise</string>
     <string name="companyName">"Nom de l'entreprise"</string>
