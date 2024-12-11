@@ -37,6 +37,7 @@
         <activity android:name=".MyAccountActivity"></activity>
         <activity android:name=".ContactsActivity"></activity>
         <activity android:name=".CreateContactActivity"></activity>
+        <activity android:name=".UpdateContactActivity"></activity>
     </application>
 
 </manifest>
