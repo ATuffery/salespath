@@ -6,6 +6,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
+import fr.iutrodez.salespathapp.auth.LoginActivity;
+import fr.iutrodez.salespathapp.contact.ContactsActivity;
+import fr.iutrodez.salespathapp.user.MyAccountActivity;
+
 public class BaseActivity extends AppCompatActivity {
 
     @Override

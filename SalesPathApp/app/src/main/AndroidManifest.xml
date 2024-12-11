@@ -25,7 +25,7 @@
 
         <!-- Déclaration de l'activité principale -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +33,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".CreateAccountActivity"></activity>
-        <activity android:name=".MyAccountActivity"></activity>
-        <activity android:name=".ContactsActivity"></activity>
-        <activity android:name=".CreateContactActivity"></activity>
-        <activity android:name=".UpdateContactActivity"></activity>
+        <activity android:name=".auth.CreateAccountActivity"></activity>
+        <activity android:name=".user.MyAccountActivity"></activity>
+        <activity android:name=".contact.ContactsActivity"></activity>
+        <activity android:name=".contact.CreateContactActivity"></activity>
+        <activity android:name=".contact.UpdateContactActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.card;
 
 public class CardWithTwoLines {
     private String title;

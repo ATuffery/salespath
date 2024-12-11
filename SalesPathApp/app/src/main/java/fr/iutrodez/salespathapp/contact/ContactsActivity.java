@@ -1,15 +1,10 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.contact;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,12 +18,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ContactsActivity extends BaseActivity  {
+import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.card.CardWithTwoLines;
+import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
+
+public class ContactsActivity extends BaseActivity {
 
     private RequestQueue queue;
     private Intent intent;

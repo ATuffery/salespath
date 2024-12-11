@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.card;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import fr.iutrodez.salespathapp.R;
 
 public class CardWithTwoLinesAdapteur extends RecyclerView.Adapter<CardWithTwoLinesAdapteur.ItineraryViewHolder> {
     private List<CardWithTwoLines> itemList;

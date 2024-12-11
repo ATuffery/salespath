@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.utils;
 
 import java.util.regex.Pattern;
 

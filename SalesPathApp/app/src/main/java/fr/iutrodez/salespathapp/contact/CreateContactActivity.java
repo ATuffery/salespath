@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.contact;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,10 +18,13 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.utils.CheckInput;
 
 public class CreateContactActivity extends BaseActivity {
 

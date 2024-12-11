@@ -1,17 +1,11 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,6 +19,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.utils.CheckInput;
 
 /**
  * Permet de gérer la page de d'information d'un compte d'un commercial

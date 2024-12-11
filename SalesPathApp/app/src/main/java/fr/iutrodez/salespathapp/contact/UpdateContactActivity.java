@@ -1,9 +1,12 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.contact;
 
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.R;
 
 public class UpdateContactActivity extends BaseActivity {
 

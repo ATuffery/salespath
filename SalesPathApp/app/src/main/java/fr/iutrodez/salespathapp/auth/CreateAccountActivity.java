@@ -1,7 +1,5 @@
-package fr.iutrodez.salespathapp;
+package fr.iutrodez.salespathapp.auth;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +21,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.utils.CheckInput;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
