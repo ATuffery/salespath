@@ -11,12 +11,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,15 +48,20 @@ public class UpdateContactActivity extends BaseActivity {
     private TextView msgError;
     private static final String URL_DELETE = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/deleteOne?id=";
     private static final String URL_MODIFY = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/updateOne?id=";
+    private static final String URL_INFO = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/getOne?id=";
     private RequestQueue queue;
     private String apiKey;
     private String accountId;
     private String contactId;
+    private RadioButton client;
+    private RadioButton prospect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_contact);
+
+        this.queue = Volley.newRequestQueue(this);
 
         this.intent = getIntent();
         this.accountId = intent.getStringExtra("accountId");
@@ -73,6 +81,8 @@ public class UpdateContactActivity extends BaseActivity {
         this.phoneNumberInput = findViewById(R.id.phoneNumber);
         this.typeInput = findViewById(R.id.contactType);
         this.msgError = findViewById(R.id.msgError);
+        this.client = findViewById(R.id.typeContact);
+        this.prospect = findViewById(R.id.typeProspect);
 
         modify.setText("Modifier");
         modify.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +99,67 @@ public class UpdateContactActivity extends BaseActivity {
         });
 
         title.setText(R.string.editContact);
+
+        initialDisplay();
+    }
+
+    private void initialDisplay() {
+        queue.add(requestInfo(this.URL_INFO + this.contactId));
+    }
+
+    private JsonObjectRequest requestInfo(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            companyAddressInput.setText(response.getString("address"));
+                            companyNameInput.setText(response.getString("enterpriseName"));
+                            companyDescriptionInput.setText(response.getString("description"));
+                            latInput.setText(String.valueOf(response.getJSONArray("coordonates").get(0)));
+                            lonInput.setText(String.valueOf(response.getJSONArray("coordonates").get(1)));
+                            lastNameInput.setText(response.getString("lastName"));
+                            firstNameInput.setText(response.getString("firstName"));
+                            phoneNumberInput.setText(response.getString("phoneNumber"));
+                            if (response.getString("client").equals("true")) {
+                                typeInput.check(client.getId());
+                            } else {
+                                typeInput.check(prospect.getId());
+                            }
+
+                        } catch (JSONException e) {
+                            msgError.setText(getString(R.string.error_server));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            int statusCode = error.networkResponse.statusCode;
+                            if (statusCode == 404) {
+                                msgError.setText(getString(R.string.error_find_account));
+                            } else {
+                                msgError.setText(getString(R.string.error_server));
+                            }
+                        } else {
+                            msgError.setText(getString(R.string.error_server));
+                        }
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", intent.getStringExtra("apiKey"));
+                return headers;
+            }
+        };
+        return jsonObjectRequest;
     }
 
     private void deleteContact() {
+        Log.e("URL", this.URL_DELETE + this.contactId);
         this.queue.add(requestClientDeletion(this.URL_DELETE + this.contactId));
     }
 
@@ -122,14 +190,16 @@ public class UpdateContactActivity extends BaseActivity {
         String[] coord = new String[] {lat, lon};
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("entrepriseName", companyName);
+            jsonBody.put("enterpriseName", companyName);
             jsonBody.put("address", address);
             jsonBody.put("description", description);
             jsonBody.put("firstName", firstName);
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
             jsonBody.put("isClient", type.equals("Client"));
-            jsonBody.put("coord", coord);
+            jsonBody.put("coordinates", new JSONArray(coord));
+            jsonBody.put("idPerson", accountId);
+
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
         }
@@ -139,11 +209,16 @@ public class UpdateContactActivity extends BaseActivity {
 
     private void goToContacts() {
         Intent intent = new Intent(this, ContactsActivity.class);
+
+        Intent intentParent = getIntent();
+        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+
         startActivity(intent);
     }
 
     private JsonObjectRequest requestClientDeletion(String url) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -191,6 +266,4 @@ public class UpdateContactActivity extends BaseActivity {
         };
         return jsonObjectRequest;
     }
-
-
 }

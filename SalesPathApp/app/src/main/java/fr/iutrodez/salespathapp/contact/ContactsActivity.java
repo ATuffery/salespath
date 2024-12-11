@@ -2,6 +2,7 @@ package fr.iutrodez.salespathapp.contact;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -44,8 +45,6 @@ public class ContactsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewHorizontal);
-
         this.intent = getIntent();
         this.id = intent.getStringExtra("accountId");
         this.apiKey = intent.getStringExtra("apiKey");
@@ -53,11 +52,6 @@ public class ContactsActivity extends BaseActivity {
         this. queue = Volley.newRequestQueue(this);
 
         getClientList();
-
-        CardWithTwoLinesAdapteur adapter = new CardWithTwoLinesAdapteur(contacts);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void getClientList() {
@@ -79,13 +73,15 @@ public class ContactsActivity extends BaseActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+                            Log.d("data", "taille array " + response.length());
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject data = response.getJSONObject(i);
+
                                 contacts.add(new CardWithTwoLines(
                                         data.getString("firstName") + " " + data.getString("lastName"),
                                         data.getBoolean("client") ? "Client" : "Prospect",
                                         data.getString("address"),
-                                        data.getString("entrepriseName"),
+                                        data.getString("enterpriseName"),
                                         "Modifier",
                                         () -> {
                                             Intent intent = new Intent(ContactsActivity.this, UpdateContactActivity.class);
@@ -94,8 +90,10 @@ public class ContactsActivity extends BaseActivity {
                                             intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
                                             intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
                                             try {
-                                                intent.putExtra("contactId", intentParent.getStringExtra(data.getString("id")));
+                                                Log.e("id", data.getString("id"));
+                                                intent.putExtra("contactId", data.getString("id"));
                                             } catch (JSONException e) {
+                                                Log.e("JSONEXC", "JSONEXC");
                                                 throw new RuntimeException(e);
                                             }
 
@@ -103,8 +101,15 @@ public class ContactsActivity extends BaseActivity {
                                         }
                                 ));
                             }
+                            CardWithTwoLinesAdapteur adapter = new CardWithTwoLinesAdapteur(contacts);
+
+                            RecyclerView recyclerView = findViewById(R.id.recyclerViewHorizontal);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(ContactsActivity.this));
+
                         } catch (JSONException e) {
                             displayServerError();
+                            Log.e("EE", "EE");
                         }
                     }
                 },
@@ -118,9 +123,11 @@ public class ContactsActivity extends BaseActivity {
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 displayServerError();
+                                Log.e("AA", "AA");
                             }
                         } else {
                             displayServerError();
+                            Log.e("CC", "CC2");
                         }
                     }
                 }) {
