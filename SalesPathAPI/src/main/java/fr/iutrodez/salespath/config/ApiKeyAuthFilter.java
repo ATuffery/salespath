@@ -16,6 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtre pour l'authentification par clé API
+ */
 @Component
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 

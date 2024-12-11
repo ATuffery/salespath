@@ -5,6 +5,9 @@ import jakarta.persistence.Id;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Représentation d'un client dans Mongo DB
+ */
 @Document(collection = "Client")
 public class Client {
 
@@ -22,6 +25,9 @@ public class Client {
     @GeneratedValue
     private ObjectId id;
 
+    /**
+     * Constructeur par défaut
+     */
     public Client(String enterpriseName, String address, String description,
             String firstName, String lastName, String phoneNumber,
             String isClient, Double[] coordonates, String idPerson) {

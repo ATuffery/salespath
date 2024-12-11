@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.iutrodez.salespathapp.card.CardWithTwoLines;
+import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
+
 public class MainActivity extends BaseActivity {
 
     private MapView map;
