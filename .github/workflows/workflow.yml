@@ -29,6 +29,8 @@ jobs:
     # 3. Se connecter à AWS pour pull l'image Docker (ECR)
     - name: Login to AWS ECR
       uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_REGION: eu-west-3
 
     # 4. Construire et pousser l'image Docker depuis le dossier SalesPathAPI
     - name: Build and push Docker image
