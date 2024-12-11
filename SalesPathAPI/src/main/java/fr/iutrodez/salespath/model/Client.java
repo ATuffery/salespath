@@ -24,7 +24,7 @@ public class Client {
 
     public Client(String enterpriseName, String address, String description,
             String firstName, String lastName, String phoneNumber,
-            String isClient, String latitude, String longitude, String idPerson) {
+            String isClient, Double[] coordonates, String idPerson) {
 
         Boolean client = Boolean.parseBoolean(isClient);
 
@@ -35,8 +35,7 @@ public class Client {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.isClient = client;
-        this.coordonates[0] = Double.parseDouble(latitude);
-        this.coordonates[1] = Double.parseDouble(longitude);
+        this.coordonates = coordonates;
         this.idPerson = Long.parseLong(idPerson);
     }
 
