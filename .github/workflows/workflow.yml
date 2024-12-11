@@ -43,9 +43,9 @@ jobs:
     - name: Build and push Docker image
       run: |
         cd SalesPathAPI
-        IMAGE_NAME=345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath
-        docker build -t $IMAGE_NAME:latest .
-        docker push $IMAGE_NAME:latest
+        docker build -t api-salespath:latest .
+        docker tag api-salespath:latest 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+        docker push 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
 
     # 6. Déployer l'application sur l'instance EC2
     - name: Deploy to EC2
@@ -56,9 +56,9 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           docker pull 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
-          docker stop intelligent_ellis || true
-          docker rm intelligent_ellis || true
-          docker run -d -p 8080:8080 --name intelligent_ellis 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
+          docker stop container_api || true
+          docker rm container_api || true
+          docker run -d -p 8080:8080 --name container_api 345594604531.dkr.ecr.eu-west-3.amazonaws.com/api-salespath:latest
 
       env:
         AWS_REGION: eu-west-3
