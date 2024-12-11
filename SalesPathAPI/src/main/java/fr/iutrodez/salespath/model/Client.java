@@ -2,6 +2,9 @@ package fr.iutrodez.salespath.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+
+import java.util.Arrays;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,7 +21,7 @@ public class Client {
     private String lastName;
     private String phoneNumber;
     private Boolean isClient;
-    private Double[] coordonates;
+    private Double[] coordinates;
     private Long idPerson;
 
     @Id
@@ -30,9 +33,8 @@ public class Client {
      */
     public Client(String enterpriseName, String address, String description,
             String firstName, String lastName, String phoneNumber,
-            String isClient, Double[] coordonates, String idPerson) {
+            Boolean isClient, Double[] coordinates, Long idPerson) {
 
-        Boolean client = Boolean.parseBoolean(isClient);
 
         this.enterpriseName = enterpriseName;
         this.address = address;
@@ -40,9 +42,9 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.isClient = client;
-        this.coordonates = coordonates;
-        this.idPerson = Long.parseLong(idPerson);
+        this.isClient = isClient;
+        this.coordinates = coordinates;
+        this.idPerson = idPerson;
     }
 
     public String getEnterpriseName() {
@@ -102,11 +104,11 @@ public class Client {
     }
 
     public Double[] getCoordonates() {
-        return coordonates;
+        return coordinates;
     }
 
-    public void setCoordonates(Double[] coordonates) {
-        this.coordonates = coordonates;
+    public void setCoordonates(Double[] coordinates) {
+        this.coordinates = coordinates;
     }
 
     public void setId(ObjectId id) {
