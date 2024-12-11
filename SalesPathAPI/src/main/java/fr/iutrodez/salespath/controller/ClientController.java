@@ -32,7 +32,8 @@ public class ClientController {
             clientService.CreateClient(client);
             return ResponseEntity.status(201).body(Map.of("success", "Client ajouté avec succès"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erreur lors de la requête à la base de données (500)");
+            System.err.print(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("Erreur", "Ajout non effectué (500)"));
         }
     }
 
@@ -48,7 +49,7 @@ public class ClientController {
         try {
             return ResponseEntity.status(200).body(clientService.GetClientsById(id));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body("Error, type Id not valid");
+            return ResponseEntity.status(400).body(Map.of("Error", "type Id not valid"));
         } catch (Exception e) {
             System.err.print(e.getMessage());
             return ResponseEntity.status(500).body(Map.of("Error", "in BDD"));
@@ -63,10 +64,11 @@ public class ClientController {
      *         un code 500 en cas d'erreur.
      */
     @GetMapping(value = "/getOne")
-    public ResponseEntity<?> getClient(@RequestParam ObjectId id) {
+    public ResponseEntity<?> getClient(@RequestParam String id) {
         try {
             return ResponseEntity.status(200).body(clientService.GetClientById(id));
         } catch (Exception e) {
+            System.err.print(e.getMessage());
             return ResponseEntity.status(500).body(Map.of("Error", "in BDD"));
         }
     }
@@ -79,12 +81,12 @@ public class ClientController {
      *         avec un code 500 en cas d'échec.
      */
     @DeleteMapping(value = "/deleteOne")
-    public ResponseEntity<?> deleteClient(@RequestParam ObjectId id) {
+    public ResponseEntity<?> deleteClient(@RequestParam String id) {
         try {
             clientService.DeleteClientById(id);
             return ResponseEntity.status(200).body(Map.of("success", "Suppression effectuée"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Suppression non effectuée");
+            return ResponseEntity.status(500).body(Map.of("Error","Suppression non effectuée"));
         }
     }
 
@@ -97,12 +99,12 @@ public class ClientController {
      *         avec un code 500 en cas d'échec.
      */
     @PutMapping(value = "/updateOne")
-    public ResponseEntity<?> updateClient(@RequestBody Client client, @RequestParam ObjectId id) {
+    public ResponseEntity<?> updateClient(@RequestBody Client client, @RequestParam String id) {
         try {
             clientService.UpdateClient(client, id);
             return ResponseEntity.status(200).body(Map.of("success", "Mise à jour effectuée"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erreur lors de la requête à la base de données (500)");
+            return ResponseEntity.status(500).body(Map.of("Error", "Modification non effectué (500)"));
         }
     }
 }
