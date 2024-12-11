@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,7 +27,7 @@ public class Client {
 
     @Id
     @GeneratedValue
-    private ObjectId id;
+    private String id;
 
     /**
      * Constructeur par défaut
@@ -34,7 +35,6 @@ public class Client {
     public Client(String enterpriseName, String address, String description,
             String firstName, String lastName, String phoneNumber,
             Boolean isClient, Double[] coordinates, Long idPerson) {
-
 
         this.enterpriseName = enterpriseName;
         this.address = address;
@@ -45,6 +45,8 @@ public class Client {
         this.isClient = isClient;
         this.coordinates = coordinates;
         this.idPerson = idPerson;
+
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getEnterpriseName() {
@@ -111,11 +113,11 @@ public class Client {
         this.coordinates = coordinates;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 

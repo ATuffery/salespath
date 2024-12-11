@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service pour gérer les opérations relatives aux clients.
@@ -48,26 +49,35 @@ public class ClientService {
 
     /**
      * Récupère un client spécifique à partir de son ID.
-     * 
+     *
      * @param id L'ID du client.
      * @return L'objet Client correspondant.
      * @throws RuntimeException En cas d'erreur lors de la récupération.
      */
-    public Client GetClientById(ObjectId id) {
+    public Client GetClientById(String id) {
         try {
-            return clientRepository.findById(id);
+            // Utilisation de Optional pour vérifier si un client a été trouvé
+            Optional<Client> clientOptional = clientRepository.findById(id);
+            System.out.print(clientOptional);
+
+            // Si le client est présent, on le retourne
+            if (clientOptional.isPresent()) {
+                return clientOptional.get();  // Retourner le client trouvé
+            } else {
+                // Si le client n'est pas trouvé, lancer une exception ou retourner null selon votre choix
+                throw new RuntimeException("Client non trouvé avec l'ID : " + id);
+            }
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la récupération du client par ID : " + e.getMessage());
         }
     }
-
     /**
      * Supprime un client à partir de son ID.
      * 
      * @param id L'ID du client à supprimer.
      * @throws RuntimeException En cas d'erreur lors de la suppression.
      */
-    public void DeleteClientById(ObjectId id) {
+    public void DeleteClientById(String id) {
         try {
             clientRepository.deleteClientById(id);
         } catch (Exception e) {
@@ -83,30 +93,24 @@ public class ClientService {
      * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe
      *                                  pas.
      */
-    public void UpdateClient(Client updatedClient, ObjectId id) {
-        Optional<Client> cli;
-        cli = Optional.ofNullable(clientRepository.findById(id));
+    public void UpdateClient(Client updatedClient, String id) {
+        // Recherche du client à partir de son ID, et gestion du cas où il n'est pas trouvé
+        Client existingClient = clientRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Client introuvable avec l'ID : " + id));
 
-        if (cli.isPresent()) {
-            Client existingClient = cli.get();
+        // Mise à jour des champs
+        existingClient.setEnterpriseName(updatedClient.getEnterpriseName());
+        existingClient.setAddress(updatedClient.getAddress());
+        existingClient.setDescription(updatedClient.getDescription());
+        existingClient.setFirstName(updatedClient.getFirstName());
+        existingClient.setLastName(updatedClient.getLastName());
+        existingClient.setPhoneNumber(updatedClient.getPhoneNumber());
+        existingClient.setClient(updatedClient.getClient());
+        existingClient.setCoordonates(updatedClient.getCoordonates());
+        existingClient.setIdPerson(updatedClient.getIdPerson());
 
-            // Mise à jour des champs
-            existingClient.setEnterpriseName(updatedClient.getEnterpriseName());
-            existingClient.setAddress(updatedClient.getAddress());
-            existingClient.setDescription(updatedClient.getDescription());
-            existingClient.setFirstName(updatedClient.getFirstName());
-            existingClient.setLastName(updatedClient.getLastName());
-            existingClient.setPhoneNumber(updatedClient.getPhoneNumber());
-            existingClient.setClient(updatedClient.getClient());
-            existingClient.setCoordonates(updatedClient.getCoordonates());
-            existingClient.setIdPerson(updatedClient.getIdPerson());
-
-            // Sauvegarde des modifications
-            clientRepository.save(existingClient);
-        } else {
-            // Gestion du cas où le client n'existe pas
-            throw new IllegalArgumentException("Client introuvable avec l'ID : " + id);
-        }
+        // Sauvegarde des modifications
+        clientRepository.save(existingClient);
     }
 
 }

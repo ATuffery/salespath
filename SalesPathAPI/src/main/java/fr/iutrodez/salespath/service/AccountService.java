@@ -70,7 +70,7 @@ public class AccountService {
         try {
             // On génère l'API Key à l'aide de l'UUID
             String uuid = UUID.randomUUID().toString();
-            String apiKey = uuid.replace("-", "").substring(0, 30);
+            String apiKey = uuid.replace("-", "");
 
             salesPerson.setApiKey(apiKey);
 

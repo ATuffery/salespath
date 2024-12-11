@@ -1,9 +1,9 @@
 package fr.iutrodez.salespath.repository;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import fr.iutrodez.salespath.model.Client;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface de repository pour gérer les opérations CRUD liées aux clients.
@@ -20,14 +20,15 @@ public interface IClientRepository extends MongoRepository<Client, String> {
 
     /**
      * Recherche un client spécifique via son ID unique.
+     *
      * @param id L'ID unique du client.
      * @return L'objet Client correspondant ou null si non trouvé.
      */
-    Client findById(ObjectId id);
+    Optional<Client> findById(String id);
 
     /**
      * Supprime un client de la base de données en utilisant son ID unique.
      * @param id L'ID unique du client à supprimer.
      */
-    void deleteClientById(ObjectId id);
+    void deleteClientById(String id);
 }
