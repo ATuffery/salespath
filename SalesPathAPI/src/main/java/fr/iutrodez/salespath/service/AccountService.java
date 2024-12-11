@@ -1,6 +1,5 @@
 package fr.iutrodez.salespath.service;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.repository.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
