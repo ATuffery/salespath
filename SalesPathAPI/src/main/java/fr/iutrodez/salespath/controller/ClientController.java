@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,8 +21,10 @@ public class ClientController {
 
     /**
      * Endpoint pour créer un nouveau client.
+     * 
      * @param client L'objet Client à ajouter.
-     * @return Une réponse HTTP avec un code 201 si réussi, ou un code 500 en cas d'erreur.
+     * @return Une réponse HTTP avec un code 201 si réussi, ou un code 500 en cas
+     *         d'erreur.
      */
     @PostMapping(value = "/add")
     public ResponseEntity<String> createNewClient(@RequestBody Client client) {
@@ -37,36 +38,44 @@ public class ClientController {
 
     /**
      * Endpoint pour récupérer une liste de clients associés à une personne donnée.
+     * 
      * @param id L'ID de la personne.
-     * @return Une liste de clients avec un code 200 si réussi, ou null avec un code 500 en cas d'erreur.
+     * @return Une liste de clients avec un code 200 si réussi, ou null avec un code
+     *         500 en cas d'erreur.
      */
     @GetMapping(value = "/get")
-    public ResponseEntity<List<Client>> getClients(@RequestParam Long id) {
+    public ResponseEntity<?> getClients(@RequestParam Long id) {
         try {
             return ResponseEntity.status(200).body(clientService.GetClientsById(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body("Error, type Id not valid");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body("Error, in BDD");
         }
     }
 
     /**
      * Endpoint pour récupérer un client spécifique via son ID.
+     * 
      * @param id L'ID du client.
-     * @return L'objet Client correspondant avec un code 200 si réussi, ou null avec un code 500 en cas d'erreur.
+     * @return L'objet Client correspondant avec un code 200 si réussi, ou null avec
+     *         un code 500 en cas d'erreur.
      */
     @GetMapping(value = "/getOne")
-    public ResponseEntity<Client> getClient(@RequestParam ObjectId id) {
+    public ResponseEntity<?> getClient(@RequestParam ObjectId id) {
         try {
             return ResponseEntity.status(200).body(clientService.GetClientById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body("Error, in BDD");
         }
     }
 
     /**
      * Endpoint pour supprimer un client via son ID.
+     * 
      * @param id L'ID du client à supprimer.
-     * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur avec un code 500 en cas d'échec.
+     * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur
+     *         avec un code 500 en cas d'échec.
      */
     @DeleteMapping(value = "/deleteOne")
     public ResponseEntity<String> deleteClient(@RequestParam ObjectId id) {
@@ -80,9 +89,11 @@ public class ClientController {
 
     /**
      * Endpoint pour mettre à jour un client existant.
+     * 
      * @param client L'objet Client contenant les nouvelles données.
-     * @param id L'ID du client à mettre à jour.
-     * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur avec un code 500 en cas d'échec.
+     * @param id     L'ID du client à mettre à jour.
+     * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur
+     *         avec un code 500 en cas d'échec.
      */
     @PutMapping(value = "/updateOne")
     public ResponseEntity<String> updateClient(@RequestBody Client client, @RequestParam ObjectId id) {
