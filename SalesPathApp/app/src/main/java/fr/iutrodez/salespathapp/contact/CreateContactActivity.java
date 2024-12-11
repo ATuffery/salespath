@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,7 +95,7 @@ public class CreateContactActivity extends BaseActivity {
             msgError.setText(getString(R.string.typing_error));
             return;
         }
-
+        String[] coord = new String[] {lat, lon};
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("entrepriseName", companyName);
@@ -104,8 +105,7 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
             jsonBody.put("isClient", type.equals("Client"));
-            jsonBody.put("latitude", lat);
-            jsonBody.put("longitude", lon);
+            jsonBody.put("coord", coord);
             jsonBody.put("idPerson", accountId);
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
