@@ -23,6 +23,7 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 /**
  * Permet de gérer la page de d'information d'un compte d'un commercial
@@ -34,6 +35,8 @@ public class MyAccountActivity extends BaseActivity {
     private EditText addressInput;
     private EditText emailInput;
     private TextView userInitials;
+    private String apiKey;
+    private String accountId;
 
     private static final String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/";
 
@@ -51,6 +54,9 @@ public class MyAccountActivity extends BaseActivity {
         addressInput = findViewById(R.id.address);
         emailInput = findViewById(R.id.email);
         userInitials = findViewById(R.id.userInitials);
+
+        this.apiKey = Utils.dataAccess(this, "apiKey");
+        this.accountId = Utils.dataAccess(this, "accountId");
 
         intent = getIntent();
         queue = Volley.newRequestQueue(this);
@@ -110,7 +116,7 @@ public class MyAccountActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", intent.getStringExtra("apiKey"));
+                headers.put("X-API-KEY", apiKey);
                 return headers;
             }
         };
@@ -153,7 +159,7 @@ public class MyAccountActivity extends BaseActivity {
             Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
         }
 
-        queue.add(requestUpdate(this.URL + "update/" + intent.getStringExtra("accountId"),
+        queue.add(requestUpdate(this.URL + "update/" + this.accountId,
                                 jsonBody));
     }
 
@@ -197,7 +203,7 @@ public class MyAccountActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", intent.getStringExtra("apiKey"));
+                headers.put("X-API-KEY", apiKey);
                 return headers;
             }
         };

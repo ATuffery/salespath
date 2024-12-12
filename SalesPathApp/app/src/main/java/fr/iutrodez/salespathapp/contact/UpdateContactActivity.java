@@ -29,6 +29,7 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 public class UpdateContactActivity extends BaseActivity {
 
@@ -64,9 +65,11 @@ public class UpdateContactActivity extends BaseActivity {
         this.queue = Volley.newRequestQueue(this);
 
         this.intent = getIntent();
-        this.accountId = intent.getStringExtra("accountId");
         this.contactId = intent.getStringExtra("contactId");
-        this.apiKey = intent.getStringExtra("apiKey");
+        Log.d("dd", contactId + "");
+
+        this.apiKey = Utils.dataAccess(this, "apiKey");
+        this.accountId = Utils.dataAccess(this, "accountId");
 
         this.title = findViewById(R.id.title);
         this.delete = findViewById(R.id.delete_button);
@@ -151,7 +154,7 @@ public class UpdateContactActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", intent.getStringExtra("apiKey"));
+                headers.put("X-API-KEY", apiKey);
                 return headers;
             }
         };
@@ -209,11 +212,6 @@ public class UpdateContactActivity extends BaseActivity {
 
     private void goToContacts() {
         Intent intent = new Intent(this, ContactsActivity.class);
-
-        Intent intentParent = getIntent();
-        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
-        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
-
         startActivity(intent);
     }
 

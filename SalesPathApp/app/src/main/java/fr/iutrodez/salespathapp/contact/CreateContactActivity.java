@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 public class CreateContactActivity extends BaseActivity {
 
@@ -48,9 +50,8 @@ public class CreateContactActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_contact);
 
-        Intent intent = getIntent();
-        this.apiKey = intent.getStringExtra("apiKey");
-        this.accountId = intent.getStringExtra("accountId");
+        this.apiKey = Utils.dataAccess(this, "apiKey");
+        this.accountId = Utils.dataAccess(this, "accountId");
 
         this.companyAddressInput = findViewById(R.id.companyAddress);
         this.companyNameInput = findViewById(R.id.companyName);
@@ -99,14 +100,14 @@ public class CreateContactActivity extends BaseActivity {
         String[] coord = new String[] {lat, lon};
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("entrepriseName", companyName);
+            jsonBody.put("enterpriseName", companyName);
             jsonBody.put("address", address);
             jsonBody.put("description", description);
             jsonBody.put("firstName", firstName);
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
             jsonBody.put("isClient", type.equals("Client"));
-            jsonBody.put("coord", coord);
+            jsonBody.put("coordinates", new JSONArray(coord));
             jsonBody.put("idPerson", accountId);
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));

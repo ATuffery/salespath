@@ -29,6 +29,7 @@ import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 public class ContactsActivity extends BaseActivity {
 
@@ -44,13 +45,9 @@ public class ContactsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers);
-
-        this.intent = getIntent();
-        this.id = intent.getStringExtra("accountId");
-        this.apiKey = intent.getStringExtra("apiKey");
-
+        this.apiKey = Utils.dataAccess(this, "apiKey");
+        this.id = Utils.dataAccess(this, "accountId");
         this. queue = Volley.newRequestQueue(this);
-
         getClientList();
     }
 
@@ -85,18 +82,11 @@ public class ContactsActivity extends BaseActivity {
                                         "Modifier",
                                         () -> {
                                             Intent intent = new Intent(ContactsActivity.this, UpdateContactActivity.class);
-
-                                            Intent intentParent = getIntent();
-                                            intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
-                                            intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
                                             try {
-                                                Log.e("id", data.getString("id"));
                                                 intent.putExtra("contactId", data.getString("id"));
                                             } catch (JSONException e) {
-                                                Log.e("JSONEXC", "JSONEXC");
                                                 throw new RuntimeException(e);
                                             }
-
                                             startActivity(intent);
                                         }
                                 ));
@@ -109,7 +99,6 @@ public class ContactsActivity extends BaseActivity {
 
                         } catch (JSONException e) {
                             displayServerError();
-                            Log.e("EE", "EE");
                         }
                     }
                 },

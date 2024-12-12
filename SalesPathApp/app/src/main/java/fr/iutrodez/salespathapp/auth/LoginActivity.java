@@ -1,6 +1,8 @@
 package fr.iutrodez.salespathapp.auth;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,13 +29,13 @@ public class LoginActivity extends AppCompatActivity {
     public EditText loginEntry;
     public EditText passwordEntry;
     public TextView errorMsg;
-    public static String apiKey;
-    public static String accountId;
+    private SharedPreferences myPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.myPreferences = getSharedPreferences("me.xml", Activity.MODE_PRIVATE);
 
         loginEntry = findViewById(R.id.email);
         passwordEntry = findViewById(R.id.password);
@@ -76,8 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            apiKey = response.getString("apiKey");
-                            accountId = response.getString("id");
+                            SharedPreferences.Editor editor = myPreferences.edit();
+                            editor.putString("apiKey", response.getString("apiKey"));
+                            editor.putString("accountId", response.getString("id"));
+                            editor.apply();
                             goToHomePage();
                         } catch (JSONException e) {
                             displayServerError();
@@ -111,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void goToHomePage() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("apiKey", apiKey);
-        intent.putExtra("accountId", accountId);
         startActivity(intent);
     }
 

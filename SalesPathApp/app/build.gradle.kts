@@ -39,5 +39,6 @@ dependencies {
     implementation ("org.osmdroid:osmdroid-android:6.1.13")
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("androidx.preference:preference:1.2.0")
 
 }
