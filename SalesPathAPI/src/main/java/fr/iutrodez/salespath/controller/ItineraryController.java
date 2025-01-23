@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/client")
+@RequestMapping(value = "/itinerary")
 public class ItineraryController {
 
     @Autowired

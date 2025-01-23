@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/account/**", "/client/**"))
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/account/**", "/client/**", "itinerary/**"))
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/account/login", "/account/add").permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -5,9 +5,8 @@ import fr.iutrodez.salespath.model.Client;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 /**
  * Service pour gérer les opérations relatives aux clients.
@@ -56,21 +55,18 @@ public class ClientService {
      */
     public Client GetClientById(String id) {
         try {
-            // Utilisation de Optional pour vérifier si un client a été trouvé
             Optional<Client> clientOptional = clientRepository.findById(id);
-            System.out.print(clientOptional);
 
-            // Si le client est présent, on le retourne
             if (clientOptional.isPresent()) {
-                return clientOptional.get();  // Retourner le client trouvé
+                return clientOptional.get();
             } else {
-                // Si le client n'est pas trouvé, lancer une exception ou retourner null selon votre choix
                 throw new RuntimeException("Client non trouvé avec l'ID : " + id);
             }
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la récupération du client par ID : " + e.getMessage());
         }
     }
+
     /**
      * Supprime un client à partir de son ID.
      * 
@@ -113,4 +109,23 @@ public class ClientService {
         clientRepository.save(existingClient);
     }
 
+    /**
+     * Récupère les coordonnées d'un client à partir de son ID.
+     * @param id L'ID du client.
+     * @return Un tableau de coordonnées (latitude, longitude).
+     */
+    public Double[] GetCoordById(String id) {
+        try {
+            Optional<Client> clientOptional = clientRepository.findById(id);
+
+            if (clientOptional.isPresent()) {
+                Client client = clientOptional.get();
+                return client.getCoordonates();
+            } else {
+                throw new RuntimeException("Client non trouvé avec l'ID : " + id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des coordonnées du client : " + e.getMessage());
+        }
+    }
 }

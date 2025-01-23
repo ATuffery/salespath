@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface IItineraryRepository extends JpaRepository<Itinerary, Long> {
 
-    @Query("SELECT i FROM Itinerary i WHERE i.id = :id")
+    @Query("SELECT i FROM Itinerary i WHERE i.idItinerary = :id")
     Optional<Itinerary> findByIdUser(String id);
 }

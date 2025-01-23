@@ -1,7 +1,10 @@
 package fr.iutrodez.salespath.service;
 
+import fr.iutrodez.salespath.SalesPathApiApplication;
+import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.repository.IAccountRepository;
+import fr.iutrodez.salespath.utils.DifferentPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,29 +98,37 @@ public class AccountService {
 
     /**
      * Permet de mettre à jour les informations d'un commercial
-     * 
-     * @param id          l'id du commercial à mettre à jour
-     * @param salesPerson les nouvelles informations du commercial
+     * @param id l'ID du commercial à mettre à jour
+     * @param request les informations à mettre à jour
      * @return true si la mise à jour a réussi
+     * @throws DifferentPasswordException si le mot de passe actuel est incorrect
      * @throws RuntimeException si une erreur est survenue lors de la mise à jour
+     * @throws IllegalArgumentException si le compte n'existe pas
      */
-    public boolean updateSalesPerson(Long id, SalesPerson salesPerson) {
-        return accountRepository.findById(id)
-                .map(existing -> {
-                    existing.setFirstName(salesPerson.getFirstName());
-                    existing.setLastName(salesPerson.getLastName());
-                    existing.setAddress(salesPerson.getAddress());
-                    existing.setEmail(salesPerson.getEmail());
-                    existing.setPassword(passwordEncoder.encode(salesPerson.getPassword()));
-
-                    try {
-                        accountRepository.save(existing);
-                        return true;
-                    } catch (Exception e) {
-                        throw new RuntimeException("Error while saving the account : " + e.getMessage());
-                    }
-                })
+    public boolean updateSalesPerson(Long id, SalesPersonUpdateRequest request) throws DifferentPasswordException {
+        SalesPerson existing = accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
+
+        // On vérifie les mots de passe
+        if (!passwordEncoder.matches(request.getOldPassword() , existing.getPassword())) {
+            throw new DifferentPasswordException("Invalid old password");
+        }
+
+        existing.setFirstName(request.getSalesPerson().getFirstName());
+        existing.setLastName(request.getSalesPerson().getLastName());
+        existing.setAddress(request.getSalesPerson().getAddress());
+        existing.setEmail(request.getSalesPerson().getEmail());
+
+        if (!request.getSalesPerson().getPassword().isEmpty()) {
+            existing.setPassword(passwordEncoder.encode(request.getSalesPerson().getPassword()));
+        }
+
+        try {
+            accountRepository.save(existing);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while saving the account: " + e.getMessage());
+        }
     }
 
     /**

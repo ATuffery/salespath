@@ -1,7 +1,9 @@
 package fr.iutrodez.salespath.controller;
 
+import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.service.AccountService;
+import fr.iutrodez.salespath.utils.DifferentPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,19 +85,22 @@ public class AccountController {
     /**
      * Endpoint pour mettre à jour un commercial
      * @param id l'id du commercial à mettre à jour
-     * @param salesPerson les infos du commercial à mettre à jour
+     * @param request les infos du commercial à mettre à jour
      * @return un code 200 si le commercial a été mis à jour
      *         un code 404 si l'id en paramètre est invalide
      *         un code 500 si une erreur est survenue lors de la mise à jour
+     *         un code 400 si l'ancien mdp n'est pas le même que celui en BDD
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SalesPerson salesPerson) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SalesPersonUpdateRequest request) {
         try {
-            accountService.updateSalesPerson(id, salesPerson);
+            accountService.updateSalesPerson(id, request);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        } catch (DifferentPasswordException e) {
+            return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
         }
 
         return ResponseEntity.status(201).body(Map.of("success", "Account updated"));

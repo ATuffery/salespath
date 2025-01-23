@@ -1,8 +1,10 @@
 package fr.iutrodez.salespath.model;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+@Entity
 public class Itinerary {
 
     @Id
@@ -13,10 +15,7 @@ public class Itinerary {
 
     private String codeUser;
 
-    public Itinerary(String idItinerary, String nameItinerary, String codeUser) {
-        this.codeUser = codeUser;
-        this.nameItinerary = nameItinerary;
-        this.idItinerary = idItinerary;
+    public Itinerary() {
     }
 
     public String getIdItinerary() {
