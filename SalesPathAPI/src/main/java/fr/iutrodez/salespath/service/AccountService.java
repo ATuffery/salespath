@@ -108,6 +108,7 @@ public class AccountService {
                     existing.setLastName(salesPerson.getLastName());
                     existing.setAddress(salesPerson.getAddress());
                     existing.setEmail(salesPerson.getEmail());
+                    existing.setPassword(passwordEncoder.encode(salesPerson.getPassword()));
 
                     try {
                         accountRepository.save(existing);
