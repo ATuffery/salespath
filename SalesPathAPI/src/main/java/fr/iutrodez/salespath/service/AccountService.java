@@ -110,7 +110,7 @@ public class AccountService {
                 .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
 
         // On vérifie les mots de passe
-        if (!passwordEncoder.matches(request.getOldPassword() , existing.getPassword())) {
+        if (!request.getOldPassword().isEmpty() && !passwordEncoder.matches(request.getOldPassword() , existing.getPassword())) {
             throw new DifferentPasswordException("Invalid old password");
         }
 
@@ -119,7 +119,7 @@ public class AccountService {
         existing.setAddress(request.getSalesPerson().getAddress());
         existing.setEmail(request.getSalesPerson().getEmail());
 
-        if (!request.getSalesPerson().getPassword().isEmpty()) {
+        if (!request.getOldPassword().isEmpty() && !request.getSalesPerson().getPassword().isEmpty()) {
             existing.setPassword(passwordEncoder.encode(request.getSalesPerson().getPassword()));
         }
 
