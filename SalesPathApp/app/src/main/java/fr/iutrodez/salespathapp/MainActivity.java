@@ -4,9 +4,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -20,6 +22,8 @@ import java.util.List;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
+import fr.iutrodez.salespathapp.itinerary.CreateItinerary;
+import fr.iutrodez.salespathapp.user.MyAccountActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class MainActivity extends BaseActivity {
@@ -123,6 +127,16 @@ public class MainActivity extends BaseActivity {
             marker.setIcon(markerIcon);
             map.getOverlays().add(marker);
         }
+    }
+
+    public void gotToAddItinerary(View btn) {
+        Intent intent = new Intent(this, CreateItinerary.class);
+
+        Intent intentParent = getIntent();
+        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
+        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
+
+        startActivity(intent);
     }
 
     @Override

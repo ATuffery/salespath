@@ -4,6 +4,8 @@
     <string name="error_server">"Une erreur inatendue s'est produite."</string>
     <string name="error_login">"Vos informations de connexion semblent incorrectes. Veuillez réessayer."</string>
     <string name="error_loginEmpty">"Veuillez saisir votre email et mot de passe pour vous connecter."</string>
+    <string name="error_badPassword">"Votre mot de passe actuel ne correspond pas à celui renseigné."</string>
+    <string name="error_passwordLenght">"Votre nouveau mot de passe doit contenir entre 8 et 50 caractères."</string>
     <string name="error_emailAlreadyUsed">"Cette adresse email est déjà rattachée à un compte. Connectez-vous ou utilisez une autre email."</string>
     <string name="createAccount">Pas de compte ? Créez-en un.</string>
     <string name="login">Déjà un compte ? Connectez-vous.</string>
@@ -26,4 +28,5 @@
     <string name="typing_error">Des champs sont invalides, veuillez vérifier votre saisie.</string>
     <string name="success_account_update">Votre compte a bien été mis à jour.</string>
     <string name="error_find_account">Le compte n\'existe pas.</string>
+    <string name="modif_password">Modifier votre mot de passe</string>
 </resources>
