@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Titre -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Créer itinéraire"
+            android:textSize="@dimen/text_size_large"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/margin_bottom_large" />
+
+        <!-- Champ informations -->
+        <TextView
+            android:id="@+id/tv_informations_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Informations"
+            android:textSize="@dimen/text_size_medium"
+            android:paddingBottom="@dimen/margin_bottom_small"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_nom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom"
+            android:padding="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:backgroundTint="@color/grey"
+            android:textSize="@dimen/text_size_medium" />
+
+        <!-- Choix des contacts -->
+        <TextView
+            android:id="@+id/tv_contacts_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choix des contacts"
+            android:textSize="@dimen/text_size_medium"
+            android:paddingBottom="@dimen/margin_bottom_small"
+            android:textColor="@color/black" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <!-- Bouton Créer -->
+        <Button
+            android:id="@+id/btn_creer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_bottom_large"
+            android:text="Créer"
+            android:padding="@dimen/button_padding"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+    </LinearLayout>
+</ScrollView>

@@ -2,6 +2,7 @@ package fr.iutrodez.salespathapp.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ public class MyAccountActivity extends BaseActivity {
     private EditText firstNameInput;
     private EditText addressInput;
     private EditText emailInput;
+    private EditText oldPasswordInput;
+    private EditText newPasswordInput;
     private TextView userInitials;
     private String apiKey;
     private String accountId;
@@ -55,6 +58,8 @@ public class MyAccountActivity extends BaseActivity {
         addressInput = findViewById(R.id.address);
         emailInput = findViewById(R.id.email);
         userInitials = findViewById(R.id.userInitials);
+        oldPasswordInput = findViewById(R.id.oldPassword);
+        newPasswordInput = findViewById(R.id.newPassword);
 
         this.apiKey = Utils.dataAccess(this, "apiKey");
         this.accountId = Utils.dataAccess(this, "accountId");
@@ -136,10 +141,12 @@ public class MyAccountActivity extends BaseActivity {
      * @param button
      */
     public void updateAccount(View button) {
-        String lastName = lastNameInput.getText().toString().trim();
-        String firstName = firstNameInput.getText().toString().trim();
-        String address = addressInput.getText().toString().trim();
-        String email = emailInput.getText().toString().trim();
+        String lastName = Utils.inputValueFormatted(lastNameInput);
+        String firstName = Utils.inputValueFormatted(firstNameInput);
+        String address = Utils.inputValueFormatted(addressInput);
+        String email = Utils.inputValueFormatted(emailInput);
+        String oldPassword = Utils.inputValueFormatted(oldPasswordInput);
+        String newPassword = Utils.inputValueFormatted(newPasswordInput);
 
         if (!CheckInput.text(lastName, 1, 50) ||
                 !CheckInput.text(firstName, 1, 50) ||
@@ -150,16 +157,27 @@ public class MyAccountActivity extends BaseActivity {
             return;
         }
 
+        // En cas de modif de mot de passe
+        if ((!oldPassword.isEmpty() || !newPassword.isEmpty())
+            && CheckInput.text(newPassword, 8, 50)) {
+            Toast.makeText(getBaseContext(), R.string.error_passwordLenght, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         JSONObject jsonBody = new JSONObject();
+        JSONObject salesperson = new JSONObject();
         try {
-            jsonBody.put("firstName", firstName);
-            jsonBody.put("lastName", lastName);
-            jsonBody.put("address", address);
-            jsonBody.put("email", email);
+            salesperson.put("firstName", firstName);
+            salesperson.put("lastName", lastName);
+            salesperson.put("address", address);
+            salesperson.put("email", email);
+            salesperson.put("password", newPassword);
+            jsonBody.put("oldPassword", oldPassword);
+            jsonBody.put("salesPerson", salesperson);
         } catch (JSONException e) {
             Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
         }
-
+        Log.e("ID", this.accountId);
         queue.add(requestUpdate(this.URL + "update/" + this.accountId,
                                 jsonBody));
     }
@@ -196,7 +214,7 @@ public class MyAccountActivity extends BaseActivity {
                             }
                         } else {
                             Toast.makeText(getBaseContext(), R.string.error_server,
-                                           Toast.LENGTH_LONG).show();
+                                            Toast.LENGTH_LONG).show();
                         }
                     }
                 }) {

@@ -35,7 +35,8 @@
             android:text="Ajouter"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/primary"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:onClick="gotToAddItinerary"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewHorizontal"
