@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -47,9 +48,9 @@ public class UpdateContactActivity extends BaseActivity {
     private Button delete;
     private Button modify;
     private TextView msgError;
-    private static final String URL_DELETE = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/deleteOne?id=";
-    private static final String URL_MODIFY = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/updateOne?id=";
-    private static final String URL_INFO = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/getOne?id=";
+    private static final String URL_DELETE = Config.API_URL + "client/deleteOne?id=";
+    private static final String URL_MODIFY = Config.API_URL + "client/updateOne?id=";
+    private static final String URL_INFO = Config.API_URL + "client/getOne?id=";
     private RequestQueue queue;
     private String apiKey;
     private String accountId;
@@ -178,14 +179,14 @@ public class UpdateContactActivity extends BaseActivity {
         String type = ((RadioButton) findViewById(typeInput.getCheckedRadioButtonId())).getText().toString();
 
         if (!CheckInput.text(lon, 1, 10) ||
-                !CheckInput.text(lat, 1, 10) ||
-                !CheckInput.text(description, 1, 150) ||
-                !CheckInput.text(companyName, 1, 50) ||
-                !CheckInput.text(lastName, 1, 50) ||
-                !CheckInput.text(firstName, 1, 50) ||
-                !CheckInput.text(address, 1, 150) ||
-                !CheckInput.text(phone, 10, 10) ||
-                !CheckInput.text(type, 1, 50)) {
+            !CheckInput.text(lat, 1, 10) ||
+            !CheckInput.text(description, 1, 150) ||
+            !CheckInput.text(companyName, 1, 50) ||
+            !CheckInput.text(lastName, 1, 50) ||
+            !CheckInput.text(firstName, 1, 50) ||
+            !CheckInput.text(address, 1, 150) ||
+            !CheckInput.text(phone, 10, 10) ||
+            !CheckInput.text(type, 1, 50)) {
 
             msgError.setText(getString(R.string.typing_error));
             return;

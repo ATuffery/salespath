@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 
@@ -34,7 +35,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText passwordInput;
     private TextView msgError;
 
-    private final static String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/add";
+    private final static String URL = Config.API_URL + "account/add";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

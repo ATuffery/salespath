@@ -20,12 +20,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.MainActivity;
 import fr.iutrodez.salespathapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final static String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/login";
+    private final static String URL = Config.API_URL + "account/login";
     public EditText loginEntry;
     public EditText passwordEntry;
     public TextView errorMsg;

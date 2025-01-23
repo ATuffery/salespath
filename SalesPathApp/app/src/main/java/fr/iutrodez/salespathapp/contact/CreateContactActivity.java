@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -41,7 +42,7 @@ public class CreateContactActivity extends BaseActivity {
     private EditText phoneNumberInput;
     private RadioGroup typeInput;
     private TextView msgError;
-    private final static String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/add";
+    private final static String URL = Config.API_URL + "client/add";
     private String apiKey;
     private String accountId;
 

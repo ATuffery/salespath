@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
@@ -35,7 +36,7 @@ public class ContactsActivity extends BaseActivity {
 
     private RequestQueue queue;
     private Intent intent;
-    private static final String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/client/get?id=";
+    private static final String URL = Config.API_URL + "client/get?id=";
     private String id;
     private String apiKey;
 

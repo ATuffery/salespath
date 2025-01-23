@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -38,7 +39,7 @@ public class MyAccountActivity extends BaseActivity {
     private String apiKey;
     private String accountId;
 
-    private static final String URL = "http://ec2-13-39-14-30.eu-west-3.compute.amazonaws.com:8080/account/";
+    private static final String URL = Config.API_URL + "account/";
 
     private Intent intent;
 
