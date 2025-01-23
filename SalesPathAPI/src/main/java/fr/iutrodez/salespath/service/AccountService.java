@@ -1,10 +1,9 @@
 package fr.iutrodez.salespath.service;
 
-import fr.iutrodez.salespath.SalesPathApiApplication;
 import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.repository.IAccountRepository;
-import fr.iutrodez.salespath.utils.DifferentPasswordException;
+import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -60,12 +60,14 @@ public class PathFinder {
 
         // Chercher la plus petite route possible
         String[] route = new String[idClients.length];
-        int indice = 0;
         ArrayList<Integer> uti = new ArrayList<Integer>();
-        route[0] = idClients[DistanceMin(distances[0], uti)];
         uti.add(0);
+        int indice = DistanceMin(distances[0], uti);
+        uti.add(indice);
+        route[0] = idClients[indice];
+
         for (int i = 1; i < distances.length - 1; i++) {
-            indice = DistanceMin(distances[i], uti);
+            indice = DistanceMin(distances[indice], uti);
             route[i] = idClients[indice];
             uti.add(indice);
         }
@@ -75,7 +77,7 @@ public class PathFinder {
     }
 
     public int DistanceMin(Double[] list, ArrayList<Integer> uti) {
-        double distMin = list[0];
+        double distMin = 1000000000;
         int indice = 0;
         boolean isPresent = false;
         for (int i = 1; i < list.length; i++) {

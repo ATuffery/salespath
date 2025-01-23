@@ -3,7 +3,7 @@ package fr.iutrodez.salespath.controller;
 import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.service.AccountService;
-import fr.iutrodez.salespath.utils.DifferentPasswordException;
+import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
