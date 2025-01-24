@@ -23,6 +23,7 @@ import java.util.List;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
 import fr.iutrodez.salespathapp.itinerary.CreateItinerary;
+import fr.iutrodez.salespathapp.itinerary.DetailsItinerary;
 import fr.iutrodez.salespathapp.user.MyAccountActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -94,8 +95,7 @@ public class MainActivity extends BaseActivity {
                         "5 clients/prospects à visiter",
                         "Détails",
                         () -> {
-                            // Action pour l'itinéraire "Itinéraire 3"
-                            System.out.println("Action pour Itinéraire 3 exécutée !");
+                            goToItineraryDetails("3");
                         }
                 )
         );
@@ -107,6 +107,15 @@ public class MainActivity extends BaseActivity {
         // Configurer un LinearLayoutManager en mode horizontal
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void goToItineraryDetails(String itineraryId) {
+        Intent intent = new Intent(this, DetailsItinerary.class);
+
+        Intent intentParent = getIntent();
+        intent.putExtra("itineraryId", itineraryId);
+
+        startActivity(intent);
     }
 
     private void addMarkers() {

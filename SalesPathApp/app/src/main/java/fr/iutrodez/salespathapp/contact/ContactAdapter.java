@@ -32,11 +32,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Contact contact = contacts.get(position);
         holder.tvName.setText(contact.getName());
         holder.tvDetails.setText(contact.getDetails());
-        holder.cbContact.setChecked(contact.isChecked());
-
-        holder.cbContact.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            contact.setChecked(isChecked); // Update the model when the checkbox is toggled
-        });
+        if (contact.noCheckbox()) {
+            holder.cbContact.setVisibility(View.GONE);
+        } else {
+            holder.cbContact.setChecked(contact.isChecked());
+            holder.cbContact.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                contact.setChecked(isChecked ? ContactCheckbox.CHECKED : ContactCheckbox.UNCHECKED); // Update the model when the checkbox is toggled
+            });
+        }
     }
 
     @Override

@@ -3,12 +3,12 @@ package fr.iutrodez.salespathapp.contact;
 public class Contact {
     private String name;
     private String details;
-    private boolean isChecked;
+    private ContactCheckbox checkbox;
 
-    public Contact(String name, String details, boolean isChecked) {
+    public Contact(String name, String details, ContactCheckbox isChecked) {
         this.name = name;
         this.details = details;
-        this.isChecked = isChecked;
+        this.checkbox = isChecked;
     }
 
     public String getName() {
@@ -20,10 +20,14 @@ public class Contact {
     }
 
     public boolean isChecked() {
-        return isChecked;
+        return checkbox.equals(ContactCheckbox.CHECKED);
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public boolean noCheckbox () {
+        return checkbox.equals(ContactCheckbox.NO_CHECKBOX);
+    }
+
+    public void setChecked(ContactCheckbox checked) {
+        checkbox = checked;
     }
 }
