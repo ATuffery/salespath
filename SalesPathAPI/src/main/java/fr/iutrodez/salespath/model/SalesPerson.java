@@ -16,6 +16,8 @@ public class SalesPerson {
     private String email;
     private String address;
     private String apiKey;
+    private double latitude;
+    private double longitude;
 
     @Id
     @GeneratedValue
@@ -78,5 +80,21 @@ public class SalesPerson {
 
     public Long getId() {
         return id;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

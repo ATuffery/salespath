@@ -35,4 +35,7 @@ public interface IAccountRepository extends JpaRepository<SalesPerson, Long> {
      */
     @Query("SELECT s FROM SalesPerson s WHERE s.apiKey = :apiKey")
     Optional<SalesPerson> findByApiKey(String apiKey);
+
+    @Query("SELECT s.latitude, s.longitude FROM SalesPerson s WHERE s.id = :id")
+    Double[] getCoordById(Long id);
 }

@@ -3,6 +3,8 @@ package fr.iutrodez.salespath.service;
 import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.repository.IAccountRepository;
+import fr.iutrodez.salespath.utils.Utils;
+import fr.iutrodez.salespath.utils.exception.CoordinatesException;
 import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,7 +81,16 @@ public class AccountService {
             // On hash le mot de passe
             salesPerson.setPassword(passwordEncoder.encode(salesPerson.getPassword()));
 
+            // On récupère les coordonnées de l'adresse
+            double[] coord = Utils.GetCoordByAddress(salesPerson.getAddress());
+
+            salesPerson.setLatitude(coord[0]);
+            salesPerson.setLongitude(coord[1]);
+
             return accountRepository.save(salesPerson);
+        } catch (CoordinatesException e) {
+            throw new RuntimeException("Error while getting coordinates : " + e.getMessage());
+
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the account : " + e.getMessage());
         }
@@ -118,6 +129,17 @@ public class AccountService {
         existing.setAddress(request.getSalesPerson().getAddress());
         existing.setEmail(request.getSalesPerson().getEmail());
 
+        try {
+            // On récupère les coordonnées de l'adresse
+            double[] coord = Utils.GetCoordByAddress(existing.getAddress());
+
+            existing.setLatitude(coord[0]);
+            existing.setLongitude(coord[1]);
+        } catch (CoordinatesException e) {
+            throw new RuntimeException("Error while getting coordinates : " + e.getMessage());
+
+        }
+
         if (!request.getOldPassword().isEmpty() && !request.getSalesPerson().getPassword().isEmpty()) {
             existing.setPassword(passwordEncoder.encode(request.getSalesPerson().getPassword()));
         }
@@ -139,5 +161,12 @@ public class AccountService {
      */
     public Optional<SalesPerson> getSalesPerson(String apiKey) {
         return accountRepository.findByApiKey(apiKey);
+    }
+
+    public Double[] getCoordPerson(Long id) {
+        SalesPerson existing = accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
+
+        return accountRepository.getCoordById(id);
     }
 }

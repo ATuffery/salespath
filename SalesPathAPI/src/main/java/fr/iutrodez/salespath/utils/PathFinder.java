@@ -1,6 +1,8 @@
 package fr.iutrodez.salespath.utils;
 
 
+import fr.iutrodez.salespath.controller.AccountController;
+import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.service.ClientService;
 
 import java.util.ArrayList;
@@ -10,6 +12,10 @@ import java.util.List;
 public class PathFinder {
 
     private ClientService clientService;
+
+    private AccountController accountController;
+
+    private SalesPerson person;
 
     /* Rayon de la Terre en km */
     private static final double R = 6371;
@@ -40,11 +46,11 @@ public class PathFinder {
         return R * c;
     }
 
-    public String[] LittleAlgo(String[] idClients, String idUser) {
+    public String[] ItineraryOrder(String[] idClients, String idUser) {
 
         // Créer une liste de points clients
         Double[][] clients = new Double[idClients.length + 1][2];
-        // clients[0] = getCoordUser(idUser);
+        person =
         // Recupérer les coordonnées de chaque point client
         for (int i = 1; i < idClients.length + 1; i++) {
             clients[i] = clientService.GetCoordById(idClients[i]);

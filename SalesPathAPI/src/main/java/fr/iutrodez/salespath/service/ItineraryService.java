@@ -15,6 +15,7 @@ public class ItineraryService {
 
     public Itinerary createItinerary(Itinerary iti) {
         try {
+
             return itineraryRepository.save(iti);
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the itinerary : " + e.getMessage());

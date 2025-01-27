@@ -105,4 +105,14 @@ public class AccountController {
 
         return ResponseEntity.status(201).body(Map.of("success", "Account updated"));
     }
+
+    @GetMapping(value = "/getCoor/{id}")
+    public ResponseEntity<?> getCoor(@PathVariable Long id) {
+        try {
+            accountService.getCoordPerson(id);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(Map.of("error", "Account not found for API Key : " + id));
+        }
+        return ResponseEntity.status(201).body(Map.of("success","Account trouvé"));
+    }
 }

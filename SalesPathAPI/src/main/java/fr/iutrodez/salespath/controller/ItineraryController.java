@@ -61,6 +61,4 @@ public class ItineraryController {
         }
         return ResponseEntity.status(200).body(Map.of("success", "Account deleted"));
     }
-
-
 }

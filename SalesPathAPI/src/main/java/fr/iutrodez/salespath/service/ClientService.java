@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import fr.iutrodez.salespath.utils.Utils;
 
 import java.util.*;
 
@@ -31,7 +32,7 @@ public class ClientService {
      */
     public void CreateClient(Client client) {
         try {
-            double[] coord = GetCoordByAddress(client.getAddress());
+            double[] coord = Utils.GetCoordByAddress(client.getAddress());
 
             if (coord[0] != 0) {
                 client.setCoordonates(new Double[]{coord[0], coord[1]});
@@ -111,7 +112,7 @@ public class ClientService {
 
         if (updatedClient.getCoordonates() != existingClient.getCoordonates()) {
             try {
-                double[] coord = GetCoordByAddress(updatedClient.getAddress());
+                double[] coord = Utils.GetCoordByAddress(updatedClient.getAddress());
 
                 if (coord[0] != 0) {
                     updatedClient.setCoordonates(new Double[]{coord[0], coord[1]});
@@ -154,54 +155,5 @@ public class ClientService {
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la récupération des coordonnées du client : " + e.getMessage());
         }
-    }
-
-    /**
-     * Récupère les coordonnées d'un client à partir de son adresse.
-     * @param address L'adresse du client.
-     * @return Un tableau de coordonnées (latitude, longitude).
-     * @throws CoordinatesException En cas d'erreur lors de la récupération des coordonnées ou si aucune
-     *                              coordonnées n'est trouvée
-     */
-    private static double[] GetCoordByAddress(String address) throws CoordinatesException {
-        double[] result = new double[0];
-        Properties properties = new Properties();
-        String apiKeyOpenCage;
-
-        try {
-            properties.load(ClientService.class.getClassLoader().getResourceAsStream("application.properties"));
-            apiKeyOpenCage = properties.getProperty("api.key.open.cage");
-        } catch (Exception e) {
-            throw new CoordinatesException("Erreur lors de la récupération de la clé API OpenCage : " + e.getMessage());
-        }
-
-        JOpenCageGeocoder jOpenCageGeocoder = new JOpenCageGeocoder(apiKeyOpenCage);
-        JOpenCageForwardRequest request = new JOpenCageForwardRequest(address);
-
-        request.setRestrictToCountryCode("fr");
-
-        JOpenCageResponse response = jOpenCageGeocoder.forward(request);
-
-        int statusCode = response.getStatus().getCode();
-
-        switch (statusCode) {
-            case 200:
-                JOpenCageLatLng firstResultLatLng = response.getFirstPosition();
-                if (firstResultLatLng != null) {
-                    result = new double[]{firstResultLatLng.getLat(), firstResultLatLng.getLng()};
-                } else {
-                    throw new CoordinatesException("Aucun résultat trouvé pour l'adresse : " + address);
-                }
-                break;
-            case 400:
-                throw new CoordinatesException("Requête invalide (paramètre manquant ou incorrect).");
-            case 401:
-                throw new CoordinatesException("Clé API invalide ou manquante.");
-            case 402:
-                throw new CoordinatesException("Quota dépassé (paiement requis).");
-            case 403:
-                throw new CoordinatesException("Accès interdit. Clé API bloquée.");
-        }
-        return result;
     }
 }
