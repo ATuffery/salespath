@@ -1,16 +1,23 @@
 package fr.iutrodez.salespathapp.itinerary;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
+import fr.iutrodez.salespathapp.data.ContactData;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 public class CreateItinerary extends AppCompatActivity {
 
@@ -25,21 +32,51 @@ public class CreateItinerary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_itinerary);
 
-        Intent intent = getIntent();
-        this.apiKey = intent.getStringExtra("apiKey");
-        this.accountId = intent.getStringExtra("accountId");
+        this.apiKey = Utils.dataAccess(this, "apiKey");
+        this.accountId = Utils.dataAccess(this, "accountId");
+        Log.e("Account", this.accountId);
 
         rvContacts = findViewById(R.id.rv_contacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
 
-        contactList = new ArrayList<>();
-        contactList.add(new Contact("MARTIN Guillaume", "Pomme", ContactCheckbox.CHECKED));
-        contactList.add(new Contact("SERRES Patrice", "Miracle", ContactCheckbox.UNCHECKED));
-        contactList.add(new Contact("POSTMAN Nathalie", "Microflop", ContactCheckbox.UNCHECKED));
-        contactList.add(new Contact("DENAMIEL JP", "Pell", ContactCheckbox.UNCHECKED));
+        fillContacts();
 
         contactAdapter = new ContactAdapter(contactList);
         rvContacts.setAdapter(contactAdapter);
     }
+
+    private void fillContacts() {
+        contactList = new ArrayList<>();
+
+        // Appel à ContactData pour récupérer les données
+        ContactData.getContacts(getBaseContext(), this.apiKey, this.accountId, new ContactData.OnContactsLoadedListener() {
+            @Override
+            public void onContactsLoaded(ArrayList<JSONObject> contacts) {
+                for (JSONObject jsonContact : contacts) {
+                    try {
+                        String name = jsonContact.getString("firstName") + " " + jsonContact.getString("lastName");
+                        String details = jsonContact.getString("enterpriseName") + " - " + jsonContact.getString("address");
+
+                        Contact contact = new Contact(name, details, ContactCheckbox.UNCHECKED);
+                        contactList.add(contact);
+
+                    } catch (JSONException e) {
+                        Utils.displayServerError(getBaseContext(), "Erreur lors de la lecture des données.");
+                    }
+                }
+
+                // Mise à jour de l'interface utilisateur
+                ContactAdapter adapter = new ContactAdapter(contactList);
+                rvContacts.setAdapter(adapter);
+                rvContactsà                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .setLayoutManager(new LinearLayoutManager(getBaseContext()));
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Utils.displayServerError(getBaseContext(), errorMessage);
+            }
+        });
+    }
+
 }
 
