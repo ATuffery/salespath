@@ -68,7 +68,7 @@ public class CreateItinerary extends AppCompatActivity {
                 // Mise à jour de l'interface utilisateur
                 ContactAdapter adapter = new ContactAdapter(contactList);
                 rvContacts.setAdapter(adapter);
-                rvContactsà                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                rvContacts.setLayoutManager(new LinearLayoutManager(getBaseContext()));
             }
 
             @Override
