@@ -1,10 +1,15 @@
 package fr.iutrodez.salespath.service;
 
+import fr.iutrodez.salespath.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.model.Itinerary;
+import fr.iutrodez.salespath.model.ItineraryStep;
 import fr.iutrodez.salespath.repository.IItineraryRepository;
+import fr.iutrodez.salespath.utils.PathFinder;
+import fr.iutrodez.salespath.utils.PathFinder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -13,13 +18,34 @@ public class ItineraryService {
     @Autowired
     private IItineraryRepository itineraryRepository;
 
-    public Itinerary createItinerary(Itinerary iti) {
-        try {
+    @Autowired
+    private PathFinder pf;
 
-            return itineraryRepository.save(iti);
+    @Autowired
+    private ItineraryStepService itineraryStepService;
+
+    public Itinerary createItinerary(ItineraryAddRequest iti) {
+        try {
+            String[] order = pf.itineraryOrder(iti.getIdClients(),
+                                               Long.parseLong(iti.getItinerary().getCodeUser()));
+
+            Itinerary saved = itineraryRepository.save(iti.getItinerary());
+
+            for (int i = 0; i < order.length; i++) {
+                ItineraryStep itiStep = new ItineraryStep();
+                itiStep.setIdItinerary(String.valueOf(saved.getIdItinerary()));
+                itiStep.setIdClient(order[i]);
+                itiStep.setStep(i+1);
+
+                itineraryStepService.addStep(itiStep);
+            }
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("The step already exists");
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the itinerary : " + e.getMessage());
         }
+
+        return null;
     }
 
     public Optional<Itinerary> getItineraryUser(String idUser) {

@@ -9,7 +9,7 @@ public class Itinerary {
 
     @Id
     @GeneratedValue
-    private String idItinerary;
+    private Long idItinerary;
 
     private String nameItinerary;
 
@@ -18,11 +18,11 @@ public class Itinerary {
     public Itinerary() {
     }
 
-    public String getIdItinerary() {
+    public Long getIdItinerary() {
         return idItinerary;
     }
 
-    public void setIdItinerary(String idItinerary) {
+    public void setIdItinerary(Long idItinerary) {
         this.idItinerary = idItinerary;
     }
 

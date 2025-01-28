@@ -1,5 +1,6 @@
 package fr.iutrodez.salespath.controller;
 
+import fr.iutrodez.salespath.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.model.Itinerary;
 import fr.iutrodez.salespath.service.ItineraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ItineraryController {
     private ItineraryService itineraryService;
 
     @PostMapping()
-    public ResponseEntity<?> createItinerary(@RequestBody Itinerary itinerary) {
+    public ResponseEntity<?> createItinerary(@RequestBody ItineraryAddRequest itinerary) {
         try {
             itineraryService.createItinerary(itinerary);
         } catch (IllegalArgumentException e) {
@@ -25,7 +26,7 @@ public class ItineraryController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
-        return ResponseEntity.status(201).body(Map.of("success", "Account created"));
+        return ResponseEntity.status(201).body(Map.of("success", "Itinerary created"));
     }
 
     @GetMapping("/{idUser}")

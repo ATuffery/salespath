@@ -163,10 +163,32 @@ public class AccountService {
         return accountRepository.findByApiKey(apiKey);
     }
 
+    /**
+     * Permet de récupérer les coordonnées d'un commercial
+     *
+     * @param id l'ID du commercial
+     * @return les coordonnées du commercial
+     * @throws IllegalArgumentException si le commercial n'existe pas
+     */
     public Double[] getCoordPerson(Long id) {
-        SalesPerson existing = accountRepository.findById(id)
+        accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + id));
 
-        return accountRepository.getCoordById(id);
+        Object[] result = accountRepository.getCoordById(id);
+
+        // Vérifier que result n'est pas null et que result[0] contient bien des valeurs
+        if (result != null && result.length > 0 && result[0] instanceof Object[]) {
+            Object[] coordinates = (Object[]) result[0];
+
+            // Vérification que le tableau de coordonnées contient bien la latitude et la longitude
+            if (coordinates.length > 1) {
+                Double latitude = ((Number) coordinates[0]).doubleValue();
+                Double longitude = ((Number) coordinates[1]).doubleValue();
+                return new Double[] {latitude, longitude};
+            }
+        }
+
+        throw new IllegalStateException("Could not retrieve coordinates for ID: " + id);
     }
+
 }

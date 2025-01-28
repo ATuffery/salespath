@@ -26,7 +26,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/account/**", "/client/**", "itinerary/**"))
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/account/login", "/account/add").permitAll()
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/account/login", "/account/add",
+                                                                               "/v3/api-docs/**", "/swagger-ui/**",
+                                                                               "swagger-ui.html").permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
