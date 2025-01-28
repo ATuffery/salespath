@@ -91,12 +91,6 @@ public class ContactsActivity extends BaseActivity {
         String apiKey = intentParent.getStringExtra("apiKey");
         String accountId = intentParent.getStringExtra("accountId");
 
-        if (apiKey != null && accountId != null) {
-            intent.putExtra("apiKey", apiKey);
-            intent.putExtra("accountId", accountId);
-            startActivity(intent);
-        } else {
-            Utils.displayServerError(getBaseContext(), "Clés manquantes dans l'intention parent.");
-        }
+        startActivity(intent);
     }
 }
