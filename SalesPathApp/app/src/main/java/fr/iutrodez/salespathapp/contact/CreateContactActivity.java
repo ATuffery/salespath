@@ -41,16 +41,11 @@ public class CreateContactActivity extends BaseActivity {
     private RadioGroup typeInput;
     private TextView msgError;
     private final static String URL = Config.API_URL + "client/add";
-    private String apiKey;
-    private String accountId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_contact);
-
-        this.apiKey = Utils.dataAccess(this, "apiKey");
-        this.accountId = Utils.dataAccess(this, "accountId");
 
         this.companyAddressInput = findViewById(R.id.companyAddress);
         this.companyNameInput = findViewById(R.id.companyName);
@@ -100,7 +95,7 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
             jsonBody.put("isClient", type.equals("Client"));
-            jsonBody.put("idPerson", accountId);
+            jsonBody.put("idPerson", getAccountId());
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
         }
@@ -127,7 +122,7 @@ public class CreateContactActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", apiKey);
+                headers.put("X-API-KEY", getApiKey());
                 return headers;
             }
         };

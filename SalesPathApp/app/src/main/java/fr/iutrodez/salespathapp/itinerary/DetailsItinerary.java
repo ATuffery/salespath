@@ -28,7 +28,6 @@ import fr.iutrodez.salespathapp.utils.Utils;
 public class DetailsItinerary extends BaseActivity {
 
     private MapView map;
-    private String apiKey;
     private String itineraryId;
     private Intent intent;
     private TextView title;
@@ -43,8 +42,6 @@ public class DetailsItinerary extends BaseActivity {
         // Configure OSMDroid
         Configuration.getInstance().setUserAgentValue(getPackageName());
         setContentView(R.layout.activity_display_itinerary);
-
-        this.apiKey = Utils.dataAccess(this, "apiKey");
 
         this.intent = getIntent();
         this.itineraryId = intent.getStringExtra("itineraryId");
