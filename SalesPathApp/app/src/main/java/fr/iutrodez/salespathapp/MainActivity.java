@@ -140,11 +140,6 @@ public class MainActivity extends BaseActivity {
 
     public void gotToAddItinerary(View btn) {
         Intent intent = new Intent(this, CreateItinerary.class);
-
-        Intent intentParent = getIntent();
-        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
-        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
-
         startActivity(intent);
     }
 

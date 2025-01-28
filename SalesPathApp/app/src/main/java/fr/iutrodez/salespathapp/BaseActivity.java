@@ -1,6 +1,7 @@
 package fr.iutrodez.salespathapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,10 +14,13 @@ import fr.iutrodez.salespathapp.utils.Utils;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private final String apiKey;
-    private final String accountID;
+    private String apiKey;
+    private String accountID;
 
-    public BaseActivity() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         this.apiKey = Utils.dataAccess(this, "apiKey");
         this.accountID = Utils.dataAccess(this, "accountId");
     }
