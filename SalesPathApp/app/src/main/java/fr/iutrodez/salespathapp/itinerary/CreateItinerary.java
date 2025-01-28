@@ -17,6 +17,7 @@ import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.data.ContactData;
+import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class CreateItinerary extends AppCompatActivity {

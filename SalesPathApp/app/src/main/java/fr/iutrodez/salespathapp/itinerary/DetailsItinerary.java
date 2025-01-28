@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -19,6 +18,7 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.BaseActivity;
+import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
@@ -57,7 +57,7 @@ public class DetailsItinerary extends BaseActivity {
 
         IMapController mapController = map.getController();
         mapController.setZoom(13.0);
-        GeoPoint startPoint = new GeoPoint(44.3500, 2.5750); // Exemple coordonnées (Rodez)
+        GeoPoint startPoint = new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE);
         mapController.setCenter(startPoint);
 
         // Ajouter des marqueurs

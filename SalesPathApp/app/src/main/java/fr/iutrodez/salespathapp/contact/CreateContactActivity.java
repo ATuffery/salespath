@@ -35,8 +35,6 @@ public class CreateContactActivity extends BaseActivity {
     private EditText companyNameInput;
     private EditText companyAddressInput;
     private EditText companyDescriptionInput;
-    private EditText latInput;
-    private EditText lonInput;
     private EditText lastNameInput;
     private EditText firstNameInput;
     private EditText phoneNumberInput;
@@ -57,8 +55,6 @@ public class CreateContactActivity extends BaseActivity {
         this.companyAddressInput = findViewById(R.id.companyAddress);
         this.companyNameInput = findViewById(R.id.companyName);
         this.companyDescriptionInput = findViewById(R.id.companyDescription);
-        this.latInput = findViewById(R.id.lat);
-        this.lonInput = findViewById(R.id.lon);
         this.lastNameInput = findViewById(R.id.lastName);
         this.firstNameInput = findViewById(R.id.firstName);
         this.phoneNumberInput = findViewById(R.id.phoneNumber);
@@ -78,27 +74,23 @@ public class CreateContactActivity extends BaseActivity {
         String companyName = companyNameInput.getText().toString().trim();
         String address = companyAddressInput.getText().toString().trim();
         String description = companyDescriptionInput.getText().toString().trim();
-        String lat = latInput.getText().toString().trim();
-        String lon = lonInput.getText().toString().trim();
         String lastName = lastNameInput.getText().toString().trim();
         String firstName = firstNameInput.getText().toString().trim();
         String phone = phoneNumberInput.getText().toString().trim();
         String type = ((RadioButton) findViewById(typeInput.getCheckedRadioButtonId())).getText().toString();
 
-        if (!CheckInput.text(lon, 1, 10) ||
-                !CheckInput.text(lat, 1, 10) ||
-                !CheckInput.text(description, 1, 150) ||
-                !CheckInput.text(companyName, 1, 50) ||
-                !CheckInput.text(lastName, 1, 50) ||
-                !CheckInput.text(firstName, 1, 50) ||
-                !CheckInput.text(address, 1, 150) ||
-                !CheckInput.text(phone, 10, 10) ||
-                !CheckInput.text(type, 1, 50)) {
+        if (!CheckInput.text(description, 1, 150) ||
+            !CheckInput.text(companyName, 1, 50) ||
+            !CheckInput.text(lastName, 1, 50) ||
+            !CheckInput.text(firstName, 1, 50) ||
+            !CheckInput.text(address, 1, 150) ||
+            !CheckInput.text(phone, 10, 10) ||
+            !CheckInput.text(type, 1, 50)) {
 
             msgError.setText(getString(R.string.typing_error));
             return;
         }
-        String[] coord = new String[] {lat, lon};
+
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("enterpriseName", companyName);
@@ -108,7 +100,6 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("lastName", lastName);
             jsonBody.put("phoneNumber", phone);
             jsonBody.put("isClient", type.equals("Client"));
-            jsonBody.put("coordinates", new JSONArray(coord));
             jsonBody.put("idPerson", accountId);
         } catch (JSONException e) {
             msgError.setText(getString(R.string.error_server));
@@ -130,7 +121,6 @@ public class CreateContactActivity extends BaseActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         msgError.setText(getString(R.string.error_server));
-                        Log.d("API", "PAI");
                     }
                 }) {
             @Override

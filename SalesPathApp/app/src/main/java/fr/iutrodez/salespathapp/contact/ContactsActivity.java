@@ -13,11 +13,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.BaseActivity;
-import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
 import fr.iutrodez.salespathapp.data.ContactData;
+import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class ContactsActivity extends BaseActivity {
