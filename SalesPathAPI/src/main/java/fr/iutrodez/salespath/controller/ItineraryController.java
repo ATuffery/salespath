@@ -16,7 +16,7 @@ public class ItineraryController {
     @Autowired
     private ItineraryService itineraryService;
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<?> createItinerary(@RequestBody Itinerary itinerary) {
         try {
             itineraryService.createItinerary(itinerary);
@@ -28,8 +28,8 @@ public class ItineraryController {
         return ResponseEntity.status(201).body(Map.of("success", "Account created"));
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getItineraryUser(String idUser) {
+    @GetMapping("/{idUser}")
+    public ResponseEntity<?> getItineraryUser(@PathVariable String idUser) {
         try {
             return ResponseEntity.status(200).body(itineraryService.getItineraryUser(idUser));
         } catch (IllegalArgumentException e) {
@@ -39,8 +39,8 @@ public class ItineraryController {
         }
     }
 
-    @GetMapping("/getOne")
-    public ResponseEntity<?> getItinerary(String id) {
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<?> getItinerary(@PathVariable String id) {
         try {
             return ResponseEntity.status(200).body(itineraryService.getItinerary(id));
         } catch (IllegalArgumentException e) {
@@ -50,7 +50,7 @@ public class ItineraryController {
         }
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<?> deleteItinerary(String id) {
         try {
             itineraryService.deleteItinerary(id);

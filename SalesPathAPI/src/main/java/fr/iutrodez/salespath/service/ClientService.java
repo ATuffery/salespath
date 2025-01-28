@@ -75,7 +75,7 @@ public class ClientService {
             if (clientOptional.isPresent()) {
                 return clientOptional.get();
             } else {
-                throw new RuntimeException("Client non trouvé avec l'ID : " + id);
+                throw new IllegalArgumentException("Client non trouvé avec l'ID : " + id);
             }
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la récupération du client par ID : " + e.getMessage());

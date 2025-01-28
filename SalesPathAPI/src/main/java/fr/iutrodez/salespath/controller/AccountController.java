@@ -27,7 +27,7 @@ public class AccountController {
      * @param password le mot de passe de l'utilisateur
      * @return la clé API de l'utilisateur si l'utilisateur existe
      */
-    @GetMapping(value="/login")
+    @GetMapping(value = "/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         Optional<SalesPerson> salesPersonOptional = accountService.login(email, password);
 
@@ -69,7 +69,7 @@ public class AccountController {
      *        un code 400 si l'email est déjà utilisé
      *        un code 500 si une erreur est survenue lors de l'ajout
      */
-    @PostMapping(value = "/add")
+    @PostMapping()
     public ResponseEntity<?> add(@RequestBody SalesPerson salesPerson) {
         try {
             accountService.addSalesPerson(salesPerson);
@@ -91,7 +91,7 @@ public class AccountController {
      *         un code 500 si une erreur est survenue lors de la mise à jour
      *         un code 400 si l'ancien mdp n'est pas le même que celui en BDD
      */
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SalesPersonUpdateRequest request) {
         try {
             accountService.updateSalesPerson(id, request);
@@ -104,15 +104,5 @@ public class AccountController {
         }
 
         return ResponseEntity.status(201).body(Map.of("success", "Account updated"));
-    }
-
-    @GetMapping(value = "/getCoor/{id}")
-    public ResponseEntity<?> getCoor(@PathVariable Long id) {
-        try {
-            accountService.getCoordPerson(id);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(Map.of("error", "Account not found for API Key : " + id));
-        }
-        return ResponseEntity.status(201).body(Map.of("success","Account trouvé"));
     }
 }
