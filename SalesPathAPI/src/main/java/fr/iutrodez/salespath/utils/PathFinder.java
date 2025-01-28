@@ -53,7 +53,7 @@ public class PathFinder {
         clients[0] = accountService.getCoordPerson(idUser);
         // Recupérer les coordonnées de chaque point client
         for (int i = 1; i < idClients.length + 1; i++) {
-            clients[i] = clientService.GetCoordById(idClients[i]);
+            clients[i] = clientService.getCoordById(idClients[i]);
         }
 
         // Créer matrice de distance entre chaque point client

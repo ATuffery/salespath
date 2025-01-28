@@ -30,7 +30,7 @@ public class ClientService {
      * @param client L'objet Client à créer.
      * @throws RuntimeException En cas d'erreur lors de la création.
      */
-    public void CreateClient(Client client) {
+    public void createClient(Client client) {
         try {
             double[] coord = Utils.GetCoordByAddress(client.getAddress());
 
@@ -53,7 +53,7 @@ public class ClientService {
      * @return Une liste de clients.
      * @throws RuntimeException En cas d'erreur lors de la récupération.
      */
-    public List<Client> GetClientsById(Long idPerson) {
+    public List<Client> getClientsById(Long idPerson) {
         try {
             return clientRepository.findByIdPerson(idPerson);
         } catch (Exception e) {
@@ -65,21 +65,12 @@ public class ClientService {
      * Récupère un client spécifique à partir de son ID.
      *
      * @param id L'ID du client.
-     * @return L'objet Client correspondant.
-     * @throws RuntimeException En cas d'erreur lors de la récupération.
+     * @return L'objet Client.
+     * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe pas.
      */
-    public Client GetClientById(String id) {
-        try {
-            Optional<Client> clientOptional = clientRepository.findById(id);
-
-            if (clientOptional.isPresent()) {
-                return clientOptional.get();
-            } else {
-                throw new IllegalArgumentException("Client non trouvé avec l'ID : " + id);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la récupération du client par ID : " + e.getMessage());
-        }
+    public Client getClientById(String id) {
+        return clientRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Client non trouvé avec l'ID : " + id));
     }
 
     /**
@@ -88,7 +79,7 @@ public class ClientService {
      * @param id L'ID du client à supprimer.
      * @throws RuntimeException En cas d'erreur lors de la suppression.
      */
-    public void DeleteClientById(String id) {
+    public void deleteClientById(String id) {
         try {
             clientRepository.deleteClientById(id);
         } catch (Exception e) {
@@ -105,7 +96,7 @@ public class ClientService {
      *                                  pas.
      * @throws RuntimeException         En cas d'erreur lors de la récupération des coordonnées
      */
-    public void UpdateClient(Client updatedClient, String id) {
+    public void updateClient(Client updatedClient, String id) {
         // Recherche du client à partir de son ID, et gestion du cas où il n'est pas trouvé
         Client existingClient = clientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Client introuvable avec l'ID : " + id));
@@ -142,7 +133,7 @@ public class ClientService {
      * @param id L'ID du client.
      * @return Un tableau de coordonnées (latitude, longitude).
      */
-    public Double[] GetCoordById(String id) {
+    public Double[] getCoordById(String id) {
         try {
             Optional<Client> clientOptional = clientRepository.findById(id);
 

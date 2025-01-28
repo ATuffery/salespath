@@ -29,7 +29,7 @@ public class ClientController {
     @PostMapping()
     public ResponseEntity<?> createNewClient(@RequestBody Client client) {
         try {
-            clientService.CreateClient(client);
+            clientService.createClient(client);
             return ResponseEntity.status(201).body(Map.of("success", "Client ajouté avec succès"));
         } catch (Exception e) {
             System.err.print(e.getMessage());
@@ -47,7 +47,7 @@ public class ClientController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getClients(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(200).body(clientService.GetClientsById(id));
+            return ResponseEntity.status(200).body(clientService.getClientsById(id));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400).body(Map.of("error", "type Id not valid"));
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class ClientController {
     @GetMapping(value = "/getOne/{id}")
     public ResponseEntity<?> getClient(@PathVariable String id) {
         try {
-            return ResponseEntity.status(200).body(clientService.GetClientById(id));
+            return ResponseEntity.status(200).body(clientService.getClientById(id));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(Map.of("error", "Any client with this ID"));
         } catch (RuntimeException e) {
@@ -85,7 +85,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable String id) {
         try {
-            clientService.DeleteClientById(id);
+            clientService.deleteClientById(id);
             return ResponseEntity.status(200).body(Map.of("success", "Suppression effectuée"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error","Suppression non effectuée"));
@@ -103,7 +103,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@RequestBody Client client, @PathVariable String id) {
         try {
-            clientService.UpdateClient(client, id);
+            clientService.updateClient(client, id);
             return ResponseEntity.status(200).body(Map.of("success", "Mise à jour effectuée"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Modification non effectué (500)"));
