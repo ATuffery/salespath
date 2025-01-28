@@ -2,6 +2,11 @@ package fr.iutrodez.salespath.controller;
 
 import fr.iutrodez.salespath.model.Client;
 import fr.iutrodez.salespath.service.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,13 @@ public class ClientController {
      * @return Une réponse HTTP avec un code 201 si réussi, ou un code 500 en cas
      *         d'erreur.
      */
+    @Operation(summary = "Créer un nouveau client", description = "Ajoute un nouveau client à la base de données.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Client ajouté avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Ajout non effectué en raison d'une erreur serveur",
+                    content = @Content(mediaType = "application/json"))
+    })
     @PostMapping()
     public ResponseEntity<?> createNewClient(@RequestBody Client client) {
         try {
@@ -44,6 +56,15 @@ public class ClientController {
      * @return Une liste de clients avec un code 200 si réussi, ou null avec un code
      *         500 en cas d'erreur.
      */
+    @Operation(summary = "Récupérer les clients associés à une personne", description = "Renvoie une liste de clients liés à une personne spécifique.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Liste des clients renvoyée avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "ID fourni non valide",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur serveur ou base de données",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getClients(@PathVariable Long id) {
         try {
@@ -64,6 +85,15 @@ public class ClientController {
      *         null avec un code 500 en cas d'erreur de la BDD,
      *         ou un message d'erreur avec un code 404 si le client n'existe pas.
      */
+    @Operation(summary = "Récupérer un client spécifique", description = "Renvoie les informations d'un client en fonction de son ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Client trouvé avec succès",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))),
+            @ApiResponse(responseCode = "404", description = "Aucun client trouvé avec cet ID",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur serveur ou base de données",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping(value = "/getOne/{id}")
     public ResponseEntity<?> getClient(@PathVariable String id) {
         try {
@@ -82,6 +112,13 @@ public class ClientController {
      * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur
      *         avec un code 500 en cas d'échec.
      */
+    @Operation(summary = "Supprimer un client", description = "Supprime un client de la base de données en fonction de son ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Client supprimé avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur serveur ou suppression non effectuée",
+                    content = @Content(mediaType = "application/json"))
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable String id) {
         try {
@@ -100,6 +137,13 @@ public class ClientController {
      * @return Une réponse HTTP avec un code 200 si réussi, ou un message d'erreur
      *         avec un code 500 en cas d'échec.
      */
+    @Operation(summary = "Mettre à jour un client", description = "Met à jour les informations d'un client existant.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Mise à jour effectuée avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur serveur ou mise à jour non effectuée",
+                    content = @Content(mediaType = "application/json"))
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@RequestBody Client client, @PathVariable String id) {
         try {

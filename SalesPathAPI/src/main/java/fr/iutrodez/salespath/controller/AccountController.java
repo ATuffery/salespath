@@ -4,6 +4,10 @@ import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.model.SalesPerson;
 import fr.iutrodez.salespath.service.AccountService;
 import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +31,13 @@ public class AccountController {
      * @param password le mot de passe de l'utilisateur
      * @return la clé API de l'utilisateur si l'utilisateur existe
      */
+    @Operation(summary = "Connexion à un compte", description = "Permet de se connecter avec un email et un mot de passe.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Connexion réussie, clé API renvoyée",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Compte non trouvé",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping(value = "/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         Optional<SalesPerson> salesPersonOptional = accountService.login(email, password);
@@ -44,6 +55,14 @@ public class AccountController {
      * @param apiKey la clé API de l'utilisateur
      * @return les informations si l'utilisateur existe
      */
+    @Operation(summary = "Récupérer les informations d'un utilisateur", description = "Renvoie les informations d'un" +
+                                                                                      " utilisateur avec sa clé API.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Informations de l'utilisateur récupérées avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Compte non trouvé pour la clé API fournie",
+                    content = @Content(mediaType = "application/json"))
+    })
     @GetMapping(value="/infos")
     public ResponseEntity<?> infos(@RequestHeader("X-API-KEY") String apiKey) {
         Optional<SalesPerson> salesPersonOptional = accountService.getSalesPerson(apiKey);
@@ -69,6 +88,15 @@ public class AccountController {
      *        un code 400 si l'email est déjà utilisé
      *        un code 500 si une erreur est survenue lors de l'ajout
      */
+    @Operation(summary = "Ajouter un nouveau commercial", description = "Ajoute un nouveau compte commercial.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Compte créé avec succès",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Email déjà utilisé ou données invalides",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur interne lors de la création du compte",
+                    content = @Content(mediaType = "application/json"))
+    })
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody SalesPerson salesPerson) {
         try {
@@ -91,6 +119,18 @@ public class AccountController {
      *         un code 500 si une erreur est survenue lors de la mise à jour
      *         un code 400 si l'ancien mdp n'est pas le même que celui en BDD
      */
+    @Operation(summary = "Mettre à jour un commercial", description = "Met à jour les informations d'un compte " +
+                                                                      "commercial existant.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Mise à jour réussie",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "ID du commercial invalide ou inexistant",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Ancien mot de passe incorrect ou données invalides",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erreur interne lors de la mise à jour",
+                    content = @Content(mediaType = "application/json"))
+    })
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SalesPersonUpdateRequest request) {
         try {
