@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
 
         IMapController mapController = map.getController();
         mapController.setZoom(13.0);
-        GeoPoint startPoint = new GeoPoint(44.3500, 2.5750); // Exemple coordonnées (Rodez)
+        GeoPoint startPoint = new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE);
         mapController.setCenter(startPoint);
 
         // Ajouter des marqueurs
@@ -140,11 +140,6 @@ public class MainActivity extends BaseActivity {
 
     public void gotToAddItinerary(View btn) {
         Intent intent = new Intent(this, CreateItinerary.class);
-
-        Intent intentParent = getIntent();
-        intent.putExtra("apiKey", intentParent.getStringExtra("apiKey"));
-        intent.putExtra("accountId", intentParent.getStringExtra("accountId"));
-
         startActivity(intent);
     }
 

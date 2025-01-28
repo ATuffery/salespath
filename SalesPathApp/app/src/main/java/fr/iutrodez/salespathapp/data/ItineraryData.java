@@ -21,16 +21,16 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 
-public class ContactData {
+public class ItineraryData {
 
     // Interface pour notifier quand les contacts sont chargés
-    public interface OnContactsLoadedListener {
-        void onContactsLoaded(ArrayList<JSONObject> contacts);
+    public interface OnItinerariesLoadedListener {
+        void OnItinerariesLoaded(ArrayList<JSONObject> contacts);
         void onError(String errorMessage);
     }
 
     // Méthode pour récupérer les contacts
-    public static void getContacts(Context context, String apiKey, String id, OnContactsLoadedListener listener) {
+    public static void getItineraries(Context context, String apiKey, String id, OnItinerariesLoadedListener listener) {
         String url = Config.API_URL + "client/get?id=" + id;
 
         // Création de la requête réseau
@@ -44,7 +44,7 @@ public class ContactData {
                                 contacts.add(response.getJSONObject(i));
                             }
                             // Notifier que les contacts sont chargés
-                            listener.onContactsLoaded(contacts);
+                            listener.OnItinerariesLoaded(contacts);
                         } catch (JSONException e) {
                             listener.onError("Une erreur s'est produite lors de la lecture des données.");
                         }

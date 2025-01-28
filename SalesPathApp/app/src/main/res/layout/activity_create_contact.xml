@@ -85,30 +85,6 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
 
-        <EditText
-            android:id="@+id/lat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/lat"
-            android:layout_marginHorizontal="@dimen/padding_default"
-            android:layout_marginBottom="@dimen/margin_bottom_medium"
-            android:padding="@dimen/padding_default"
-            android:inputType="number"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black" />
-
-        <EditText
-            android:id="@+id/lon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/lon"
-            android:layout_marginHorizontal="@dimen/padding_default"
-            android:layout_marginBottom="@dimen/margin_bottom_medium"
-            android:padding="@dimen/padding_default"
-            android:inputType="number"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

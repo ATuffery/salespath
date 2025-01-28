@@ -51,14 +51,12 @@ public class CreateAccountActivity extends AppCompatActivity {
         this.msgError = findViewById(R.id.msgError);
     }
 
-    public void btnGoToLogin(View button) {
+    public void goToLogin(View button) {
         goToLogin();
     }
 
     public void goToLogin() {
-        Log.d("CreateAccountActivity", "Inside goToLogin()");
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void createAccount(View button) {

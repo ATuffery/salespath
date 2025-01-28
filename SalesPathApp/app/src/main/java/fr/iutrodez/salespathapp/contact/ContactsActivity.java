@@ -13,17 +13,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.BaseActivity;
-import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
 import fr.iutrodez.salespathapp.data.ContactData;
+import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class ContactsActivity extends BaseActivity {
-
-    private String id;
-    private String apiKey;
 
     private ArrayList<CardWithTwoLines> contacts = new ArrayList<>();
     private CardWithTwoLinesAdapteur adapter;
@@ -32,9 +29,6 @@ public class ContactsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers);
-
-        this.apiKey = Utils.dataAccess(this, "apiKey");
-        this.id = Utils.dataAccess(this, "accountId");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewHorizontal);
         adapter = new CardWithTwoLinesAdapteur(contacts);
@@ -46,7 +40,7 @@ public class ContactsActivity extends BaseActivity {
     }
 
     private void getClientList() {
-        ContactData.getContacts(getBaseContext(), this.apiKey, this.id, new ContactData.OnContactsLoadedListener() {
+        ContactData.getContacts(getBaseContext(), getApiKey(), getAccountId(), new ContactData.OnContactsLoadedListener() {
             @Override
             public void onContactsLoaded(ArrayList<JSONObject> data) {
                 try {
@@ -86,17 +80,6 @@ public class ContactsActivity extends BaseActivity {
 
     public void goToCreateContact(View btn) {
         Intent intent = new Intent(this, CreateContactActivity.class);
-
-        Intent intentParent = getIntent();
-        String apiKey = intentParent.getStringExtra("apiKey");
-        String accountId = intentParent.getStringExtra("accountId");
-
-        if (apiKey != null && accountId != null) {
-            intent.putExtra("apiKey", apiKey);
-            intent.putExtra("accountId", accountId);
-            startActivity(intent);
-        } else {
-            Utils.displayServerError(getBaseContext(), "Clés manquantes dans l'intention parent.");
-        }
+        startActivity(intent);
     }
 }

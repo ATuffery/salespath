@@ -12,29 +12,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.data.ContactData;
+import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
-public class CreateItinerary extends AppCompatActivity {
+public class CreateItinerary extends BaseActivity {
 
     private RecyclerView rvContacts;
     private ContactAdapter contactAdapter;
     private ArrayList<Contact> contactList;
-    private String apiKey;
-    private String accountId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_itinerary);
-
-        this.apiKey = Utils.dataAccess(this, "apiKey");
-        this.accountId = Utils.dataAccess(this, "accountId");
-        Log.e("Account", this.accountId);
 
         rvContacts = findViewById(R.id.rv_contacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
@@ -49,7 +45,7 @@ public class CreateItinerary extends AppCompatActivity {
         contactList = new ArrayList<>();
 
         // Appel à ContactData pour récupérer les données
-        ContactData.getContacts(getBaseContext(), this.apiKey, this.accountId, new ContactData.OnContactsLoadedListener() {
+        ContactData.getContacts(getBaseContext(), getApiKey(), getAccountId(), new ContactData.OnContactsLoadedListener() {
             @Override
             public void onContactsLoaded(ArrayList<JSONObject> contacts) {
                 for (JSONObject jsonContact : contacts) {

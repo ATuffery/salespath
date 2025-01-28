@@ -39,12 +39,8 @@ public class MyAccountActivity extends BaseActivity {
     private EditText oldPasswordInput;
     private EditText newPasswordInput;
     private TextView userInitials;
-    private String apiKey;
-    private String accountId;
 
     private static final String URL = Config.API_URL + "account/";
-
-    private Intent intent;
 
     private RequestQueue queue;
 
@@ -61,10 +57,6 @@ public class MyAccountActivity extends BaseActivity {
         oldPasswordInput = findViewById(R.id.oldPassword);
         newPasswordInput = findViewById(R.id.newPassword);
 
-        this.apiKey = Utils.dataAccess(this, "apiKey");
-        this.accountId = Utils.dataAccess(this, "accountId");
-
-        intent = getIntent();
         queue = Volley.newRequestQueue(this);
 
         initialDisplayUpdate();
@@ -122,7 +114,7 @@ public class MyAccountActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", apiKey);
+                headers.put("X-API-KEY", getApiKey()); // MArche pas this.apiKey
                 return headers;
             }
         };
@@ -177,8 +169,8 @@ public class MyAccountActivity extends BaseActivity {
         } catch (JSONException e) {
             Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
         }
-        Log.e("ID", this.accountId);
-        queue.add(requestUpdate(this.URL + "update/" + this.accountId,
+
+        queue.add(requestUpdate(this.URL + "update/" + getAccountId(),
                                 jsonBody));
     }
 
@@ -222,7 +214,7 @@ public class MyAccountActivity extends BaseActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", apiKey);
+                headers.put("X-API-KEY", getApiKey());
                 return headers;
             }
         };
