@@ -3,11 +3,13 @@ package fr.iutrodez.salespath.itinerary.service;
 import fr.iutrodez.salespath.account.model.SalesPerson;
 import fr.iutrodez.salespath.account.repository.IAccountRepository;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.repository.IItineraryStepRepository;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import fr.iutrodez.salespath.itinerary.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
 import fr.iutrodez.salespath.utils.PathFinder;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class ItineraryService {
 
     @Autowired
     private ItineraryStepService itineraryStepService;
+
+    @Autowired
+    private IItineraryStepRepository itineraryStepRepository;
 
     @Autowired
     private IAccountRepository accountRepository;
@@ -73,11 +78,21 @@ public class ItineraryService {
         }
     }
 
-    public void deleteItinerary(String id) {
+    @Transactional
+    public boolean deleteItinerary(Long id) {
+        Optional<Itinerary> itineraryOpt = itineraryRepository.findById(id);
+
+        if (itineraryOpt.isEmpty()) {
+            return false;
+        }
+
         try {
-            itineraryRepository.deleteById(Long.parseLong(id));
+            itineraryStepRepository.deleteByIdItinerary(String.valueOf(id));
+            itineraryRepository.deleteById(id);
+
+            return true;
         } catch (Exception e) {
-            throw new RuntimeException("Error while deleting the itinerary : " + e.getMessage());
+            throw new RuntimeException("Error deleting itinerary: " + e.getMessage());
         }
     }
 }

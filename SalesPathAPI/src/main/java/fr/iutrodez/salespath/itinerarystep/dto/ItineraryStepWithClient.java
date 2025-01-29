@@ -1,11 +1,26 @@
 package fr.iutrodez.salespath.itinerarystep.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Détail d'une étape d'itinéraire avec les informations sur le client.")
 public class ItineraryStepWithClient {
+
+    @Schema(description = "L'ID de l'itinéraire")
     private String idItinerary;
+
+    @Schema(description = "L'ID du client")
     private String idClient;
+
+    @Schema(description = "Le numéro de l'étape")
     private int step;
+
+    @Schema(description = "Le nom complet du client")
     private String clientName;
+
+    @Schema(description = "Latitude de la position du client")
     private double clientLatitude;
+
+    @Schema(description = "Longitude de la position du client")
     private double clientLongitude;
 
     public String getIdItinerary() {

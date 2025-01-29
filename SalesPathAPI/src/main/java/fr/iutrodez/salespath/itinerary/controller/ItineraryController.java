@@ -9,6 +9,11 @@ import fr.iutrodez.salespath.itinerary.service.ItineraryService;
 import fr.iutrodez.salespath.itinerarystep.dto.ItineraryStepWithClient;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +37,13 @@ public class ItineraryController {
     @Autowired
     private ClientService clientService;
 
+    @Operation(summary = "Créer un nouvel itinéraire",
+            description = "Permet de créer un itinéraire en envoyant les informations nécessaires.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Itinéraire créé avec succès"),
+            @ApiResponse(responseCode = "404", description = "Erreur dans les données fournies"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     @PostMapping()
     public ResponseEntity<?> createItinerary(@RequestBody ItineraryAddRequest itinerary) {
         try {
@@ -44,6 +56,13 @@ public class ItineraryController {
         return ResponseEntity.status(201).body(Map.of("success", "Itinerary created"));
     }
 
+    @Operation(summary = "Obtenir les itinéraires d'un utilisateur",
+            description = "Permet de récupérer tous les itinéraires associés à un utilisateur en fonction de son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Itinéraires récupérés avec succès"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     @GetMapping("/{idUser}")
     public ResponseEntity<?> getItineraryUser(@PathVariable Long idUser) {
         try {
@@ -58,6 +77,17 @@ public class ItineraryController {
         }
     }
 
+    @Operation(summary = "Récupérer les informations d'un itinéraire avec les étapes",
+            description = "Cette méthode permet de récupérer les informations détaillées pour un itinéraire, y compris les informations sur les clients pour chaque étape.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Informations sur l'itinéraire récupérées avec succès",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ItineraryInfos.class))),
+                    @ApiResponse(responseCode = "404", description = "Itinéraire ou étapes non trouvés",
+                            content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur interne",
+                            content = @Content(mediaType = "application/json"))
+            })
     @GetMapping("/getInfos/{id}")
     public ResponseEntity<?> getInfos(@PathVariable Long id) {
         try {
@@ -105,16 +135,24 @@ public class ItineraryController {
         }
     }
 
-
-    @DeleteMapping()
-    public ResponseEntity<?> deleteItinerary(String id) {
-        try {
-            itineraryService.deleteItinerary(id);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
+    @Operation(summary = "Supprimer un itinéraire",
+            description = "Permet de supprimer un itinéraire à partir de son identifiant.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Itinéraire supprimé avec succès"),
+            @ApiResponse(responseCode = "404", description = "Itinéraire non trouvé"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteItinerary(@PathVariable Long id) {
+        try {;
+            if (itineraryService.deleteItinerary(id)) {
+                return ResponseEntity.ok(Map.of("success", "Itinerary deleted successfully"));
+            } else {
+                return ResponseEntity.status(404).body(Map.of("error", "Itinerary not found"));
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
-        return ResponseEntity.status(200).body(Map.of("success", "Account deleted"));
     }
+
 }
