@@ -1,8 +1,8 @@
-package fr.iutrodez.salespath.service;
+package fr.iutrodez.salespath.account.service;
 
-import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
-import fr.iutrodez.salespath.model.SalesPerson;
-import fr.iutrodez.salespath.repository.IAccountRepository;
+import fr.iutrodez.salespath.account.model.SalesPerson;
+import fr.iutrodez.salespath.account.dto.SalesPersonUpdateRequest;
+import fr.iutrodez.salespath.account.repository.IAccountRepository;
 import fr.iutrodez.salespath.utils.Utils;
 import fr.iutrodez.salespath.utils.exception.CoordinatesException;
 import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;

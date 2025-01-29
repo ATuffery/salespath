@@ -1,13 +1,12 @@
-package fr.iutrodez.salespath.controller;
+package fr.iutrodez.salespath.client.controller;
 
-import fr.iutrodez.salespath.model.Client;
-import fr.iutrodez.salespath.service.ClientService;
+import fr.iutrodez.salespath.client.service.ClientService;
+import fr.iutrodez.salespath.client.model.Client;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

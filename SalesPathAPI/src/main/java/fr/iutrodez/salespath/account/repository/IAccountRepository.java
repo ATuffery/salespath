@@ -1,6 +1,6 @@
-package fr.iutrodez.salespath.repository;
+package fr.iutrodez.salespath.account.repository;
 
-import fr.iutrodez.salespath.model.SalesPerson;
+import fr.iutrodez.salespath.account.model.SalesPerson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

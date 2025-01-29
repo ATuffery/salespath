@@ -1,8 +1,6 @@
-package fr.iutrodez.salespath.dto;
+package fr.iutrodez.salespath.itinerary.dto;
 
-import fr.iutrodez.salespath.model.Itinerary;
-
-import java.util.ArrayList;
+import fr.iutrodez.salespath.itinerary.model.Itinerary;
 
 public class ItineraryAddRequest {
     private Itinerary itinerary;

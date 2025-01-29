@@ -1,14 +1,13 @@
 package fr.iutrodez.salespath.utils;
 
 
-import fr.iutrodez.salespath.model.SalesPerson;
-import fr.iutrodez.salespath.service.AccountService;
-import fr.iutrodez.salespath.service.ClientService;
+import fr.iutrodez.salespath.account.model.SalesPerson;
+import fr.iutrodez.salespath.account.service.AccountService;
+import fr.iutrodez.salespath.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PathFinder {

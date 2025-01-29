@@ -1,8 +1,8 @@
-package fr.iutrodez.salespath.controller;
+package fr.iutrodez.salespath.account.controller;
 
-import fr.iutrodez.salespath.dto.SalesPersonUpdateRequest;
-import fr.iutrodez.salespath.model.SalesPerson;
-import fr.iutrodez.salespath.service.AccountService;
+import fr.iutrodez.salespath.account.service.AccountService;
+import fr.iutrodez.salespath.account.model.SalesPerson;
+import fr.iutrodez.salespath.account.dto.SalesPersonUpdateRequest;
 import fr.iutrodez.salespath.utils.exception.DifferentPasswordException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

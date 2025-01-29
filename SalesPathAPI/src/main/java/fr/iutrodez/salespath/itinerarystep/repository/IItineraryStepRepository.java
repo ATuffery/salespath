@@ -1,6 +1,6 @@
-package fr.iutrodez.salespath.repository;
+package fr.iutrodez.salespath.itinerarystep.repository;
 
-import fr.iutrodez.salespath.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

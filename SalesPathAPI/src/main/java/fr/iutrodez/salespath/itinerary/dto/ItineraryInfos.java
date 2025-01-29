@@ -1,7 +1,7 @@
-package fr.iutrodez.salespath.dto;
+package fr.iutrodez.salespath.itinerary.dto;
 
-import fr.iutrodez.salespath.model.Itinerary;
-import fr.iutrodez.salespath.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerary.model.Itinerary;
 
 public class ItineraryInfos {
 

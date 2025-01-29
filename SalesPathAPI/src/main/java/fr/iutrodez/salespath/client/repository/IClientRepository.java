@@ -1,7 +1,7 @@
-package fr.iutrodez.salespath.repository;
+package fr.iutrodez.salespath.client.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import fr.iutrodez.salespath.model.Client;
+import fr.iutrodez.salespath.client.model.Client;
 import java.util.List;
 import java.util.Optional;
 

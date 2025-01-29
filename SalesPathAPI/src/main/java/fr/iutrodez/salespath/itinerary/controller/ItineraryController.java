@@ -1,12 +1,11 @@
-package fr.iutrodez.salespath.controller;
+package fr.iutrodez.salespath.itinerary.controller;
 
-import fr.iutrodez.salespath.dto.ItineraryAddRequest;
-import fr.iutrodez.salespath.dto.ItineraryInfos;
-import fr.iutrodez.salespath.model.Itinerary;
-import fr.iutrodez.salespath.model.ItineraryStep;
-import fr.iutrodez.salespath.model.SalesPerson;
-import fr.iutrodez.salespath.service.ItineraryService;
-import fr.iutrodez.salespath.service.ItineraryStepService;
+import fr.iutrodez.salespath.itinerary.dto.ItineraryAddRequest;
+import fr.iutrodez.salespath.itinerary.dto.ItineraryInfos;
+import fr.iutrodez.salespath.itinerary.model.Itinerary;
+import fr.iutrodez.salespath.itinerary.service.ItineraryService;
+import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

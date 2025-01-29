@@ -1,9 +1,7 @@
-package fr.iutrodez.salespath.service;
+package fr.iutrodez.salespath.itinerarystep.service;
 
-import com.fasterxml.jackson.annotation.OptBoolean;
-import fr.iutrodez.salespath.model.ItineraryStep;
-import fr.iutrodez.salespath.model.SalesPerson;
-import fr.iutrodez.salespath.repository.IItineraryStepRepository;
+import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.repository.IItineraryStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

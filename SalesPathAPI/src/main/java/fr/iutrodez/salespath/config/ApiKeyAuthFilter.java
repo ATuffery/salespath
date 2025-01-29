@@ -1,7 +1,6 @@
 package fr.iutrodez.salespath.config;
 
-import fr.iutrodez.salespath.repository.IAccountRepository;
-import fr.iutrodez.salespath.service.AccountService;
+import fr.iutrodez.salespath.account.service.AccountService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package fr.iutrodez.salespath.model;
+package fr.iutrodez.salespath.itinerarystep.model;
 
 import java.io.Serializable;
 import java.util.Objects;

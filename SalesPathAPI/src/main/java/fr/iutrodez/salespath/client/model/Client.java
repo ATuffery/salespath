@@ -1,4 +1,4 @@
-package fr.iutrodez.salespath.model;
+package fr.iutrodez.salespath.client.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

@@ -4,7 +4,7 @@ import com.opencagedata.jopencage.JOpenCageGeocoder;
 import com.opencagedata.jopencage.model.JOpenCageForwardRequest;
 import com.opencagedata.jopencage.model.JOpenCageLatLng;
 import com.opencagedata.jopencage.model.JOpenCageResponse;
-import fr.iutrodez.salespath.service.ClientService;
+import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.utils.exception.CoordinatesException;
 
 import java.util.Properties;

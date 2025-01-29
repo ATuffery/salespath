@@ -1,4 +1,4 @@
-package fr.iutrodez.salespath.model;
+package fr.iutrodez.salespath.itinerarystep.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

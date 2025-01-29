@@ -1,15 +1,9 @@
-package fr.iutrodez.salespath.service;
+package fr.iutrodez.salespath.client.service;
 
-import com.opencagedata.jopencage.JOpenCageGeocoder;
-import com.opencagedata.jopencage.model.JOpenCageForwardRequest;
-import com.opencagedata.jopencage.model.JOpenCageLatLng;
-import com.opencagedata.jopencage.model.JOpenCageResponse;
-import fr.iutrodez.salespath.repository.IClientRepository;
-import fr.iutrodez.salespath.model.Client;
+import fr.iutrodez.salespath.client.repository.IClientRepository;
+import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.utils.exception.CoordinatesException;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import fr.iutrodez.salespath.utils.Utils;
 

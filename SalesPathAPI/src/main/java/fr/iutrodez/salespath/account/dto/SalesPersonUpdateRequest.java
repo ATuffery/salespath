@@ -1,6 +1,6 @@
-package fr.iutrodez.salespath.dto;
+package fr.iutrodez.salespath.account.dto;
 
-import fr.iutrodez.salespath.model.SalesPerson;
+import fr.iutrodez.salespath.account.model.SalesPerson;
 
 public class SalesPersonUpdateRequest {
 
