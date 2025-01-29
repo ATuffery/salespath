@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import org.osmdroid.api.IMapController;
@@ -22,10 +21,8 @@ import java.util.List;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
-import fr.iutrodez.salespathapp.itinerary.CreateItinerary;
-import fr.iutrodez.salespathapp.itinerary.DetailsItinerary;
-import fr.iutrodez.salespathapp.user.MyAccountActivity;
-import fr.iutrodez.salespathapp.utils.Utils;
+import fr.iutrodez.salespathapp.itinerary.CreateItineraryActivity;
+import fr.iutrodez.salespathapp.itinerary.DetailsItineraryActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -110,7 +107,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void goToItineraryDetails(String itineraryId) {
-        Intent intent = new Intent(this, DetailsItinerary.class);
+        Intent intent = new Intent(this, DetailsItineraryActivity.class);
 
         Intent intentParent = getIntent();
         intent.putExtra("itineraryId", itineraryId);
@@ -139,7 +136,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void gotToAddItinerary(View btn) {
-        Intent intent = new Intent(this, CreateItinerary.class);
+        Intent intent = new Intent(this, CreateItineraryActivity.class);
         startActivity(intent);
     }
 

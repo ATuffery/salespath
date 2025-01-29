@@ -32,7 +32,7 @@
             android:textColor="@color/black" />
 
         <EditText
-            android:id="@+id/et_nom"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nom"
@@ -51,6 +51,14 @@
             android:paddingBottom="@dimen/margin_bottom_small"
             android:textColor="@color/black" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1 requis, 8 max."
+            android:textSize="@dimen/text_size_small"
+            android:paddingBottom="@dimen/margin_bottom_small"
+            android:textColor="@color/alert" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_contacts"
             android:layout_width="match_parent"
@@ -67,6 +75,7 @@
             android:padding="@dimen/button_padding"
             android:backgroundTint="@color/primary"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_medium" />
+            android:textSize="@dimen/text_size_medium"
+            android:onClick="createItinerary"/>
     </LinearLayout>
 </ScrollView>

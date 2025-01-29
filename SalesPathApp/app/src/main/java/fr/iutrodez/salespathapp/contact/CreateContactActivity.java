@@ -40,7 +40,7 @@ public class CreateContactActivity extends BaseActivity {
     private EditText phoneNumberInput;
     private RadioGroup typeInput;
     private TextView msgError;
-    private final static String URL = Config.API_URL + "client/add";
+    private final static String URL = Config.API_URL + "client/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

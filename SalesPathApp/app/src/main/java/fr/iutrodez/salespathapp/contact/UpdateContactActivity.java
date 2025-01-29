@@ -46,9 +46,9 @@ public class UpdateContactActivity extends BaseActivity {
     private Button delete;
     private Button modify;
     private TextView msgError;
-    private static final String URL_DELETE = Config.API_URL + "client/deleteOne?id=";
-    private static final String URL_MODIFY = Config.API_URL + "client/updateOne?id=";
-    private static final String URL_INFO = Config.API_URL + "client/getOne?id=";
+    private static final String URL_DELETE = Config.API_URL + "client/";
+    private static final String URL_MODIFY = Config.API_URL + "client/";
+    private static final String URL_INFO = Config.API_URL + "client/getOne/";
     private RequestQueue queue;
     private String contactId;
     private RadioButton client;
@@ -151,7 +151,6 @@ public class UpdateContactActivity extends BaseActivity {
     }
 
     private void deleteContact() {
-        Log.e("URL", this.URL_DELETE + this.contactId);
         this.queue.add(requestClientDeletion(this.URL_DELETE + this.contactId));
     }
 

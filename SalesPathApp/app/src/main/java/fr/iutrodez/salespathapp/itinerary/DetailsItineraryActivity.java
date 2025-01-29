@@ -23,9 +23,8 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
-import fr.iutrodez.salespathapp.utils.Utils;
 
-public class DetailsItinerary extends BaseActivity {
+public class DetailsItineraryActivity extends BaseActivity {
 
     private MapView map;
     private String itineraryId;
@@ -65,14 +64,14 @@ public class DetailsItinerary extends BaseActivity {
         customers.setLayoutManager(new LinearLayoutManager(this));
 
         contacts = new ArrayList<>();
-        contacts.add(new Contact("MARTIN Guillaume", "Prospect - Pomme", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("SERRES Patrice", "Client - Miracle", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("POSTMAN Nathalie", "Client - Microflop", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
-        contacts.add(new Contact("DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "MARTIN Guillaume", "Prospect - Pomme", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "SERRES Patrice", "Client - Miracle", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "POSTMAN Nathalie", "Client - Microflop", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
+        contacts.add(new Contact("ABC", "DENAMIEL JP", "Prospect - Pell", ContactCheckbox.NO_CHECKBOX));
 
         contactAdapter = new ContactAdapter(contacts);
         customers.setAdapter(contactAdapter);
