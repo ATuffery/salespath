@@ -30,11 +30,11 @@ public class ItineraryStepService {
         }
     }
 
-    public Optional<ItineraryStep> getSteps(String idItinerary) {
-        Optional<ItineraryStep> stepOpt = itineraryStepRepository.findByIdItinerary(idItinerary);
+    public Optional<ItineraryStep[]> getSteps(String idItinerary) {
+        Optional<ItineraryStep[]> stepOpt = itineraryStepRepository.findByIdItinerary(idItinerary);
 
         if (stepOpt.isPresent()) {
-            ItineraryStep step = stepOpt.get();
+            return stepOpt;
         }
 
         return Optional.empty();

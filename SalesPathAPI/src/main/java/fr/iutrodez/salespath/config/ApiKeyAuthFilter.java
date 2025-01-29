@@ -34,7 +34,8 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         // Vérifier si l'API key est nécessaire pour cette requête
         String path = request.getRequestURI();
-        if (!"/account/login".equals(path) && !"/account/add".equals(path)) { // Si ce n'est pas la route de login
+        if (!"/account/login".equals(path) && !"/account/add".equals(path) && !"/swagger-ui.html".equals(path)
+            && !"/v3/api-docs".equals(path)) {
             if (apiKey == null || apiKey.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Missing API Key");

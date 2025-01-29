@@ -3,13 +3,13 @@ package fr.iutrodez.salespath.service;
 import fr.iutrodez.salespath.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.model.Itinerary;
 import fr.iutrodez.salespath.model.ItineraryStep;
+import fr.iutrodez.salespath.model.SalesPerson;
+import fr.iutrodez.salespath.repository.IAccountRepository;
 import fr.iutrodez.salespath.repository.IItineraryRepository;
 import fr.iutrodez.salespath.utils.PathFinder;
-import fr.iutrodez.salespath.utils.PathFinder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -24,7 +24,10 @@ public class ItineraryService {
     @Autowired
     private ItineraryStepService itineraryStepService;
 
-    public Itinerary createItinerary(ItineraryAddRequest iti) {
+    @Autowired
+    private IAccountRepository accountRepository;
+
+    public void createItinerary(ItineraryAddRequest iti) {
         try {
             String[] order = pf.itineraryOrder(iti.getIdClients(),
                                                Long.parseLong(iti.getItinerary().getCodeUser()));
@@ -44,23 +47,28 @@ public class ItineraryService {
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the itinerary : " + e.getMessage());
         }
-
-        return null;
     }
 
-    public Optional<Itinerary> getItineraryUser(String idUser) {
-        try {
-            return itineraryRepository.findByIdUser(idUser);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while search the itinerarys : " + e.getMessage());
+    public Optional<Itinerary[]> getItineraryUser(Long idUser) {
+        SalesPerson existing = accountRepository.findById(idUser)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found for ID : " + idUser));
+
+        Optional<Itinerary[]> itineraryOpt = itineraryRepository.findByIdUser(idUser);
+
+        if (itineraryOpt.isPresent()) {
+            return itineraryOpt;
+        } else {
+           return Optional.empty();
         }
     }
 
-    public Optional<Itinerary> getItinerary(String id) {
-        try {
-            return itineraryRepository.findById(Long.parseLong(id));
-        } catch (Exception e) {
-            throw new RuntimeException("Error while search the itinerary : " + e.getMessage());
+    public Optional<Itinerary> getItinerary(Long id) {
+        Optional<Itinerary> itineraryOpt = itineraryRepository.findById(id);
+
+        if (itineraryOpt.isPresent()) {
+            return itineraryOpt;
+        } else {
+            return Optional.empty();
         }
     }
 

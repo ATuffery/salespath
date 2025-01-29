@@ -14,5 +14,5 @@ public interface IItineraryStepRepository extends JpaRepository<ItineraryStep, S
     Optional<ItineraryStep> findByIds(String idItinerary, String idClient);
 
     @Query("SELECT i FROM ItineraryStep i WHERE i.idItinerary = ?1")
-    Optional<ItineraryStep> findByIdItinerary(String idItinerary);
+    Optional<ItineraryStep[]> findByIdItinerary(String idItinerary);
 }

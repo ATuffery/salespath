@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Classe principale de l'application
  */
-@SpringBootApplication
+@SpringBootApplication()
 public class SalesPathApiApplication {
 
     /**
