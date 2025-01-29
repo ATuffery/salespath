@@ -25,13 +25,14 @@ public class ItineraryData {
 
     // Interface pour notifier quand les contacts sont chargés
     public interface OnItinerariesLoadedListener {
-        void OnItinerariesLoaded(ArrayList<JSONObject> contacts);
+        void OnItinerariesLoaded(ArrayList<JSONObject> data);
+
         void onError(String errorMessage);
     }
 
     // Méthode pour récupérer les contacts
     public static void getItineraries(Context context, String apiKey, String id, OnItinerariesLoadedListener listener) {
-        String url = Config.API_URL + "client/get?id=" + id;
+        String url = Config.API_URL + "itinerary/" + id;
 
         // Création de la requête réseau
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,

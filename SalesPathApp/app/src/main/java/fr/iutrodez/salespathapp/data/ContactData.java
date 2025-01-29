@@ -31,7 +31,7 @@ public class ContactData {
 
     // Méthode pour récupérer les contacts
     public static void getContacts(Context context, String apiKey, String id, OnContactsLoadedListener listener) {
-        String url = Config.API_URL + "client/get?id=" + id;
+        String url = Config.API_URL + "client/" + id;
 
         // Création de la requête réseau
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,

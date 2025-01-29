@@ -38,8 +38,9 @@
         <activity android:name=".contact.ContactsActivity"></activity>
         <activity android:name=".contact.CreateContactActivity"></activity>
         <activity android:name=".contact.UpdateContactActivity"></activity>
-        <activity android:name=".itinerary.CreateItinerary"></activity>
-        <activity android:name=".itinerary.DetailsItinerary"></activity>
+        <activity android:name=".itinerary.CreateItineraryActivity"></activity>
+        <activity android:name=".itinerary.DetailsItineraryActivity"></activity>
+        <activity android:name=".itinerary.ItinerariesActivity"></activity>
     </application>
 
 </manifest>
