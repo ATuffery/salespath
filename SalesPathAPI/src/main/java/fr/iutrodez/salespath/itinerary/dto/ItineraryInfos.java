@@ -1,12 +1,12 @@
 package fr.iutrodez.salespath.itinerary.dto;
 
-import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.dto.ItineraryStepWithClient;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 
 public class ItineraryInfos {
 
     private Itinerary itinerary;
-    private ItineraryStep[] steps;
+    private ItineraryStepWithClient[] steps;
 
     public Itinerary getItinerary() {
         return itinerary;
@@ -16,11 +16,11 @@ public class ItineraryInfos {
         this.itinerary = itinerary;
     }
 
-    public ItineraryStep[] getSteps() {
+    public ItineraryStepWithClient[] getSteps() {
         return steps;
     }
 
-    public void setSteps(ItineraryStep[] steps) {
+    public void setSteps(ItineraryStepWithClient[] steps) {
         this.steps = steps;
     }
 }

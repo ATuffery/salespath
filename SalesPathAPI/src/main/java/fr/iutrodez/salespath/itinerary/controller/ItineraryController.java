@@ -1,9 +1,12 @@
 package fr.iutrodez.salespath.itinerary.controller;
 
+import fr.iutrodez.salespath.client.model.Client;
+import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.itinerary.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.itinerary.dto.ItineraryInfos;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.service.ItineraryService;
+import fr.iutrodez.salespath.itinerarystep.dto.ItineraryStepWithClient;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(value = "/itinerary")
 public class ItineraryController {
 
@@ -23,6 +28,9 @@ public class ItineraryController {
 
     @Autowired
     private ItineraryStepService itineraryStepService;
+
+    @Autowired
+    private ClientService clientService;
 
     @PostMapping()
     public ResponseEntity<?> createItinerary(@RequestBody ItineraryAddRequest itinerary) {
@@ -54,18 +62,34 @@ public class ItineraryController {
     public ResponseEntity<?> getInfos(@PathVariable Long id) {
         try {
             Optional<Itinerary> itineraryOpt = itineraryService.getItinerary(id);
-            Optional<ItineraryStep[]> stepsOpt;
 
             if (itineraryOpt.isPresent()) {
                 Itinerary itinerary = itineraryOpt.get();
-                stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
+                Optional<ItineraryStep[]> stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
 
                 if (stepsOpt.isPresent()) {
                     ItineraryStep[] steps = stepsOpt.get();
+                    List<ItineraryStep> stepsList = Arrays.asList(steps);
+
+                    // Ajouter les informations des clients
+                    ItineraryStepWithClient[] stepsWithClient = (ItineraryStepWithClient[]) stepsList.stream().map(step -> {
+                        Client client = clientService.getClientById(step.getIdClient());
+
+                        ItineraryStepWithClient enrichedStep = new ItineraryStepWithClient();
+                        enrichedStep.setIdItinerary(step.getIdItinerary());
+                        enrichedStep.setIdClient(step.getIdClient());
+                        enrichedStep.setStep(step.getStep());
+
+                        enrichedStep.setClientName(client.getLastName() + ' ' + client.getFirstName());
+                        enrichedStep.setClientLatitude(client.getCoordonates()[0]);
+                        enrichedStep.setClientLongitude(client.getCoordonates()[1]);
+
+                        return enrichedStep;
+                    }).toArray(ItineraryStepWithClient[]::new);
 
                     ItineraryInfos infos = new ItineraryInfos();
                     infos.setItinerary(itinerary);
-                    infos.setSteps(steps);
+                    infos.setSteps(stepsWithClient);
 
                     return ResponseEntity.status(200).body(infos);
                 } else {
@@ -74,10 +98,13 @@ public class ItineraryController {
             } else {
                 return ResponseEntity.status(404).body(Map.of("error", "Itinerary not found for this Id"));
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
+
 
     @DeleteMapping()
     public ResponseEntity<?> deleteItinerary(String id) {
