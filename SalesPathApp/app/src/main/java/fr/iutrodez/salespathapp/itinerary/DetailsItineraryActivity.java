@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -92,7 +91,7 @@ public class DetailsItineraryActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                runOnUiThread(() -> Utils.displayServerError(getBaseContext(), errorMessage));
+                runOnUiThread(() -> Utils.displayError(getBaseContext(), errorMessage));
             }
         });
     }

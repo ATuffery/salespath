@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Represente un itinéraire
+ */
 public class Itinerary {
     private int idItinerary;
     private String nameItinerary;

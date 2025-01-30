@@ -19,8 +19,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
@@ -28,7 +26,6 @@ import fr.iutrodez.salespathapp.itinerary.CreateItineraryActivity;
 import fr.iutrodez.salespathapp.itinerary.DetailsItineraryActivity;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.ContactData;
-import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -89,7 +86,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayServerError(getBaseContext(), errorMessage);
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }
@@ -110,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayServerError(getBaseContext(), errorMessage);
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }
@@ -139,7 +136,7 @@ public class MainActivity extends BaseActivity {
                 marker.setIcon(markerIcon);
                 map.getOverlays().add(marker);
             } catch (JSONException e) {
-                Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                Utils.displayError(getBaseContext(), getString(R.string.error_server));
             }
         }
 

@@ -41,7 +41,13 @@ public class ItineraryData {
     }
 
 
-    // Méthode pour récupérer la liste des itinéraires
+    /**
+     * Récupère tous les itinéraire d'un commercial
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param accountId L'id du commercial
+     * @param listener la fonction qui va se déclancher au retour des données
+     */
     public static void getItineraries(Context context, String apiKey, String accountId, OnItinerariesLoadedListener listener) {
         String url = Config.API_URL + "itinerary/" + accountId;
 
@@ -59,12 +65,10 @@ public class ItineraryData {
                                 String date = itineraryObject.optString("creationDate", "");
                                 int nbSteps =  itineraryObject.optInt("nbSteps", 0);
 
-                                // Création d'un objet Itinerary
                                 Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                                 itineraries.add(itinerary);
                                 itinerary.setNbSteps(nbSteps);
                             }
-                            // Notifier que les itinéraires sont chargés
                             listener.OnItinerariesLoaded(itineraries);
                         } catch (JSONException e) {
                             listener.onError("Erreur lors de la lecture des données.");
@@ -91,7 +95,14 @@ public class ItineraryData {
         requestQueue.add(jsonArrayRequest);
     }
 
-    // Méthode pour récupérer les détails d'un itinéraire spécifique
+
+    /**
+     * Récupère le détails d'un itinéraire
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param id L'id du commercial
+     * @param listener la fonction qui va se déclancher au retour des données
+     */
     public static void getItinerariesInfos(Context context, String apiKey, String id, OnItineraryDetailsLoadedListener listener) {
         String url = Config.API_URL + "itinerary/getInfos/" + id;
 
@@ -100,7 +111,6 @@ public class ItineraryData {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            // Récupération de l'itinéraire
                             JSONObject itineraryObject = response.getJSONObject("itinerary");
                             int idItinerary = itineraryObject.optInt("idItinerary", -1);
                             String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
@@ -108,11 +118,9 @@ public class ItineraryData {
                             String date =  itineraryObject.optString("creationDate", "");
                             int nbSteps =  itineraryObject.optInt("nbSteps", 0);
 
-                            // Création de l'objet Itinerary
                             Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                             itinerary.setNbSteps(nbSteps);
 
-                            // Récupération des étapes
                             JSONArray stepsArray = response.optJSONArray("steps");
                             if (stepsArray != null) {
                                 for (int i = 0; i < stepsArray.length(); i++) {
@@ -123,12 +131,10 @@ public class ItineraryData {
                                     double clientLatitude = stepObject.optDouble("clientLatitude", 0);
                                     double clientLongitude = stepObject.optDouble("clientLongitude", 0);
 
-                                    // Ajouter l'étape à l'itinéraire
                                     itinerary.addStep(new Step(idItinerary, idClient, step, clientName, clientLatitude, clientLongitude));
                                 }
                             }
 
-                            // Notifier l'écouteur avec les données formatées
                             listener.OnItineraryDetailsLoaded(itinerary);
 
                         } catch (JSONException e) {
@@ -156,6 +162,14 @@ public class ItineraryData {
         requestQueue.add(jsonObjectRequest);
     }
 
+
+    /**
+     * Supprime un itinéraire
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param idItinerary L'id du commercial
+     * @param listener la fonction qui va se déclancher au retour des données
+     */
     public static void deleteItinerary(Context context, String apiKey, int idItinerary, OnItineraryDeletedListener listener) {
         String url = Config.API_URL + "itinerary/" + idItinerary;
 
@@ -189,7 +203,7 @@ public class ItineraryData {
 
 
 
-    // Gestion des erreurs de requête
+    /** Gestion des erreurs des requêtes */
     private static void handleError(Context context, VolleyError error, Object listener) {
         String errorMessage;
         if (error.networkResponse != null) {

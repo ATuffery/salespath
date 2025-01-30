@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +31,6 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
-import fr.iutrodez.salespathapp.contact.ContactsActivity;
 import fr.iutrodez.salespathapp.data.ContactData;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -66,7 +64,6 @@ public class CreateItineraryActivity extends BaseActivity {
     private void fillContacts() {
         contactList = new ArrayList<>();
 
-        // Appel à ContactData pour récupérer les données
         ContactData.getContacts(getBaseContext(), getApiKey(), getAccountId(), new ContactData.OnContactsLoadedListener() {
             @Override
             public void onContactsLoaded(ArrayList<JSONObject> contacts) {
@@ -79,11 +76,10 @@ public class CreateItineraryActivity extends BaseActivity {
                         contactList.add(contact);
 
                     } catch (JSONException e) {
-                        Utils.displayServerError(getBaseContext(), "Erreur lors de la lecture des données.");
+                        Utils.displayError(getBaseContext(), "Erreur lors de la lecture des données.");
                     }
                 }
 
-                // Mise à jour de l'interface utilisateur
                 ContactAdapter adapter = new ContactAdapter(contactList);
                 rvContacts.setAdapter(adapter);
                 rvContacts.setLayoutManager(new LinearLayoutManager(getBaseContext()));
@@ -91,11 +87,15 @@ public class CreateItineraryActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayServerError(getBaseContext(), errorMessage);
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }
 
+    /**
+     * Lance le processus d'ajout d'un itinéraire
+     * @param btn button cliqué
+     */
     public void createItinerary(View btn) {
         ArrayList<String> contacts = new ArrayList<>();
         for (int i = 0 ; i < contactList.size() ; i++) {
@@ -109,7 +109,7 @@ public class CreateItineraryActivity extends BaseActivity {
 
         if (!CheckInput.text(name, 1, 50) ||
             contacts.size() == 0 || contacts.size() > Config.MAX_ITINERARY_STEP) {
-            Utils.displayServerError(getBaseContext(), getString(R.string.typing_error));
+            Utils.displayError(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
@@ -123,7 +123,7 @@ public class CreateItineraryActivity extends BaseActivity {
             jsonBody.put("itinerary", itinerary);
             jsonBody.put("idClients", contactsSteps);
         } catch (JSONException e) {
-            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+            Utils.displayError(getBaseContext(), getString(R.string.error_server));
         }
 
         Log.e("DATA", jsonBody.toString());
@@ -132,6 +132,7 @@ public class CreateItineraryActivity extends BaseActivity {
         queue.add(requestCreation(this.urlAdd, jsonBody));
     }
 
+    /** Envoie de la requete de création à l'API */
     private JsonObjectRequest requestCreation(String url, JSONObject body) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, body,
                 new Response.Listener<JSONObject>() {
@@ -143,7 +144,7 @@ public class CreateItineraryActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                        Utils.displayError(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override

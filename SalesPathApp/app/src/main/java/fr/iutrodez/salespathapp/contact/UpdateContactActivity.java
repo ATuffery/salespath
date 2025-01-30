@@ -2,16 +2,13 @@ package fr.iutrodez.salespathapp.contact;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,7 +16,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -120,7 +116,7 @@ public class UpdateContactActivity extends BaseActivity {
                             }
 
                         } catch (JSONException e) {
-                            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                            Utils.displayError(getBaseContext(), getString(R.string.error_server));
                         }
                     }
                 },
@@ -130,12 +126,12 @@ public class UpdateContactActivity extends BaseActivity {
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                Utils.displayServerError(getBaseContext(), getString(R.string.error_find_account));
+                                Utils.displayError(getBaseContext(), getString(R.string.error_find_account));
                             } else {
-                                Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                                Utils.displayError(getBaseContext(), getString(R.string.error_server));
                             }
                         } else {
-                            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                            Utils.displayError(getBaseContext(), getString(R.string.error_server));
                         }
                     }
                 }) {
@@ -171,7 +167,7 @@ public class UpdateContactActivity extends BaseActivity {
             !CheckInput.text(phone, 10, 10) ||
             !CheckInput.text(type, 1, 50)) {
 
-            Utils.displayServerError(getBaseContext(), getString(R.string.typing_error));
+            Utils.displayError(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
@@ -187,7 +183,7 @@ public class UpdateContactActivity extends BaseActivity {
             jsonBody.put("idPerson", getAccountId());
 
         } catch (JSONException e) {
-            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+            Utils.displayError(getBaseContext(), getString(R.string.error_server));
         }
 
         this.queue.add(requestClientModification(this.URL_MODIFY + this.contactId, jsonBody));
@@ -209,7 +205,7 @@ public class UpdateContactActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                        Utils.displayError(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override
@@ -234,7 +230,7 @@ public class UpdateContactActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                        Utils.displayError(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override

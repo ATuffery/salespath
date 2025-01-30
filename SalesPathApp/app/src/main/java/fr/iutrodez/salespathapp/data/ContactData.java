@@ -23,13 +23,19 @@ import fr.iutrodez.salespathapp.R;
 
 public class ContactData {
 
-    // Interface pour notifier quand les contacts sont chargés
+    /** Interface pour notifier quand les contacts sont chargés */
     public interface OnContactsLoadedListener {
         void onContactsLoaded(ArrayList<JSONObject> contacts);
         void onError(String errorMessage);
     }
 
-    // Méthode pour récupérer les contacts
+    /**
+     * Récupère tous les contacts d'un commercial
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param id L'id du commercial
+     * @param listener la fonction qui va se déclancher au retour des données
+     */
     public static void getContacts(Context context, String apiKey, String id, OnContactsLoadedListener listener) {
         String url = Config.API_URL + "client/" + id;
 
