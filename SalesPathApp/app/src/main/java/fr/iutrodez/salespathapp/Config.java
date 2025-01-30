@@ -10,11 +10,16 @@ public class Config {
     /**
      * Latitude utilisé par défaut sur les cartes
      */
-    public static final double MAP_DEFAULT_LATITUDE = 44.3500;
+    public static final double MAP_DEFAULT_LATITUDE = 46.603354;
 
     /**
      * Longitude utilisé par défaut sur les cartes
      */
-    public static final double MAP_DEFAULT_LONGITUDE = 2.5750;
+    public static final double MAP_DEFAULT_LONGITUDE = 1.888334;
+
+    /**
+     * Zoom appliqué par défaut de les cartes
+     */
+    public static final double MAP_DEFAULT_ZOOM = 7.0;
 
 }

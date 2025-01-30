@@ -56,7 +56,7 @@ public class DetailsItineraryActivity extends BaseActivity {
         // Configuration de la carte
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
-        mapController.setZoom(13.0);
+        mapController.setZoom(Config.MAP_DEFAULT_ZOOM);
         mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
 
         // Configuration de la liste de contacts

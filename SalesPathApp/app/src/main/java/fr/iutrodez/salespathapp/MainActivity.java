@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
-        mapController.setZoom(13.0);
+        mapController.setZoom(Config.MAP_DEFAULT_ZOOM);
         GeoPoint startPoint = new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE);
         mapController.setCenter(startPoint);
 
