@@ -35,7 +35,7 @@ public class ItineraryService {
 
     public void createItinerary(ItineraryAddRequest iti) {
         try {
-            String[] order = pf.itineraryOrder(iti.getIdClients(),
+            String[] order = pf.brutForce(iti.getIdClients(),
                                                Long.parseLong(iti.getItinerary().getCodeUser()));
 
             Itinerary saved = itineraryRepository.save(iti.getItinerary());

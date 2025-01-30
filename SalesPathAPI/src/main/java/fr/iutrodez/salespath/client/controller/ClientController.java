@@ -44,7 +44,7 @@ public class ClientController {
             return ResponseEntity.status(201).body(Map.of("success", "Client ajouté avec succès"));
         } catch (Exception e) {
             System.err.print(e.getMessage());
-            return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué (500)"));
+            return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué."  + e.getMessage()));
         }
     }
 
