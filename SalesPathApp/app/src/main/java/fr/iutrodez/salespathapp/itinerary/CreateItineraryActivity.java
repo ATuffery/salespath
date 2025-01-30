@@ -118,6 +118,7 @@ public class CreateItineraryActivity extends BaseActivity {
         try {
             JSONArray contactsSteps = new JSONArray(contacts.toArray());
             itinerary.put("codeUser", getAccountId());
+            itinerary.put("nbSteps", contacts.size());
             itinerary.put("nameItinerary", name);
             jsonBody.put("itinerary", itinerary);
             jsonBody.put("idClients", contactsSteps);
