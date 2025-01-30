@@ -22,4 +22,9 @@ public class Config {
      */
     public static final double MAP_DEFAULT_ZOOM = 7.0;
 
+    /**
+     * Nombre max d'étapes dans un itinéraire
+     */
+    public static final int MAX_ITINERARY_STEP = 8;
+
 }

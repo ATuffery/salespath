@@ -60,8 +60,8 @@ public class ItinerariesActivity extends BaseActivity {
                     itineraries.add(new CardWithTwoLines(
                             itinerary.getNameItinerary(),
                             "#" + itinerary.getIdItinerary(),
-                            "",
-                            "",
+                            "Créé le " + itinerary.getDateCreation(),
+                            itinerary.getNbSteps() + " clients/prospects à visiter",
                             "Supprimer",
                             () -> {
                                 deleteItinerary(itinerary.getIdItinerary());

@@ -56,10 +56,13 @@ public class ItineraryData {
                                 int idItinerary = itineraryObject.optInt("idItinerary", -1);
                                 String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
                                 String codeUser = itineraryObject.optString("codeUser", "");
+                                String date = itineraryObject.optString("creationDate", "");
+                                int nbSteps =  itineraryObject.optInt("nbSteps", 0);
 
                                 // Création d'un objet Itinerary
-                                Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser);
+                                Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                                 itineraries.add(itinerary);
+                                itinerary.setNbSteps(nbSteps);
                             }
                             // Notifier que les itinéraires sont chargés
                             listener.OnItinerariesLoaded(itineraries);
@@ -102,9 +105,12 @@ public class ItineraryData {
                             int idItinerary = itineraryObject.optInt("idItinerary", -1);
                             String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
                             String codeUser = itineraryObject.optString("codeUser", "");
+                            String date =  itineraryObject.optString("creationDate", "");
+                            int nbSteps =  itineraryObject.optInt("nbSteps", 0);
 
                             // Création de l'objet Itinerary
-                            Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser);
+                            Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
+                            itinerary.setNbSteps(nbSteps);
 
                             // Récupération des étapes
                             JSONArray stepsArray = response.optJSONArray("steps");

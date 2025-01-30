@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,12 +44,15 @@ public class CreateItineraryActivity extends BaseActivity {
     private ArrayList<Contact> contactList;
     private String urlAdd = Config.API_URL + "itinerary";
     private EditText nameInput;
+    private TextView infoSaisie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_itinerary);
         this.nameInput = findViewById(R.id.name);
+        this.infoSaisie = findViewById(R.id.infoSaisie);
+        this.infoSaisie.setText("1 requis, " + Config.MAX_ITINERARY_STEP + " max.");
 
         rvContacts = findViewById(R.id.rv_contacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
@@ -104,7 +108,7 @@ public class CreateItineraryActivity extends BaseActivity {
         String name = Utils.inputValueFormatted(nameInput);
 
         if (!CheckInput.text(name, 1, 50) ||
-            contacts.size() == 0 || contacts.size() > 8) {
+            contacts.size() == 0 || contacts.size() > Config.MAX_ITINERARY_STEP) {
             Utils.displayServerError(getBaseContext(), getString(R.string.typing_error));
             return;
         }
