@@ -92,7 +92,7 @@ public class CreateItineraryActivity extends BaseActivity {
         });
     }
 
-    public void createItinerary(View btn) throws JSONException {
+    public void createItinerary(View btn) {
         ArrayList<String> contacts = new ArrayList<>();
         for (int i = 0 ; i < contactList.size() ; i++) {
             Contact current = contactList.get(i);
@@ -111,15 +111,17 @@ public class CreateItineraryActivity extends BaseActivity {
 
         JSONObject jsonBody = new JSONObject();
         JSONObject itinerary = new JSONObject();
-        JSONArray contactsSteps = new JSONArray(contacts.toArray());
         try {
-            itinerary.append("codeUser", getAccountId());
-            itinerary.append("name_itinerary", name);
+            JSONArray contactsSteps = new JSONArray(contacts.toArray());
+            itinerary.put("codeUser", getAccountId());
+            itinerary.put("nameItinerary", name);
             jsonBody.put("itinerary", itinerary);
             jsonBody.put("idClients", contactsSteps);
         } catch (JSONException e) {
             Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
         }
+
+        Log.e("DATA", jsonBody.toString());
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(requestCreation(this.urlAdd, jsonBody));
