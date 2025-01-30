@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,38 +53,48 @@ public class ItinerariesActivity extends BaseActivity {
     private void fillItineraries() {
         ItineraryData.getItineraries(getBaseContext(), getApiKey(), getAccountId(), new ItineraryData.OnItinerariesLoadedListener() {
             @Override
-            public void OnItinerariesLoaded(ArrayList<JSONObject> data) {
-                try {
-                    for (JSONObject jsonContact : data) {
-                        itineraries.add(new CardWithTwoLines(
-                                jsonContact.getString("firstName"),
-                                jsonContact.getBoolean("client") ? "Client" : "Prospect",
-                                jsonContact.getString("address"),
-                                jsonContact.getString("enterpriseName"),
-                                "Modifier",
-                                () -> {
-                                    //Intent intent = new Intent(ContactsActivity.this, UpdateContactActivity.class);
-                                    //try {
-                                    //    intent.putExtra("contactId", jsonContact.getString("id"));
-                                    //} catch (JSONException e) {
-                                    //    throw new RuntimeException(e);
-                                    //}
-                                    //startActivity(intent);
-                                }
-                        ));
-                    }
+            public void OnItinerariesLoaded(ArrayList<Itinerary> itinerariesList) {
+                itineraries.clear();
 
-                    // Mettre à jour l'adaptateur
-                    adapter.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    Utils.displayServerError(getBaseContext(), e.getMessage());
+                for (Itinerary itinerary : itinerariesList) {
+                    itineraries.add(new CardWithTwoLines(
+                            itinerary.getNameItinerary(),
+                            "#" + itinerary.getIdItinerary(),
+                            "",
+                            "",
+                            "Supprimer",
+                            () -> {
+                                deleteItinerary(itinerary.getIdItinerary());
+                            }
+                    ));
                 }
+
+                // Mettre à jour l'adaptateur après avoir rempli la liste
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(String errorMessage) {
                 Utils.displayServerError(getBaseContext(), errorMessage);
+            }
+        });
+    }
+
+    private void deleteItinerary(int itineraryId) {
+        ItineraryData.deleteItinerary(getBaseContext(), getApiKey(), itineraryId, new ItineraryData.OnItineraryDeletedListener() {
+            @Override
+            public void onItineraryDeleted(boolean success, String message) {
+                if (success) {
+                    // Supprime l'itinéraire de la liste locale
+                    itineraries.removeIf(itinerary -> itinerary.getStatus().equals("#" + itineraryId));
+
+                    // Met à jour l'adaptateur après suppression
+                    adapter.notifyDataSetChanged();
+
+                    Toast.makeText(ItinerariesActivity.this, "Itinéraire supprimé avec succès !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Utils.displayServerError(getBaseContext(), message);
+                }
             }
         });
     }
