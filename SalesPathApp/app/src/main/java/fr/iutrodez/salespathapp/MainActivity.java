@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                // Gestion des erreurs
+                Utils.displayServerError(getBaseContext(), errorMessage);
             }
         });
     }
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                // Gestion des erreurs
+                Utils.displayServerError(getBaseContext(), errorMessage);
             }
         });
     }

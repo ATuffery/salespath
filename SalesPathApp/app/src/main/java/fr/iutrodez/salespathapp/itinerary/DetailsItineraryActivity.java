@@ -69,13 +69,10 @@ public class DetailsItineraryActivity extends BaseActivity {
             @Override
             public void OnItineraryDetailsLoaded(Itinerary itinerary) {
                 runOnUiThread(() -> {
-                    // Affichage du titre de l'itinéraire
                     title.setText(itinerary.getNameItinerary());
 
-                    // Ajout des étapes sur la carte
                     addMarkers(itinerary);
 
-                    // Ajout des étapes dans la liste
                     contacts.clear();
                     for (Step step : itinerary.getSteps()) {
                         contacts.add(new Contact(

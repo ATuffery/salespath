@@ -120,7 +120,7 @@ public class UpdateContactActivity extends BaseActivity {
                             }
 
                         } catch (JSONException e) {
-                            msgError.setText(getString(R.string.error_server));
+                            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
                         }
                     }
                 },
@@ -130,12 +130,12 @@ public class UpdateContactActivity extends BaseActivity {
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                msgError.setText(getString(R.string.error_find_account));
+                                Utils.displayServerError(getBaseContext(), getString(R.string.error_find_account));
                             } else {
-                                msgError.setText(getString(R.string.error_server));
+                                Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
                             }
                         } else {
-                            msgError.setText(getString(R.string.error_server));
+                            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
                         }
                     }
                 }) {
@@ -171,7 +171,7 @@ public class UpdateContactActivity extends BaseActivity {
             !CheckInput.text(phone, 10, 10) ||
             !CheckInput.text(type, 1, 50)) {
 
-            msgError.setText(getString(R.string.typing_error));
+            Utils.displayServerError(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
@@ -187,7 +187,7 @@ public class UpdateContactActivity extends BaseActivity {
             jsonBody.put("idPerson", getAccountId());
 
         } catch (JSONException e) {
-            msgError.setText(getString(R.string.error_server));
+            Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
         }
 
         this.queue.add(requestClientModification(this.URL_MODIFY + this.contactId, jsonBody));
@@ -209,7 +209,7 @@ public class UpdateContactActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        msgError.setText(getString(R.string.error_server));
+                        Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override
@@ -234,7 +234,7 @@ public class UpdateContactActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        msgError.setText(getString(R.string.error_server));
+                        Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override
