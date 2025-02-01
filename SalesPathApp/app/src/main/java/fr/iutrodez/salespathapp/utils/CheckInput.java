@@ -2,6 +2,9 @@ package fr.iutrodez.salespathapp.utils;
 
 import java.util.regex.Pattern;
 
+/**
+ * Classe utilitaire de vérification des valeurs des inputs
+ */
 public class CheckInput {
 
     /**

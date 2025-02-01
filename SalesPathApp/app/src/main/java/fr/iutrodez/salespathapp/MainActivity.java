@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,8 +19,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
@@ -27,7 +26,6 @@ import fr.iutrodez.salespathapp.itinerary.CreateItineraryActivity;
 import fr.iutrodez.salespathapp.itinerary.DetailsItineraryActivity;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.ContactData;
-import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -48,11 +46,6 @@ public class MainActivity extends BaseActivity {
         // Initialiser la carte
         map = findViewById(R.id.map);
         map.setMultiTouchControls(true);
-
-        IMapController mapController = map.getController();
-        mapController.setZoom(Config.MAP_DEFAULT_ZOOM);
-        GeoPoint startPoint = new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE);
-        mapController.setCenter(startPoint);
 
         recyclerView = findViewById(R.id.recyclerViewHorizontal);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -75,9 +68,9 @@ public class MainActivity extends BaseActivity {
                     // Ajouter chaque itinéraire dans la liste
                     itineraryList.add(new CardWithTwoLines(
                             itinerary.getNameItinerary(),
-                            "Enregistré",
-                            "Créé le xx" ,
-                            itinerary.getSteps().size() + " clients/prospects à visiter",
+                            "#" + itinerary.getIdItinerary(),
+                            "Créé le " + itinerary.getDateCreation(),
+                            itinerary.getNbSteps() + " clients/prospects à visiter",
                             "Détails",
                             () -> {
                                 goToItineraryDetails(itinerary.getIdItinerary() + "");
@@ -93,7 +86,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                // Gestion des erreurs
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }
@@ -114,9 +107,14 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                // Gestion des erreurs
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
+    }
+
+    public void gotToAddItinerary(View btn) {
+        Intent intent = new Intent(this, CreateItineraryActivity.class);
+        startActivity(intent);
     }
 
     private void addMarkers(ArrayList<JSONObject> contactsJson) {
@@ -138,9 +136,14 @@ public class MainActivity extends BaseActivity {
                 marker.setIcon(markerIcon);
                 map.getOverlays().add(marker);
             } catch (JSONException e) {
-                Utils.displayServerError(getBaseContext(), getString(R.string.error_server));
+                Utils.displayError(getBaseContext(), getString(R.string.error_server));
             }
         }
+
+        IMapController mapController = map.getController();
+        mapController.setZoom(Config.MAP_DEFAULT_ZOOM);
+        GeoPoint startPoint = new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE);
+        mapController.setCenter(startPoint);
     }
 
 

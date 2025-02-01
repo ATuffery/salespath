@@ -1,5 +1,8 @@
 package fr.iutrodez.salespathapp.itinerary;
 
+/**
+ * Représente une étape d'un itinéraire
+ */
 public class Step {
     private int idItinerary;
     private String idClient;

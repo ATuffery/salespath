@@ -17,7 +17,6 @@ public class CardWithTwoLines {
         this.onClickAction = onClickAction;
     }
 
-    // Getters
     public String getTitle() { return title; }
     public String getStatus() { return status; }
     public String getLine1() { return line1; }

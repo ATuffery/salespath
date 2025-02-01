@@ -8,6 +8,12 @@ import android.widget.Toast;
 
 public class Utils {
 
+    /**
+     * Permet d'accéder aux données mémorisées sur l'appareil client
+     * @param activity
+     * @param name
+     * @return
+     */
     public static String dataAccess(Activity activity, String name) {
         SharedPreferences mesPreferences = activity.getSharedPreferences("me.xml", Activity.MODE_PRIVATE);
         return mesPreferences.getString(name, "");
@@ -23,8 +29,8 @@ public class Utils {
         return input.getText().toString().trim();
     }
 
-    /** Méthode pour afficher une erreur serveur */
-    public static void displayServerError(Context context, String msg) {
+    /** Méthode pour afficher une erreur  */
+    public static void displayError(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 

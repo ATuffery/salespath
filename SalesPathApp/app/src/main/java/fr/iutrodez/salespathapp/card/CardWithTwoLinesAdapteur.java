@@ -49,10 +49,9 @@ public class CardWithTwoLinesAdapteur extends RecyclerView.Adapter<CardWithTwoLi
         holder.cardLine2.setText(item.getLine2());
         holder.cardBtn.setText(item.getBtnText());
 
-        // Définir l'action du bouton
         holder.cardBtn.setOnClickListener(v -> {
             if (item.getOnClickAction() != null) {
-                item.getOnClickAction().run(); // Exécuter l'action
+                item.getOnClickAction().run();
             }
         });
     }

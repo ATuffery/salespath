@@ -17,7 +17,6 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
 import fr.iutrodez.salespathapp.data.ContactData;
-import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class ContactsActivity extends BaseActivity {
@@ -67,13 +66,13 @@ public class ContactsActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
-                    Utils.displayServerError(getBaseContext(), e.getMessage());
+                    Utils.displayError(getBaseContext(), e.getMessage());
                 }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayServerError(getBaseContext(), errorMessage);
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }

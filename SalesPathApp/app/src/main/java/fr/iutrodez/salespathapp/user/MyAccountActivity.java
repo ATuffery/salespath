@@ -1,6 +1,5 @@
 package fr.iutrodez.salespathapp.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -100,8 +99,7 @@ public class MyAccountActivity extends BaseActivity {
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                Toast.makeText(getBaseContext(), R.string.error_find_account,
-                                               Toast.LENGTH_LONG).show();
+                                Utils.displayError(getBaseContext(), getString(R.string.error_find_account));
                             } else {
                                 displayServerError();
                             }
@@ -125,7 +123,7 @@ public class MyAccountActivity extends BaseActivity {
      * Affiche un message d'erreur du serveur en cas de problème
      */
     private void displayServerError() {
-        Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
+        Utils.displayError(getBaseContext(), getString(R.string.error_server));
     }
 
     /**
@@ -145,14 +143,14 @@ public class MyAccountActivity extends BaseActivity {
                 !CheckInput.text(address, 1, 150) ||
                 !CheckInput.email(email)) {
 
-            Toast.makeText(getBaseContext(), R.string.typing_error, Toast.LENGTH_LONG).show();
+            Utils.displayError(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
         // En cas de modif de mot de passe
-        if ((!oldPassword.isEmpty() || !newPassword.isEmpty())
-            && CheckInput.text(newPassword, 8, 50)) {
-            Toast.makeText(getBaseContext(), R.string.error_passwordLenght, Toast.LENGTH_LONG).show();
+        if (oldPassword.isEmpty() || newPassword.isEmpty()
+            || !CheckInput.text(newPassword, 8, 50)) {
+            Utils.displayError(getBaseContext(), getString(R.string.error_passwordLenght));
             return;
         }
 
@@ -167,8 +165,10 @@ public class MyAccountActivity extends BaseActivity {
             jsonBody.put("oldPassword", oldPassword);
             jsonBody.put("salesPerson", salesperson);
         } catch (JSONException e) {
-            Toast.makeText(getBaseContext(), R.string.error_server, Toast.LENGTH_LONG).show();
+            Utils.displayError(getBaseContext(), getString(R.string.error_server));
         }
+
+        Log.e("DATA", jsonBody.toString());
 
         queue.add(requestUpdate(this.URL + "update/" + getAccountId(),
                                 jsonBody));
@@ -198,15 +198,12 @@ public class MyAccountActivity extends BaseActivity {
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                Toast.makeText(getBaseContext(), R.string.error_find_account,
-                                               Toast.LENGTH_LONG).show();
+                                Utils.displayError(getBaseContext(), getString(R.string.error_find_account));
                             } else {
-                                Toast.makeText(getBaseContext(), R.string.error_server,
-                                               Toast.LENGTH_LONG).show();
+                                Utils.displayError(getBaseContext(), getString(R.string.error_server));
                             }
                         } else {
-                            Toast.makeText(getBaseContext(), R.string.error_server,
-                                            Toast.LENGTH_LONG).show();
+                            Utils.displayError(getBaseContext(), getString(R.string.error_server));
                         }
                     }
                 }) {

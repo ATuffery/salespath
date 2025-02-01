@@ -52,11 +52,13 @@ public class BaseActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.nav_account) {
+            // Action pour la page "Mon compte"
             Intent intent = new Intent(this, MyAccountActivity.class);
             startActivity(intent);
             return true;
 
         } else if (id == R.id.nav_contacts) {
+            // Action pour la page "Mes contacts"
             Intent intent = new Intent(this, ContactsActivity.class);
             startActivity(intent);
             return true;
@@ -66,11 +68,13 @@ public class BaseActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.nav_itineraires) {
+            // Action pour la page "Mes itinéraires"
             Intent intent = new Intent(this, ItinerariesActivity.class);
             startActivity(intent);
             return true;
 
         } else if (id == R.id.nav_logout) {
+            // Action de déconnexion
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return true;

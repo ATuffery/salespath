@@ -37,7 +37,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         } else {
             holder.cbContact.setChecked(contact.isChecked());
             holder.cbContact.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                contact.setChecked(isChecked ? ContactCheckbox.CHECKED : ContactCheckbox.UNCHECKED); // Update the model when the checkbox is toggled
+                contact.setChecked(isChecked ? ContactCheckbox.CHECKED : ContactCheckbox.UNCHECKED);
             });
         }
     }

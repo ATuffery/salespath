@@ -5,27 +5,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.BaseActivity;
-import fr.iutrodez.salespathapp.Config;
-import fr.iutrodez.salespathapp.MainActivity;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
-import fr.iutrodez.salespathapp.contact.ContactAdapter;
-import fr.iutrodez.salespathapp.contact.ContactsActivity;
-import fr.iutrodez.salespathapp.contact.UpdateContactActivity;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -60,8 +48,8 @@ public class ItinerariesActivity extends BaseActivity {
                     itineraries.add(new CardWithTwoLines(
                             itinerary.getNameItinerary(),
                             "#" + itinerary.getIdItinerary(),
-                            "",
-                            "",
+                            "Créé le " + itinerary.getDateCreation(),
+                            itinerary.getNbSteps() + " clients/prospects à visiter",
                             "Supprimer",
                             () -> {
                                 deleteItinerary(itinerary.getIdItinerary());
@@ -75,7 +63,7 @@ public class ItinerariesActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayServerError(getBaseContext(), errorMessage);
+                Utils.displayError(getBaseContext(), errorMessage);
             }
         });
     }
@@ -93,7 +81,7 @@ public class ItinerariesActivity extends BaseActivity {
 
                     Toast.makeText(ItinerariesActivity.this, "Itinéraire supprimé avec succès !", Toast.LENGTH_SHORT).show();
                 } else {
-                    Utils.displayServerError(getBaseContext(), message);
+                    Utils.displayError(getBaseContext(), message);
                 }
             }
         });

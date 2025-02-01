@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -17,6 +16,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.Config;
@@ -53,12 +53,6 @@ public class DetailsItineraryActivity extends BaseActivity {
         this.map = findViewById(R.id.map);
         this.customers = findViewById(R.id.itineraryCustomers);
 
-        // Configuration de la carte
-        map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
-        mapController.setZoom(Config.MAP_DEFAULT_ZOOM);
-        mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
-
         // Configuration de la liste de contacts
         customers.setLayoutManager(new LinearLayoutManager(this));
         contacts = new ArrayList<>();
@@ -74,13 +68,10 @@ public class DetailsItineraryActivity extends BaseActivity {
             @Override
             public void OnItineraryDetailsLoaded(Itinerary itinerary) {
                 runOnUiThread(() -> {
-                    // Affichage du titre de l'itinéraire
                     title.setText(itinerary.getNameItinerary());
 
-                    // Ajout des étapes sur la carte
                     addMarkers(itinerary);
 
-                    // Ajout des étapes dans la liste
                     contacts.clear();
                     for (Step step : itinerary.getSteps()) {
                         contacts.add(new Contact(
@@ -90,6 +81,8 @@ public class DetailsItineraryActivity extends BaseActivity {
                                 ContactCheckbox.NO_CHECKBOX
                         ));
                     }
+                    // Met dans l'ordre inverse pour commencer par l'étape 1
+                    Collections.reverse(contacts);
 
                     // Mise à jour de l'affichage
                     contactAdapter.notifyDataSetChanged();
@@ -98,7 +91,7 @@ public class DetailsItineraryActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                runOnUiThread(() -> Utils.displayServerError(getBaseContext(), errorMessage));
+                runOnUiThread(() -> Utils.displayError(getBaseContext(), errorMessage));
             }
         });
     }
@@ -116,13 +109,10 @@ public class DetailsItineraryActivity extends BaseActivity {
             map.getOverlays().add(marker);
         }
 
-        // Centrer la carte sur le premier point s'il existe
-        if (!itinerary.getSteps().isEmpty()) {
-            GeoPoint firstPoint = new GeoPoint(
-                    itinerary.getSteps().get(0).getClientLatitude(),
-                    itinerary.getSteps().get(0).getClientLongitude()
-            );
-            map.getController().setCenter(firstPoint);
-        }
+        // Configuration de la carte
+        map.setMultiTouchControls(true);
+        IMapController mapController = map.getController();
+        mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
+        mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
 }
