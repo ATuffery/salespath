@@ -23,6 +23,12 @@ public class ItineraryStepWithClient {
     @Schema(description = "Longitude de la position du client")
     private double clientLongitude;
 
+    @Schema(description = "Adresse du client")
+    private String clientAddress;
+
+    @Schema(description = "Si le client est un client")
+    private boolean isClient;
+
     public String getIdItinerary() {
         return idItinerary;
     }
@@ -69,5 +75,21 @@ public class ItineraryStepWithClient {
 
     public void setClientLongitude(double clientLongitude) {
         this.clientLongitude = clientLongitude;
+    }
+
+    public String getClientAddress() {
+        return clientAddress;
+    }
+
+    public void setClientAddress(String clientAddress) {
+        this.clientAddress = clientAddress;
+    }
+
+    public boolean isClient() {
+        return isClient;
+    }
+
+    public void setClient(boolean client) {
+        isClient = client;
     }
 }

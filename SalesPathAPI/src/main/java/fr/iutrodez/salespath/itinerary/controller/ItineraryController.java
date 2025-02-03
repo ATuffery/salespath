@@ -113,6 +113,8 @@ public class ItineraryController {
                         enrichedStep.setClientName(client.getLastName() + ' ' + client.getFirstName());
                         enrichedStep.setClientLatitude(client.getCoordonates()[0]);
                         enrichedStep.setClientLongitude(client.getCoordonates()[1]);
+                        enrichedStep.setClientAddress(client.getAddress());
+                        enrichedStep.setClient(client.getClient());
 
                         return enrichedStep;
                     }).toArray(ItineraryStepWithClient[]::new);
