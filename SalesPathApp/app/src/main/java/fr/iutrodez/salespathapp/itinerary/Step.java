@@ -1,27 +1,28 @@
 package fr.iutrodez.salespathapp.itinerary;
 
+import fr.iutrodez.salespathapp.contact.Contact;
+
 /**
  * Représente une étape d'un itinéraire
  */
 public class Step {
     private int idItinerary;
-    private String idClient;
+    private Contact contact;
     private int step;
     private String clientName;
+    private boolean isClient;
+    private String clientAddress;
     private double clientLatitude;
     private double clientLongitude;
 
-    public Step(int idItinerary, String idClient, int step, String clientName, double clientLatitude, double clientLongitude) {
+    public Step(int idItinerary, int step, Contact contact) {
         this.idItinerary = idItinerary;
-        this.idClient = idClient;
+        this.contact = contact;
         this.step = step;
-        this.clientName = clientName;
-        this.clientLatitude = clientLatitude;
-        this.clientLongitude = clientLongitude;
     }
 
-    public String getClientName() {
-        return clientName;
+    public Contact getContact() {
+        return contact;
     }
 
     public int getIdItinerary() {
@@ -32,13 +33,4 @@ public class Step {
         return step;
     }
 
-    public double getClientLatitude() {
-        return clientLatitude;
-    }
-
-    public double getClientLongitude() {
-        return clientLongitude;
-    }
-
-    public String getIdClient() { return idClient; }
 }

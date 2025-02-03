@@ -44,6 +44,7 @@
                 android:layout_marginBottom="@dimen/margin_bottom_small"/>
 
             <Button
+                android:id="@+id/playPause"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Pause"
@@ -95,6 +96,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/contactType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Prospect"
