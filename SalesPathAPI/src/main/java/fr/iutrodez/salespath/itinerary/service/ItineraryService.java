@@ -9,6 +9,7 @@ import fr.iutrodez.salespath.itinerary.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
 import fr.iutrodez.salespath.utils.PathFinder;
+import fr.iutrodez.salespath.utils.pathFinder.BrutForce;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class ItineraryService {
     private IItineraryRepository itineraryRepository;
 
     @Autowired
-    private PathFinder pf;
+    private BrutForce bf;
 
     @Autowired
     private ItineraryStepService itineraryStepService;
@@ -35,7 +36,7 @@ public class ItineraryService {
 
     public void createItinerary(ItineraryAddRequest iti) {
         try {
-            String[] order = pf.brutForce(iti.getIdClients(),
+            String[] order = bf.brutForce(iti.getIdClients(),
                                                Long.parseLong(iti.getItinerary().getCodeUser()));
 
             Itinerary saved = itineraryRepository.save(iti.getItinerary());
