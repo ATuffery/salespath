@@ -14,6 +14,7 @@
     <dimen name="text_size_large">25sp</dimen>
     <dimen name="text_size_medium">17sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_extra_small">10sp</dimen>
 
     <!-- Paddings -->
     <dimen name="padding_default">12dp</dimen>
