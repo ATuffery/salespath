@@ -136,4 +136,23 @@ public class RouteController {
                                                                           + e.getMessage()));
         }
     }
+
+    /**
+     * Endpoint pour supprimer un parcours.
+     * @param idRoute L'ID du parcours.
+     * @return Une réponse HTTP avec un code 200 si réussi, un code 500 en cas de problème avec la BDD ou un code 404 si
+     *         le parcours n'existe pas
+     */
+    @DeleteMapping(value = "/{idRoute}")
+    public ResponseEntity<?> deleteRoute(@PathVariable String idRoute) {
+        try {
+            routeService.deleteRoute(idRoute);
+            return ResponseEntity.status(200).body(Map.of("success", "Parcours supprimé avec succès"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la suppression du parcours :"
+                                                                          + e.getMessage()));
+        }
+    }
 }

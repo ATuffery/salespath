@@ -57,4 +57,16 @@ public class RouteService {
                               .orElseThrow(() -> new NoSuchElementException("Parcours non trouvé pour l'ID : " + id));
     }
 
+    /**
+     * Supprime un parcours par son ID.
+     * @param id L'ID du parcours à supprimer.
+     * @throws NoSuchElementException Si le parcours n'existe pas.
+     */
+    public void deleteRoute(String id) {
+        routeRepository.findById(id)
+                       .orElseThrow(() -> new NoSuchElementException("Parcours non trouvé pour l'ID : " + id));
+
+        routeRepository.deleteById(id);
+    }
+
 }
