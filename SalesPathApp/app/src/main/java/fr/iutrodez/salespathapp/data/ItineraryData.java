@@ -134,7 +134,7 @@ public class ItineraryData {
                                     String clientAddress = stepObject.optString("clientAddress", "Client inconnu");
                                     double clientLatitude = stepObject.optDouble("clientLatitude", 0);
                                     double clientLongitude = stepObject.optDouble("clientLongitude", 0);
-                                    boolean isClient = stepObject.optBoolean("isClient", false);
+                                    boolean isClient = stepObject.optBoolean("isClient");
 
                                     Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient);
 

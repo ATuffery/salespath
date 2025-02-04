@@ -86,7 +86,7 @@ public class Route {
      * @return le nombre de visite effectuée sur le nombre de visite total
      */
     public String nbVisit() {
-        return (this.getCurrentStep() + 1) + "/" + this.getSteps().size();
+        return this.getCurrentStep() + 1 + "/" + this.getSteps().size();
     }
 
 }
