@@ -70,9 +70,9 @@ public class CreateItineraryActivity extends BaseActivity {
                 for (JSONObject jsonContact : contacts) {
                     try {
                         String name = jsonContact.getString("firstName") + " " + jsonContact.getString("lastName");
-                        String details = jsonContact.getString("enterpriseName") + " - " + jsonContact.getString("address");
+                        String address = jsonContact.getString("enterpriseName") + " - " + jsonContact.getString("address");
 
-                        Contact contact = new Contact(jsonContact.getString("id"), name, details, ContactCheckbox.UNCHECKED);
+                        Contact contact = new Contact(jsonContact.getString("id"), name, address, 0, 0, ContactCheckbox.UNCHECKED, jsonContact.getBoolean("client"));
                         contactList.add(contact);
 
                     } catch (JSONException e) {

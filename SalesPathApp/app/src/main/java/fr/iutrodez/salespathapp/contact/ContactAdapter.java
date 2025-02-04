@@ -31,7 +31,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
         Contact contact = contacts.get(position);
         holder.tvName.setText(contact.getName());
-        holder.tvDetails.setText(contact.getDetails());
+        holder.tvDetails.setText(contact.getAddress());
         if (contact.noCheckbox()) {
             holder.cbContact.setVisibility(View.GONE);
         } else {

@@ -3,14 +3,22 @@ package fr.iutrodez.salespathapp.contact;
 public class Contact {
     private String name;
     private String id;
-    private String details;
+    private String address;
+    private boolean isClient;
+    private double latitude;
+    private double longitude;
     private ContactCheckbox checkbox;
+    private boolean visited;
 
-    public Contact(String id, String name, String details, ContactCheckbox isChecked) {
+    public Contact(String id, String name, String address, double lat, double lon, ContactCheckbox isChecked, boolean isClient) {
         this.id = id;
         this.name = name;
-        this.details = details;
+        this.address = address;
         this.checkbox = isChecked;
+        this.isClient = isClient;
+        this.latitude = lat;
+        this.longitude = lon;
+        this.visited = false;
     }
 
     public String getName() {
@@ -19,8 +27,8 @@ public class Contact {
     public String getId() {
         return id;
     }
-    public String getDetails() {
-        return details;
+    public String getAddress() {
+        return address;
     }
 
     public boolean isChecked() {
@@ -33,5 +41,25 @@ public class Contact {
 
     public void setChecked(ContactCheckbox checked) {
         checkbox = checked;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public boolean isClient() {
+        return isClient;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

@@ -21,8 +21,11 @@ import java.util.Map;
 
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.contact.Contact;
+import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.itinerary.Step;
+import fr.iutrodez.salespathapp.utils.CheckInput;
 
 public class ItineraryData {
 
@@ -128,10 +131,14 @@ public class ItineraryData {
                                     int step = stepObject.optInt("step", 0);
                                     String idClient = stepObject.optString("idClient", "");
                                     String clientName = stepObject.optString("clientName", "Client inconnu");
+                                    String clientAddress = stepObject.optString("clientAddress", "Client inconnu");
                                     double clientLatitude = stepObject.optDouble("clientLatitude", 0);
                                     double clientLongitude = stepObject.optDouble("clientLongitude", 0);
+                                    boolean isClient = stepObject.optBoolean("isClient", false);
 
-                                    itinerary.addStep(new Step(idItinerary, idClient, step, clientName, clientLatitude, clientLongitude));
+                                    Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient);
+
+                                    itinerary.addStep(new Step(idItinerary, step, contact));
                                 }
                             }
 

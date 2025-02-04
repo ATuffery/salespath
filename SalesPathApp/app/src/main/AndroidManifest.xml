@@ -41,6 +41,7 @@
         <activity android:name=".itinerary.CreateItineraryActivity"></activity>
         <activity android:name=".itinerary.DetailsItineraryActivity"></activity>
         <activity android:name=".itinerary.ItinerariesActivity"></activity>
+        <activity android:name=".route.RouteActivity"></activity>
     </application>
 
 </manifest>

@@ -36,6 +36,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="startRoute"
                     android:text="Commencer la tournée"
                     android:drawableLeft="@drawable/play_circle"
                     android:layout_marginBottom="@dimen/margin_bottom_extra_large"

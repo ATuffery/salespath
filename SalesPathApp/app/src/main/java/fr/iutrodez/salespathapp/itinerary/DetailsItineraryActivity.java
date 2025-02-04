@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -25,6 +26,7 @@ import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.data.ItineraryData;
+import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class DetailsItineraryActivity extends BaseActivity {
@@ -75,14 +77,15 @@ public class DetailsItineraryActivity extends BaseActivity {
                     contacts.clear();
                     for (Step step : itinerary.getSteps()) {
                         contacts.add(new Contact(
-                                step.getIdClient(),
-                                step.getClientName(),
-                                "Étape " + step.getStep(),
-                                ContactCheckbox.NO_CHECKBOX
+                                step.getContact().getId(),
+                                step.getContact().getName(),
+                                step.getContact().getAddress(),
+                                step.getContact().getLatitude(),
+                                step.getContact().getLongitude(),
+                                ContactCheckbox.NO_CHECKBOX,
+                                step.getContact().isClient()
                         ));
                     }
-                    // Met dans l'ordre inverse pour commencer par l'étape 1
-                    Collections.reverse(contacts);
 
                     // Mise à jour de l'affichage
                     contactAdapter.notifyDataSetChanged();
@@ -100,11 +103,11 @@ public class DetailsItineraryActivity extends BaseActivity {
         Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
 
         for (Step step : itinerary.getSteps()) {
-            GeoPoint point = new GeoPoint(step.getClientLatitude(), step.getClientLongitude());
+            GeoPoint point = new GeoPoint(step.getContact().getLatitude(), step.getContact().getLongitude());
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setTitle(step.getClientName());
+            marker.setTitle(step.getContact().getName());
             marker.setIcon(markerIcon);
             map.getOverlays().add(marker);
         }
@@ -115,4 +118,14 @@ public class DetailsItineraryActivity extends BaseActivity {
         mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
         mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
+
+    public void startRoute(View btn) {
+        Intent intent = new Intent(this, RouteActivity.class);
+        intent.putExtra("itineraryId", itineraryId);
+        intent.putExtra("apiKey", getApiKey());
+        intent.putExtra("accountId", getAccountId());
+        startActivity(intent);
+    }
+
+
 }
