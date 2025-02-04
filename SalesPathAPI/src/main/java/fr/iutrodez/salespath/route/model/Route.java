@@ -2,9 +2,12 @@ package fr.iutrodez.salespath.route.model;
 
 import fr.iutrodez.salespath.route.dto.Coordinates;
 import fr.iutrodez.salespath.route.dto.RouteStep;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,16 +15,40 @@ import java.util.UUID;
  * Représentation d'un parcours dans Mongo DB
  */
 @Document(collection = "Route")
+@Schema(description = "Représentation d'un parcours avec les informations associées.")
 public class Route {
     @Id
+    @Schema(description = "Identifiant unique du parcours", example = "123e4567-e89b-12d3-a456-426614174000")
     private String id;
+
+    @Schema(description = "Identifiant du commercial", example = "1001")
     private Long idSalesPerson;
+
+    @Schema(description = "Identifiant de l'itinéraire associé", example = "2002")
     private Long itineraryId;
+
+    @Schema(description = "Nom de l'itinéraire", example = "Visite clients Toulouse")
     private String itineraryName;
+
+    @Schema(description = "Date de début du parcours", example = "2024-02-04T08:00:00Z")
     private Date startDate;
+
+    @Schema(description = "Date de fin du parcours", example = "2024-02-04T18:00:00Z")
     private Date endDate;
-    private RouteStep[] steps;
-    private Coordinates[] localisation;
+
+    @ArraySchema(
+            schema = @Schema(description = "Liste des étapes du parcours"),
+            arraySchema = @Schema(implementation = RouteStep.class)
+    )   
+    private ArrayList<RouteStep> steps;
+
+    @ArraySchema(
+            schema = @Schema(description = "Coordonnées géographiques du parcours"),
+            arraySchema = @Schema(implementation = Coordinates.class)
+    )
+    private ArrayList<Coordinates> localisation;
+
+    @Schema(description = "Statut du parcours", example = "1")
     private int status;
 
     /**
@@ -38,7 +65,7 @@ public class Route {
      * @param status Statut
      */
     public Route(String id, Long idSalesPerson, Long itineraryId, String itineraryName, Date startDate,
-                 Date endDate, RouteStep[] steps, Coordinates[] localisation, int status) {
+                 Date endDate, ArrayList<RouteStep> steps, ArrayList<Coordinates> localisation, int status) {
         this.id = UUID.randomUUID().toString();
 
         this.idSalesPerson = idSalesPerson;
@@ -49,6 +76,9 @@ public class Route {
         this.steps = steps;
         this.localisation = localisation;
         this.status = status;
+    }
+
+    public Route() {
     }
 
     public String getId() {
@@ -99,19 +129,19 @@ public class Route {
         this.endDate = endDate;
     }
 
-    public RouteStep[] getSteps() {
+    public ArrayList<RouteStep> getSteps() {
         return steps;
     }
 
-    public void setSteps(RouteStep[] steps) {
+    public void setSteps(ArrayList<RouteStep> steps) {
         this.steps = steps;
     }
 
-    public Coordinates[] getLocalisation() {
+    public ArrayList<Coordinates> getLocalisation() {
         return localisation;
     }
 
-    public void setLocalisation(Coordinates[] localisation) {
+    public void setLocalisation(ArrayList<Coordinates> localisation) {
         this.localisation = localisation;
     }
 

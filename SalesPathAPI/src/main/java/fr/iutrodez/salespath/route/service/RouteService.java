@@ -69,4 +69,21 @@ public class RouteService {
         routeRepository.deleteById(id);
     }
 
+    /**
+     * Met à jour un parcours.
+     * @param route Le parcours à mettre à jour.
+     * @throws NoSuchElementException Si le parcours n'existe pas.
+     */
+    public void updateRoute(Route route) {
+        Route existingRoute = routeRepository.findById(route.getId())
+                                             .orElseThrow(() -> new NoSuchElementException("Parcours non trouvé pour " +
+                                                                                           "l'ID : " + route.getId()));
+
+        existingRoute.setEndDate(route.getEndDate());
+        existingRoute.setStatus(route.getStatus());
+        existingRoute.getLocalisation().addAll(route.getLocalisation());
+        existingRoute.setSteps(route.getSteps());
+
+        routeRepository.save(existingRoute);
+    }
 }
