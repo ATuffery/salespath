@@ -35,10 +35,17 @@ public class Route {
         return currentStep;
     }
 
-    public void setCurrentStep(int currentStep) {
+    /**
+     * Défini l'index de l'étape courante
+     * @param currentStep index de l'étape courante
+     * @return true si l'index est correct, false sinon
+     */
+    public boolean setCurrentStep(int currentStep) {
         if (currentStep <= this.steps.size() - 1) {
             this.currentStep = currentStep;
+            return true;
         }
+        return false;
     }
 
     public ArrayList<GeoPoint> getLocalisation() {
@@ -67,6 +74,19 @@ public class Route {
 
     public Contact getCurrentContact() {
         return this.steps.get(this.currentStep);
+    }
+
+    public boolean nextStep() {
+        return this.setCurrentStep(this.getCurrentStep() + 1);
+    }
+
+    /**
+     * Retourne une chaine de caractère avec le nombre de
+     * visite effectuée sur le nombre de visite total
+     * @return le nombre de visite effectuée sur le nombre de visite total
+     */
+    public String nbVisit() {
+        return this.getCurrentStep() + 1 + "/" + this.getSteps().size();
     }
 
 }

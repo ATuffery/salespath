@@ -8,7 +8,7 @@ public class Contact {
     private double latitude;
     private double longitude;
     private ContactCheckbox checkbox;
-    private boolean visited;
+    private ContactStatus visited;
 
     public Contact(String id, String name, String address, double lat, double lon, ContactCheckbox isChecked, boolean isClient) {
         this.id = id;
@@ -18,7 +18,7 @@ public class Contact {
         this.isClient = isClient;
         this.latitude = lat;
         this.longitude = lon;
-        this.visited = false;
+        this.visited = ContactStatus.UNVISITED;
     }
 
     public String getName() {
@@ -43,11 +43,11 @@ public class Contact {
         checkbox = checked;
     }
 
-    public boolean isVisited() {
+    public ContactStatus isVisited() {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
+    public void setVisited(ContactStatus visited) {
         this.visited = visited;
     }
 

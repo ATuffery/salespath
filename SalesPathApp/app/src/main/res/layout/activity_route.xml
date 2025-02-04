@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -45,20 +44,21 @@
 
             <Button
                 android:id="@+id/playPause"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pause"
                 android:drawableLeft="@drawable/pause"
                 android:drawablePadding="8dp"
                 android:backgroundTint="@color/primary"
                 android:layout_marginBottom="@dimen/margin_bottom_large"
+                android:onClick="playPause"
                 android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/startedAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Commencé le 12/12/2025"
+                android:text=""
                 android:textSize="@dimen/text_size_small"
                 android:layout_marginBottom="@dimen/margin_bottom_small"/>
 
@@ -66,7 +66,7 @@
                 android:id="@+id/nbSteps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contacts visités : 2/4"
+                android:text=""
                 android:layout_marginBottom="@dimen/margin_bottom_extra_large"
                 android:textSize="@dimen/text_size_small" />
 
@@ -88,6 +88,7 @@
             android:paddingLeft="15dp">
 
             <TextView
+                android:id="@+id/nextStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PROCHAIN ARRÊT"
@@ -121,12 +122,14 @@
 
 
             <Button
+                android:id="@+id/visitedBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Visite éffectuée"
                 android:drawableLeft="@drawable/check"
                 android:drawablePadding="8dp"
                 android:backgroundTint="@color/primary"
+                android:onClick="contactAction"
                 android:textColor="@color/white"/>
 
             <Button
@@ -134,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Annuler la visite"
+                android:onClick="contactAction"
                 android:backgroundTint="@color/grey" />
         </LinearLayout>
     </LinearLayout>

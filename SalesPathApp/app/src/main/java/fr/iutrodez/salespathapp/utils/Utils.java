@@ -3,8 +3,15 @@ package fr.iutrodez.salespathapp.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
@@ -34,6 +41,33 @@ public class Utils {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Formate une date en français avec l'heure, les minutes et les secondes.
+     *
+     * @param date La date à formater.
+     * @return Une chaîne représentant la date formatée en français.
+     */
+    public static String formatDateFr(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy à HH:mm:ss", Locale.FRANCE);
+        return dateFormat.format(date);
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
 
 
 }
