@@ -69,6 +69,19 @@ public class RouteController {
                     return ResponseEntity.status(404).body(Map.of("error", "Client non trouvé : "
                                                                                    + step.getClient().getId()));
                 }
+
+                Client client = clientOpt.get();
+
+                step.getClient().setFirstName(client.getFirstName());
+                step.getClient().setLastName(client.getLastName());
+                step.getClient().setEnterpriseName(client.getEnterpriseName());
+                step.getClient().setAddress(client.getAddress());
+                step.getClient().setDescription(client.getDescription());
+                step.getClient().setPhoneNumber(client.getPhoneNumber());
+                step.getClient().setIdPerson(client.getIdPerson());
+                step.getClient().setCoordonates(client.getCoordonates());
+                step.getClient().setClient(client.getClient());
+
             }
 
             route.setIdSalesPerson(idSalesPerson);
@@ -79,6 +92,29 @@ public class RouteController {
             return ResponseEntity.status(201).body(Map.of("success", "Route ajoutée avec succès"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué."  + e.getMessage()));
+        }
+    }
+
+    /**
+     * Endpoint pour récupérer tous les parcours d'un commercial.
+     * @param idSalesPerson L'ID du commercial.
+     * @return Une réponse HTTP avec un code 200 et la liste des parcours si réussi, un code 500 en cas de problème avec
+     *         la BDD ou un code 404 si le commercial n'existe pas
+     */
+    @GetMapping(value = "/{idSalesPerson}")
+    public ResponseEntity<?> getAllRoutes(@PathVariable Long idSalesPerson) {
+        try {
+            // On vérifie que le commercial existe
+            Optional<SalesPerson> salesPersonOpt = accountRepository.findById(idSalesPerson);
+
+            if (salesPersonOpt.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "ID commercial non trouvé"));
+            }
+
+            return ResponseEntity.status(200).body(routeService.getAllRoutes(idSalesPerson));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la récupération des parcours : "
+                    + e.getMessage()));
         }
     }
 }

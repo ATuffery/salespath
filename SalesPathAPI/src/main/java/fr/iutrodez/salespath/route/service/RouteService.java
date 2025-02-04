@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import fr.iutrodez.salespath.route.repository.IRouteRepository;
 import fr.iutrodez.salespath.route.model.Route;
 
+import java.util.ArrayList;
+
 /**
  * Service pour gérer les opérations relatives aux parcours.
  */
@@ -25,6 +27,19 @@ public class RouteService {
             routeRepository.save(route);
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la création d'un nouveau parcours : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Récupère tous les parcours d'un utilisateur.
+     * @param idSalesPerson L'ID de l'utilisateur.
+     * @return La liste des parcours de l'utilisateur.
+     */
+    public ArrayList<Route> getAllRoutes(Long idSalesPerson) {
+        try {
+            return routeRepository.findByIdSalesPerson(idSalesPerson);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des parcours d'un utilisateur: " + e.getMessage());
         }
     }
 }
