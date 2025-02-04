@@ -73,7 +73,9 @@ public class AccountController {
                     "firstName", salesPerson.getFirstName(),
                     "lastName", salesPerson.getLastName(),
                     "email", salesPerson.getEmail(),
-                    "address", salesPerson.getAddress()
+                    "address", salesPerson.getAddress(),
+                    "latitude", salesPerson.getLatitude(),
+                    "longitude", salesPerson.getLongitude()
             );
             return ResponseEntity.ok(response);
         } else {
