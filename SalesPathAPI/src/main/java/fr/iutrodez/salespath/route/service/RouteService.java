@@ -6,6 +6,8 @@ import fr.iutrodez.salespath.route.repository.IRouteRepository;
 import fr.iutrodez.salespath.route.model.Route;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Service pour gérer les opérations relatives aux parcours.
@@ -26,7 +28,7 @@ public class RouteService {
         try {
             routeRepository.save(route);
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la création d'un nouveau parcours : " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -34,12 +36,25 @@ public class RouteService {
      * Récupère tous les parcours d'un utilisateur.
      * @param idSalesPerson L'ID de l'utilisateur.
      * @return La liste des parcours de l'utilisateur.
+     * @throws RuntimeException En cas d'erreur lors de la récupération.
      */
     public ArrayList<Route> getAllRoutes(Long idSalesPerson) {
         try {
             return routeRepository.findByIdSalesPerson(idSalesPerson);
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la récupération des parcours d'un utilisateur: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
+
+    /**
+     * Récupère un parcours par son ID.
+     * @param id L'ID du parcours.
+     * @return Le parcours correspondant à l'ID.
+     * @throws NoSuchElementException Si le parcours n'existe pas.
+     */
+    public Route getRouteById(String id) {
+        return routeRepository.findById(id)
+                              .orElseThrow(() -> new NoSuchElementException("Parcours non trouvé pour l'ID : " + id));
+    }
+
 }

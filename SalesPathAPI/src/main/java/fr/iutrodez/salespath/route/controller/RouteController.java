@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -114,7 +115,25 @@ public class RouteController {
             return ResponseEntity.status(200).body(routeService.getAllRoutes(idSalesPerson));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la récupération des parcours : "
-                    + e.getMessage()));
+                                                                          + e.getMessage()));
+        }
+    }
+
+    /**
+     * Endpoint pour récupérer un parcours par son ID.
+     * @param idRoute L'ID du parcours.
+     * @return Une réponse HTTP avec un code 200 et le parcours si réussi, un code 500 en cas de problème avec la BDD ou
+     *         un code 404 si le parcours n'existe pas
+     */
+    @GetMapping(value = "/getOne/{idRoute}")
+    public ResponseEntity<?> getOneRoute(@PathVariable String idRoute) {
+        try {
+            return ResponseEntity.status(200).body(routeService.getRouteById(idRoute));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la récupération du parcours :"
+                                                                          + e.getMessage()));
         }
     }
 }
