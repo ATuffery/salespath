@@ -1,8 +1,11 @@
 package fr.iutrodez.salespathapp.route;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,7 @@ import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
+import fr.iutrodez.salespathapp.contact.ContactStatus;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.itinerary.Step;
@@ -37,13 +41,19 @@ public class RouteActivity extends AppCompatActivity {
     private TextView nextContact;
     private TextView nextAddress;
     private TextView nextContactType;
+    private TextView startedDate;
+    private TextView nbVisit;
     private Route route;
+    private RouteStatus status;
+    private Button btnVisited;
+    private Button btnCancelVisit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.contacts = new ArrayList<>();
+        this.status = RouteStatus.STARTED;
 
         // Configure OSMDroid
         Configuration.getInstance().setUserAgentValue(getPackageName());
@@ -60,19 +70,38 @@ public class RouteActivity extends AppCompatActivity {
         this.nextAddress = findViewById(R.id.prospectAddress);
         this.nextContact = findViewById(R.id.prospectName);
         this.nextContactType = findViewById(R.id.contactType);
+        this.btnVisited = findViewById(R.id.visitedBtn);
+        this.btnCancelVisit = findViewById(R.id.cancelVisitBtn);
+        this.nbVisit = findViewById(R.id.nbSteps);
+        this.startedDate = findViewById(R.id.startedAt);
         this.map = findViewById(R.id.map);
 
         // Charger les données de l'itinéraire
         loadItineraryData();
-
-        this.route = new Route(this.itineraryId, contacts);
-        displayContactInfo();
     }
+
 
     private void displayContactInfo() {
         Contact current = this.route.getCurrentContact();
         this.nextContact.setText(current.getName());
         this.nextAddress.setText(current.getAddress());
+        this.nextContactType.setText(current.isClient() ? "Client" : "Prospect");
+        this.startedDate.setText("Tournée commencée le " + Utils.formatDateFr(this.route.getStartDate()));
+        this.nbVisit.setText("Contacts visités : " + this.route.nbVisit());
+    }
+
+    private void displayEndInfos() {
+        this.nextContact.setText("Domicile");
+        this.nextAddress.setText("");
+        this.nextContactType.setVisibility(View.GONE);
+        this.btnCancelVisit.setVisibility(View.GONE);
+        this.btnVisited.setText("Terminer la tournée");
+        this.btnVisited.setOnLongClickListener((e) -> {
+            this.status = RouteStatus.FINISHED;
+            save();
+            finish();
+            return true;
+        });
     }
 
     private void loadItineraryData() {
@@ -96,8 +125,9 @@ public class RouteActivity extends AppCompatActivity {
                                 step.getContact().isClient()
                         ));
                     }
-                    // Met dans l'ordre inverse pour commencer par l'étape 1
-                    Collections.reverse(contacts);
+
+                    route = new Route(itineraryId, contacts);
+                    displayContactInfo();
                 });
             }
 
@@ -126,6 +156,26 @@ public class RouteActivity extends AppCompatActivity {
         IMapController mapController = map.getController();
         mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
         mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
+    }
+
+
+    /**
+     * Marque le contact courant en visité ou skipped
+     * @param btn bouton avec lequel l'utilisateur a réalisé l'action
+     */
+    public void contactAction(View btn) {
+        ContactStatus status = btn.getId() == R.id.cancelVisitBtn ? ContactStatus.SKIPPED : ContactStatus.VISITED;
+        Contact current = this.route.getCurrentContact();
+        current.setVisited(status);
+        if (!this.route.nextStep()) {
+            this.displayEndInfos();
+        } else {
+            this.displayContactInfo();
+        }
+    }
+
+    private void save() {
+        // TODO faire la sauvegarde
     }
 
 }

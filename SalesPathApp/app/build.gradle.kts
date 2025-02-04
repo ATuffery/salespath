@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "fr.iutrodez.salespath"
-        minSdk = 33
+        minSdk = 30
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

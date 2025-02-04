@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Utils {
 
     /**
@@ -34,6 +38,18 @@ public class Utils {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
-
+    /**
+     * Formate une date en français avec l'heure, les minutes et les secondes.
+     *
+     * @param date La date à formater.
+     * @return Une chaîne représentant la date formatée en français.
+     */
+    public static String formatDateFr(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy à HH:mm:ss", Locale.FRANCE);
+        return dateFormat.format(date);
+    }
 
 }
