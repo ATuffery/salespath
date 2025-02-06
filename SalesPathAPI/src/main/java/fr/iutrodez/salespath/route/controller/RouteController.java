@@ -5,6 +5,8 @@ import fr.iutrodez.salespath.account.repository.IAccountRepository;
 import fr.iutrodez.salespath.client.repository.IClientRepository;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
+import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
+import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import fr.iutrodez.salespath.route.dto.RouteStep;
 import fr.iutrodez.salespath.route.model.Route;
 import fr.iutrodez.salespath.client.model.Client;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -41,6 +44,8 @@ public class RouteController {
     private IItineraryRepository itineraryRepository;
     @Autowired
     private IClientRepository clientRepository;
+    @Autowired
+    private ItineraryStepService itineraryStepService;
 
     /**
      * Endpoint pour créer une nouvelle route.
@@ -82,32 +87,36 @@ public class RouteController {
             Itinerary itinerary = itineraryOpt.get();
 
             // On récupère les clients de l'itinéraire
-            ArrayList<RouteStep> steps = route.getSteps();
-            for (RouteStep step : steps) {
-                Optional<Client> clientOpt = clientRepository.findById(step.getClient().getId());
+            ArrayList<RouteStep> stepsList = new ArrayList<>();
+
+            Optional<ItineraryStep[]> stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
+
+            if (stepsOpt.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "Aucun client trouvé pour l'itinéraire : "
+                                                                               + itinerary.getIdItinerary()));
+            }
+
+            ItineraryStep[] steps = stepsOpt.get();
+
+            for (ItineraryStep step : steps) {
+                Optional<Client> clientOpt = clientRepository.findById(step.getIdClient());
 
                 if (clientOpt.isEmpty()) {
                     return ResponseEntity.status(404).body(Map.of("error", "Client non trouvé : "
-                                                                                   + step.getClient().getId()));
+                                                                                   + step.getIdClient()));
                 }
 
                 Client client = clientOpt.get();
 
-                step.getClient().setFirstName(client.getFirstName());
-                step.getClient().setLastName(client.getLastName());
-                step.getClient().setEnterpriseName(client.getEnterpriseName());
-                step.getClient().setAddress(client.getAddress());
-                step.getClient().setDescription(client.getDescription());
-                step.getClient().setPhoneNumber(client.getPhoneNumber());
-                step.getClient().setIdPerson(client.getIdPerson());
-                step.getClient().setCoordonates(client.getCoordonates());
-                step.getClient().setClient(client.getClient());
+                stepsList.add(new RouteStep(client, 2));
 
             }
 
             route.setIdSalesPerson(idSalesPerson);
             route.setItineraryId(idItinerary);
             route.setItineraryName(itinerary.getNameItinerary());
+            route.setSteps(stepsList);
+            route.setStartDate(LocalDateTime.now());
 
             routeService.createRoute(route);
             return ResponseEntity.status(201).body(Map.of("success", "Route ajoutée avec succès"));

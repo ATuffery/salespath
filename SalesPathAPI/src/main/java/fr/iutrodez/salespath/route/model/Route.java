@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class Route {
     private String itineraryName;
 
     @Schema(description = "Date de début du parcours", example = "2024-02-04T08:00:00Z")
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Schema(description = "Date de fin du parcours", example = "2024-02-04T18:00:00Z")
     private Date endDate;
@@ -58,20 +59,18 @@ public class Route {
      * @param idSalesPerson Id du commercial
      * @param itineraryId Id de l'itinéraire
      * @param itineraryName Nom de l'itinéraire
-     * @param startDate Date de début
      * @param endDate Date de fin
      * @param steps Etapes du parcours
      * @param localisation Localisation
      * @param status Statut
      */
-    public Route(String id, Long idSalesPerson, Long itineraryId, String itineraryName, Date startDate,
+    public Route(String id, Long idSalesPerson, Long itineraryId, String itineraryName,
                  Date endDate, ArrayList<RouteStep> steps, ArrayList<Coordinates> localisation, int status) {
         this.id = UUID.randomUUID().toString();
 
         this.idSalesPerson = idSalesPerson;
         this.itineraryId = itineraryId;
         this.itineraryName = itineraryName;
-        this.startDate = startDate;
         this.endDate = endDate;
         this.steps = steps;
         this.localisation = localisation;
@@ -113,11 +112,11 @@ public class Route {
         this.itineraryName = itineraryName;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 

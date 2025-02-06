@@ -15,6 +15,11 @@ public class RouteStep {
     @Schema(description = "Statut de l'étape", example = "1")
     private int status;
 
+    public RouteStep(Client client, int status) {
+        this.client = client;
+        this.status = status;
+    }
+
     public Client getClient() {
         return client;
     }
