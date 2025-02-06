@@ -177,18 +177,17 @@ public class AccountService {
         Object[] result = accountRepository.getCoordById(id);
 
         // Vérifier que result n'est pas null et que result[0] contient bien des valeurs
-        if (result != null && result.length > 0 && result[0] instanceof Object[]) {
-            Object[] coordinates = (Object[]) result[0];
+        if (result != null && result.length > 0 && result[0] instanceof Object[] coordinates) {
 
             // Vérification que le tableau de coordonnées contient bien la latitude et la longitude
             if (coordinates.length > 1) {
-                Double latitude = ((Number) coordinates[0]).doubleValue();
-                Double longitude = ((Number) coordinates[1]).doubleValue();
+                double latitude = ((Number) coordinates[0]).doubleValue();
+                double longitude = ((Number) coordinates[1]).doubleValue();
                 return new Double[] {latitude, longitude};
             }
         }
 
-        throw new IllegalStateException("Could not retrieve coordinates for ID: " + id);
+        throw new IllegalStateException("Impossible de récupérer les coordonnées du commercial " + id);
     }
 
 }

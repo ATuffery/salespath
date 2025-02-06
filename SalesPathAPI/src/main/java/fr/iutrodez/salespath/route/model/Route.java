@@ -39,7 +39,7 @@ public class Route {
     @ArraySchema(
             schema = @Schema(description = "Liste des étapes du parcours"),
             arraySchema = @Schema(implementation = RouteStep.class)
-    )   
+    )
     private ArrayList<RouteStep> steps;
 
     @ArraySchema(

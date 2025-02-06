@@ -81,7 +81,7 @@ public class RouteController {
 
             Itinerary itinerary = itineraryOpt.get();
 
-            // On vérifie que les clients des steps existent
+            // On récupère les clients de l'itinéraire
             ArrayList<RouteStep> steps = route.getSteps();
             for (RouteStep step : steps) {
                 Optional<Client> clientOpt = clientRepository.findById(step.getClient().getId());

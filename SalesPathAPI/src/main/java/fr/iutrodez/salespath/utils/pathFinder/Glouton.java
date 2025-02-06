@@ -30,7 +30,7 @@ public class Glouton {
         Double[][] distances = new Double[clients.length][clients.length];
         for (int i = 0; i < clients.length; i++) {
             for (int j = 0; j < clients.length; j++) {
-                distances[i][j] = CalculDistance.distanceCalcul(clients[i][0], clients[i][1], clients[j][0], clients[j][1]);
+                distances[i][j] = CalculDistance.getDistance(clients[i][0], clients[i][1], clients[j][0], clients[j][1]);
             }
         }
 

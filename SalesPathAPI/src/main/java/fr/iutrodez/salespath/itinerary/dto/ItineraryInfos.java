@@ -8,16 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class ItineraryInfos {
 
     @Schema(description = "Informations sur l'itinéraire", required = true)
-    private Itinerary itinerary;
+    private ItineraryWithCoordinates itinerary;
 
     @Schema(description = "Liste des étapes associées à l'itinéraire", required = true)
     private ItineraryStepWithClient[] steps;
 
-    public Itinerary getItinerary() {
+    public ItineraryWithCoordinates getItinerary() {
         return itinerary;
     }
 
-    public void setItinerary(Itinerary itinerary) {
+    public void setItinerary(ItineraryWithCoordinates itinerary) {
         this.itinerary = itinerary;
     }
 
