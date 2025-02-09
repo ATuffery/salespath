@@ -1,5 +1,6 @@
 package fr.iutrodez.salespath.account.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,15 +9,31 @@ import jakarta.persistence.Id;
 /**
  * Représentation d'un commercial en Base de données
  */
+@Schema(description = "Description d'un compte/un commercial")
 @Entity
 public class SalesPerson {
+    @Schema(description = "Prénom du commercial")
     private String firstName;
+
+    @Schema(description = "Nom du commercial")
     private String lastName;
+
+    @Schema(description = "Mot de passe du commercial")
     private String password;
+
+    @Schema(description = "Email du commercial")
     private String email;
+
+    @Schema(description = "Adresse du commercial")
     private String address;
+
+    @Schema(description = "Clé API du commercial")
     private String apiKey;
+
+    @Schema(description = "Latitude du domicile du commercial")
     private double latitude;
+
+    @Schema(description = "Longitude du domicile du commercial")
     private double longitude;
 
     @Id
