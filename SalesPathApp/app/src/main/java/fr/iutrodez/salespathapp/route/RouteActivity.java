@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.Manifest;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,14 +35,17 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.contact.ContactStatus;
-import fr.iutrodez.salespathapp.data.ItineraryData;
+import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.itinerary.Step;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -48,7 +53,7 @@ import fr.iutrodez.salespathapp.utils.Utils;
 public class RouteActivity extends AppCompatActivity {
 
     private MapView map;
-    private String itineraryId;
+    private String routeId;
     private TextView title;
     private ArrayList<Contact> contacts;
     private String apiKey;
@@ -57,10 +62,10 @@ public class RouteActivity extends AppCompatActivity {
     private TextView nextAddress;
     private TextView nextContactType;
     private TextView nextStop;
+    private TextView nextCompany;
     private TextView startedDate;
     private TextView nbVisit;
     private Route route;
-    private RouteStatus status;
     private Button btnVisited;
     private Button btnCancelVisit;
     private Button btnPlayPause;
@@ -75,15 +80,14 @@ public class RouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.contacts = new ArrayList<>();
-        this.status = RouteStatus.STARTED;
 
         // Configure OSMDroid
         Configuration.getInstance().setUserAgentValue(getPackageName());
         setContentView(R.layout.activity_route);
 
-        // Récupérer l'ID de l'itinéraire depuis l'intent
+        // Récupérer l'ID du parcours depuis l'intent
         Intent intent = getIntent();
-        this.itineraryId = intent.getStringExtra("itineraryId");
+        this.routeId = intent.getStringExtra("routeId");
         this.apiKey = intent.getStringExtra("apiKey");
         this.accountId = intent.getStringExtra("accountId");
 
@@ -92,6 +96,7 @@ public class RouteActivity extends AppCompatActivity {
         this.nextAddress = findViewById(R.id.prospectAddress);
         this.nextContact = findViewById(R.id.prospectName);
         this.nextContactType = findViewById(R.id.contactType);
+        this.nextCompany = findViewById(R.id.prospectCompany);
         this.btnVisited = findViewById(R.id.visitedBtn);
         this.btnCancelVisit = findViewById(R.id.cancelVisitBtn);
         this.nbVisit = findViewById(R.id.nbSteps);
@@ -113,6 +118,8 @@ public class RouteActivity extends AppCompatActivity {
         Contact current = this.route.getCurrentContact();
         this.nextContact.setText(current.getName());
         this.nextAddress.setText(current.getAddress());
+        this.nextAddress.setText(current.getAddress());
+        this.nextCompany.setText(current.getCompany());
         this.nextContactType.setText(current.isClient() ? "Client" : "Prospect");
         this.startedDate.setText("Tournée commencée le " + Utils.formatDateFr(this.route.getStartDate()));
     }
@@ -127,7 +134,7 @@ public class RouteActivity extends AppCompatActivity {
             Utils.displayError(getBaseContext(), "Pour terminer la tournée, faites un appui long sur ce bouton.");
         });
         this.btnVisited.setOnLongClickListener((e) -> {
-            this.status = RouteStatus.FINISHED;
+            this.route.setStatus(RouteStatus.FINISHED);
             save();
             finish();
             return true;
@@ -135,31 +142,11 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private void loadItineraryData() {
-        ItineraryData.getItinerariesInfos(getBaseContext(), this.apiKey, itineraryId, new ItineraryData.OnItineraryDetailsLoadedListener() {
+        RouteData.getRouteInfos(getBaseContext(), this.apiKey, routeId, new RouteData.OnRouteDetailsLoadedListener() {
             @Override
-            public void OnItineraryDetailsLoaded(Itinerary itinerary) {
+            public void OnRouteDetailsLoaded(Route data) {
                 runOnUiThread(() -> {
-                    title.setText(itinerary.getNameItinerary());
-
-                    addMarkers(itinerary);
-
-                    contacts.clear();
-                    for (Step step : itinerary.getSteps()) {
-                        contacts.add(new Contact(
-                                step.getContact().getId(),
-                                step.getContact().getName(),
-                                step.getContact().getAddress(),
-                                step.getContact().getLatitude(),
-                                step.getContact().getLongitude(),
-                                ContactCheckbox.NO_CHECKBOX,
-                                step.getContact().isClient()
-                        ));
-                    }
-
-                    route = new Route(itineraryId, contacts);
-                    displayContactInfo();
-                    nbVisit.setText("Contacts visités : 0/" + route.getSteps().size());
-
+                    route = data;
                     fetchRoute();
                 });
             }
@@ -209,16 +196,65 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private void save() {
-        // TODO faire la sauvegarde
+        String url = Config.API_URL + "route";
+
+        try {
+            JSONObject body = new JSONObject();
+            body.put("routeId", this.route.getRouteId());
+            body.put("idSalesPerson", this.route.getRouteId());
+
+            if (this.route.getStatus() == RouteStatus.FINISHED) {
+                body.put("endDate", new Date());
+            }
+
+            JSONArray steps = new JSONArray();
+            for (Contact c:
+                 this.route.getSteps()) {
+                JSONObject contact = new JSONObject();
+                JSONObject contactDetails = new JSONObject();
+                contactDetails.put("enterpriseName", c.getName());
+            }
+
+
+        } catch (Exception e) {
+            Utils.displayError(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Utils.displayError(getBaseContext(), "Sauvegarde éffectuée !");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Utils.displayError(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajouter la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        requestQueue.add(jsonObjectRequest);
     }
 
     private void uiOpacity() {
-        float opacity = this.status == RouteStatus.PAUSED ? 0.3f : 1.0f;
+        float opacity = this.route.getStatus() == RouteStatus.PAUSED ? 0.3f : 1.0f;
         this.btnVisited.setAlpha(opacity);
-        this.btnVisited.setEnabled(this.status == RouteStatus.STARTED);
+        this.btnVisited.setEnabled(this.route.getStatus() == RouteStatus.STARTED);
 
         this.btnCancelVisit.setAlpha(opacity);
-        this.btnCancelVisit.setEnabled(this.status == RouteStatus.STARTED);
+        this.btnCancelVisit.setEnabled(this.route.getStatus() == RouteStatus.STARTED);
 
         this.nextStop.setAlpha(opacity);
         this.nextContact.setAlpha(opacity);
@@ -227,13 +263,13 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     public void playPause(View btn) {
-        if (this.status == RouteStatus.PAUSED) {
-            this.status = RouteStatus.STARTED;
+        if (this.route.getStatus() == RouteStatus.PAUSED) {
+            this.route.setStatus(RouteStatus.STARTED);
             this.btnPlayPause.setText("Pause");
             this.btnPlayPause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pause, 0, 0, 0);
             uiOpacity();
-        } else if (this.status == RouteStatus.STARTED) {
-            this.status = RouteStatus.PAUSED;
+        } else if (this.route.getStatus() == RouteStatus.STARTED) {
+            this.route.setStatus(RouteStatus.PAUSED);
             this.btnPlayPause.setText("Reprendre");
             this.btnPlayPause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.play_circle, 0, 0, 0);
             uiOpacity();
@@ -264,7 +300,6 @@ public class RouteActivity extends AppCompatActivity {
     private void fetchRoute() {
         String API_URL = "https://router.project-osrm.org/route/v1/driving/";
 
-        // Construire la liste des coordonnées au format OSRM (lon,lat)
         StringBuilder urlBuilder = new StringBuilder(API_URL);
 
         for (Contact contact : contacts) {
@@ -274,23 +309,18 @@ public class RouteActivity extends AppCompatActivity {
         // Supprimer le dernier ";"
         urlBuilder.setLength(urlBuilder.length() - 1);
 
-        // Ajouter les options pour obtenir les coordonnées
         urlBuilder.append("?overview=full&geometries=geojson");
 
         String finalUrl = urlBuilder.toString();
-        Log.d("OSRM_API", "URL requête : " + finalUrl);
 
-        // Exécuter la requête avec Volley
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, finalUrl, null,
                 response -> {
-                    Log.d("OSRM_API", "Réponse reçue : " + response.toString());
                     processRouteResponse(response);
                 },
                 error -> {
-                    Log.e("OSRM_API", "Erreur API OSRM : " + error.toString());
                     Utils.displayError(getBaseContext(), "Erreur lors de la récupération de l'itinéraire.");
                 }
         );
@@ -316,10 +346,10 @@ public class RouteActivity extends AppCompatActivity {
 
                 drawRouteOnMap(routePoints);
             } else {
-                Log.e("MAP_ROUTE", "Aucun itinéraire trouvé !");
+                Utils.displayError(getBaseContext(), "Aucun itinéraire trouvé !");
             }
         } catch (Exception e) {
-            Log.e("MAP_ROUTE", "Erreur lors du parsing JSON", e);
+            Utils.displayError(getBaseContext(),getString(R.string.error_server));
         }
     }
 
@@ -327,7 +357,6 @@ public class RouteActivity extends AppCompatActivity {
     private void drawRouteOnMap(List<GeoPoint> points) {
         runOnUiThread(() -> {
             if (points.isEmpty()) {
-                Log.e("MAP_ROUTE", "Aucun point trouvé !");
                 return;
             }
 
@@ -341,12 +370,28 @@ public class RouteActivity extends AppCompatActivity {
         });
     }
 
-    // Mise à jour de la position du téléphone avec une icône personnalisée
     private void startLocationUpdates() {
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setPersonIcon(Utils.drawableToBitmap(ContextCompat.getDrawable(this, R.drawable.my_location)));
         map.getOverlays().add(myLocationOverlay);
+    }
+
+    public void showNextContactConfirmation(View btn) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Êtes-vous sûr de vouloir passer au contact suivant ?");
+
+        builder.setPositiveButton("Oui", (dialog, which) -> {
+            this.contactAction(btn);
+        });
+
+        builder.setNegativeButton("Non", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

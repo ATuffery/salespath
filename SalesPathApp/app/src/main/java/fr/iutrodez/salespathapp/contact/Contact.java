@@ -4,13 +4,14 @@ public class Contact {
     private String name;
     private String id;
     private String address;
+    private String company;
     private boolean isClient;
     private double latitude;
     private double longitude;
     private ContactCheckbox checkbox;
     private ContactStatus visited;
 
-    public Contact(String id, String name, String address, double lat, double lon, ContactCheckbox isChecked, boolean isClient) {
+    public Contact(String id, String name, String address, double lat, double lon, ContactCheckbox isChecked, boolean isClient, String company) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -19,6 +20,7 @@ public class Contact {
         this.latitude = lat;
         this.longitude = lon;
         this.visited = ContactStatus.UNVISITED;
+        this.company = company;
     }
 
     public String getName() {
@@ -61,5 +63,13 @@ public class Contact {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

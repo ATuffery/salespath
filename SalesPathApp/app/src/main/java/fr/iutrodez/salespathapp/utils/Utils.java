@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -53,6 +54,21 @@ public class Utils {
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy à HH:mm:ss", Locale.FRANCE);
         return dateFormat.format(date);
+    }
+
+    /**
+     * Parse une string en Date
+     * @param dateStr date en string
+     * @param pattern le format de la date en string
+     * @return la date parsé en Date
+     */
+    public static Date parseStringToDate(String dateStr, String pattern) {
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.FRANCE);
+        try {
+            return formatter.parse(dateStr);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {

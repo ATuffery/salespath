@@ -9,11 +9,6 @@ public class Step {
     private int idItinerary;
     private Contact contact;
     private int step;
-    private String clientName;
-    private boolean isClient;
-    private String clientAddress;
-    private double clientLatitude;
-    private double clientLongitude;
 
     public Step(int idItinerary, int step, Contact contact) {
         this.idItinerary = idItinerary;

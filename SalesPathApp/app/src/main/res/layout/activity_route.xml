@@ -112,12 +112,20 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/prospectCompany"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 Avenue de Bordeaux"
+                android:textSize="@dimen/text_size_small"
+                />
+
+            <TextView
                 android:id="@+id/prospectAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="25 Avenue de Bordeaux"
                 android:layout_marginBottom="@dimen/margin_bottom_extra_large"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_small"
                 />
 
 
@@ -137,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Annuler la visite"
-                android:onClick="contactAction"
+                android:onClick="showNextContactConfirmation"
                 android:backgroundTint="@color/grey" />
         </LinearLayout>
     </LinearLayout>

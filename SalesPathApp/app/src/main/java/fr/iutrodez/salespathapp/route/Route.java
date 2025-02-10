@@ -1,26 +1,33 @@
 package fr.iutrodez.salespathapp.route;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import fr.iutrodez.salespathapp.contact.Contact;
+import fr.iutrodez.salespathapp.utils.Utils;
 
 public class Route {
 
+    private String routeId;
     private ArrayList<Contact> steps;
     private int currentStep;
     private ArrayList<GeoPoint> localisation;
-    private boolean routePause;
+    private RouteStatus status;
     private Date startDate;
-    private String itineraryId;
+    private String accountId;
 
-    public Route(String itineraryId, ArrayList<Contact> steps) {
+    public Route(String routeId, ArrayList<Contact> steps, Date startDate, String accountId) {
+        this.routeId = routeId;
         this.steps = steps;
-        this.itineraryId = itineraryId;
         this.currentStep = 0;
         this.localisation = new ArrayList<>();
-        this.routePause = false;
-        this.startDate = new Date();
+        this.status = RouteStatus.STARTED;
+        this.startDate = startDate;
+        this.accountId = accountId;
     }
 
     public ArrayList<Contact> getSteps() {
@@ -56,21 +63,18 @@ public class Route {
         this.localisation.add(localisation);
     }
 
-    public boolean isRoutePause() {
-        return routePause;
+    public RouteStatus getStatus() {
+        return status;
     }
 
-    public void setRoutePause(boolean routePause) {
-        this.routePause = routePause;
+    public void setStatus(RouteStatus status) {
+        this.status = status;
     }
 
     public Date getStartDate() {
         return startDate;
     }
 
-    public String getItineraryId() {
-        return itineraryId;
-    }
 
     public Contact getCurrentContact() {
         return this.steps.get(this.currentStep);
@@ -89,4 +93,11 @@ public class Route {
         return this.getCurrentStep() + 1 + "/" + this.getSteps().size();
     }
 
+    public String getRouteId() {
+        return routeId;
+    }
+
+    public String getDateCreation() {
+        return Utils.formatDateFr(startDate);
+    }
 }
