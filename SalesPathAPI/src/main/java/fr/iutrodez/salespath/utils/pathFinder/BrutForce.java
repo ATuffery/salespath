@@ -112,7 +112,7 @@ public class BrutForce {
     private double calcTotalDistance(List<Double[]> path) {
         double totalDistance = 0;
         for (int i = 0; i < path.size() - 1; i++) {
-            totalDistance += CalculDistance.distanceCalcul(
+            totalDistance += CalculDistance.distanceCalculBirdFly(
                     path.get(i)[0], path.get(i)[1],
                     path.get(i + 1)[0], path.get(i + 1)[1]
             );

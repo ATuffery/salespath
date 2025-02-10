@@ -1,14 +1,17 @@
 package fr.iutrodez.salespath.itinerary.controller;
 
+import fr.iutrodez.salespath.account.service.AccountService;
 import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.itinerary.dto.ItineraryAddRequest;
 import fr.iutrodez.salespath.itinerary.dto.ItineraryInfos;
+import fr.iutrodez.salespath.itinerary.dto.ItineraryWithCoordinates;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.service.ItineraryService;
 import fr.iutrodez.salespath.itinerarystep.dto.ItineraryStepWithClient;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
+import fr.iutrodez.salespath.route.dto.Coordinates;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,6 +39,9 @@ public class ItineraryController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Operation(summary = "Créer un nouvel itinéraire",
             description = "Permet de créer un itinéraire en envoyant les informations nécessaires.")
@@ -91,10 +97,13 @@ public class ItineraryController {
     @GetMapping("/getInfos/{id}")
     public ResponseEntity<?> getInfos(@PathVariable Long id) {
         try {
+            // On récupère l'itinéraire
             Optional<Itinerary> itineraryOpt = itineraryService.getItinerary(id);
 
             if (itineraryOpt.isPresent()) {
                 Itinerary itinerary = itineraryOpt.get();
+
+                // On récupère les étapes de l'itinéraire
                 Optional<ItineraryStep[]> stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
 
                 if (stepsOpt.isPresent()) {
@@ -119,8 +128,19 @@ public class ItineraryController {
                         return enrichedStep;
                     }).toArray(ItineraryStepWithClient[]::new);
 
+                    // On récupère les coordonnées du domicile du commercial
+                    Double[] coord = accountService.getCoordPerson(Long.valueOf(itinerary.getCodeUser()));
+                    Coordinates coordinates = new Coordinates();
+                    coordinates.setLatitude(coord[0]);
+                    coordinates.setLongitude(coord[1]);
+
+                    // On crée l'objet de réponse
+                    ItineraryWithCoordinates itineraryWithCoordinates = new ItineraryWithCoordinates();
+                    itineraryWithCoordinates.setItinerary(itinerary);
+                    itineraryWithCoordinates.setCoordinates(coordinates);
+
                     ItineraryInfos infos = new ItineraryInfos();
-                    infos.setItinerary(itinerary);
+                    infos.setItinerary(itineraryWithCoordinates);
                     infos.setSteps(stepsWithClient);
 
                     return ResponseEntity.status(200).body(infos);
