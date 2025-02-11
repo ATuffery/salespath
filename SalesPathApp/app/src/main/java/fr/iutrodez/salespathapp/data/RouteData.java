@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +40,11 @@ public class RouteData {
 
     public interface OnRouteCreatedListener {
         void onRouteCreated(String routeId);
+        void onError(String errorMessage);
+    }
+
+    public interface OnRouteUpdatedListener {
+        void onRouteUpdated();
         void onError(String errorMessage);
     }
 
@@ -146,6 +152,66 @@ public class RouteData {
                         } catch (JSONException e) {
                             listener.onError("Erreur lors de la lecture de la réponse.");
                         }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        handleError(context, error, listener);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajouter la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public static void updateRoute(Context context, String apiKey, Route route, OnRouteUpdatedListener listener) {
+        String url = Config.API_URL + "route";
+
+        JSONObject routeData = new JSONObject();
+        try {
+            routeData.put("id", route.getRouteId());
+            if (route.getStatus() == RouteStatus.FINISHED) {
+                routeData.put("endDate", new Date());
+            }
+            routeData.put("status", route.getStatus().ordinal());
+
+            JSONArray stepsArray = new JSONArray();
+            for (Contact step : route.getSteps()) {
+                JSONObject stepObject = new JSONObject();
+                stepObject.put("idClient", step.getId());
+                stepObject.put("status", step.getStatus());
+                stepsArray.put(stepObject);
+            }
+            routeData.put("steps", stepsArray);
+
+            JSONArray localisationArray = new JSONArray();
+            for (GeoPoint point : route.getLocalisation()) {
+                JSONObject pointObject = new JSONObject();
+                pointObject.put("latitude", point.getLatitude());
+                pointObject.put("longitude", point.getLongitude());
+                localisationArray.put(pointObject);
+            }
+            routeData.put("localisation", localisationArray);
+        } catch (JSONException e) {
+            listener.onError("Erreur lors de la création du JSON.");
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, routeData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onRouteUpdated();
                     }
                 },
                 new Response.ErrorListener() {

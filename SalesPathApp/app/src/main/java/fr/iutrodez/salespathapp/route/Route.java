@@ -86,4 +86,6 @@ public class Route {
     public String getDateCreation() {
         return Utils.formatDateFr(startDate);
     }
+
+    public void resetLocalisation() { this.localisation.clear(); }
 }

@@ -218,56 +218,17 @@ public class RouteActivity extends AppCompatActivity {
      * base de données.
      */
     private void save() {
-        String url = Config.API_URL + "route";
-
-        try {
-            JSONObject body = new JSONObject();
-            body.put("routeId", this.route.getRouteId());
-            body.put("idSalesPerson", this.route.getRouteId());
-
-            if (this.route.getStatus() == RouteStatus.FINISHED) {
-                body.put("endDate", new Date());
-            }
-
-            JSONArray steps = new JSONArray();
-            for (Contact c:
-                 this.route.getSteps()) {
-                JSONObject contact = new JSONObject();
-                JSONObject contactDetails = new JSONObject();
-                contactDetails.put("enterpriseName", c.getName());
-            }
-
-
-        } catch (Exception e) {
-            Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
-            return;
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Utils.displayToast(getBaseContext(), "Sauvegarde éffectuée !");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
-                    }
-                }) {
+        RouteData.updateRoute(getBaseContext(), apiKey, this.route, new RouteData.OnRouteUpdatedListener() {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json");
-                headers.put("X-API-KEY", apiKey);
-                return headers;
+            public void onRouteUpdated() {
+                route.resetLocalisation();
+                Utils.displayToast(getBaseContext(), "Sauvegarde effectuée !");
             }
-        };
-
-        // Ajouter la requête à la file d'attente Volley
-        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
-        requestQueue.add(jsonObjectRequest);
+            @Override
+            public void onError(String errorMessage) {
+                Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde: " + errorMessage);
+            }
+        });
     }
 
     /**
