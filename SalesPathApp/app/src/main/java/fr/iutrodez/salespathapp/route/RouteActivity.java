@@ -206,7 +206,7 @@ public class RouteActivity extends AppCompatActivity {
         Contact current = this.route.getCurrentContact();
         current.setStatus(status);
         this.nbVisit.setText("Contacts visités : " + this.route.nbVisit());
-        if (this.route.getCurrentStep() == this.route.getSteps().size() - 1) {
+        if (this.route.getCurrentStep() == -1) {
             this.displayEndInfos();
         } else {
             this.displayContactInfo();
