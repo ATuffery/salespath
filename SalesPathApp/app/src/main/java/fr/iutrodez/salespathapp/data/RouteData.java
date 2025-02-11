@@ -182,7 +182,7 @@ public class RouteData {
             routeData.put("id", route.getRouteId());
 
             if (route.getStatus() == RouteStatus.FINISHED) {
-                routeData.put("endDate", new Date());
+                routeData.put("endDate", Utils.formatDateToISOString(new Date()));
             }
 
             routeData.put("status", route.getStatus().ordinal());

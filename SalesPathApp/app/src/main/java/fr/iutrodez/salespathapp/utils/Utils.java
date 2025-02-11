@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -101,5 +102,16 @@ public class Utils {
      */
     public static boolean isSameLocation(GeoPoint pointA, GeoPoint pointB) {
         return pointA.getLatitude() == pointB.getLatitude() && pointA.getLongitude() == pointB.getLongitude();
+    }
+
+    /**
+     * Converti une date en ISO date pour l'API
+     * @param date la date à convertir
+     * @return la date convertie
+     */
+    public static String formatDateToISOString(Date date) {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return isoFormat.format(date);
     }
 }
