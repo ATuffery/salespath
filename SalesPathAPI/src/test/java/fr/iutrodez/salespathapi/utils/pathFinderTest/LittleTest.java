@@ -1,35 +1,55 @@
-//package fr.iutrodez.salespathapi.utils.pathFinderTest;
-//
-//import fr.iutrodez.salespath.account.service.AccountService;
-//import fr.iutrodez.salespath.client.service.ClientService;
-//import fr.iutrodez.salespath.utils.pathFinder.Little;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mockito;
-//
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//public class LittleTest {
-//
-//    private Little little;
-//    private AccountService accountService;
-//    private ClientService clientService;
-//
-//    @BeforeEach
-//    void setUp() {
-//        // Mock des services
-//        accountService = mock(AccountService.class);
-//        clientService = mock(ClientService.class);
-//
-//        // Initialisation de la classe Little avec les services mockés
-//        little = new Little();
-//        little.accountService = accountService;
-//        little.clientService = clientService;
-//    }
-//
+package fr.iutrodez.salespathapi.utils.pathFinderTest;
+
+import fr.iutrodez.salespath.account.service.AccountService;
+import fr.iutrodez.salespath.client.service.ClientService;
+import fr.iutrodez.salespath.utils.pathFinder.Little;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class LittleTest {
+
+    private Little little;
+    private AccountService accountService;
+    private ClientService clientService;
+
+    @BeforeEach
+    void setUp() {
+        // Mock des services
+        accountService = mock(AccountService.class);
+        clientService = mock(ClientService.class);
+
+        // Initialisation de la classe Little avec les services mockés
+        little = new Little();
+        little.accountService = accountService;
+        little.clientService = clientService;
+    }
+
+    @Test
+    void test() {
+        String[] idClients = {"client1", "client2", "client3"};
+        Long idUser = 1L;
+
+        // Coordonnées simulées pour le compte utilisateur et les clients
+        Double[] coordUser = {43.6047, 1.4442}; // Toulouse
+        Double[] coordClient1 = {45.7640, 4.8357}; // Lyon
+        Double[] coordClient2 = {48.8566, 2.3522}; // Paris
+        Double[] coordClient3 = {50.6292, 3.0573}; // Lille
+
+        // Simuler le comportement des services
+        when(accountService.getCoordPerson(idUser)).thenReturn(coordUser);
+        when(clientService.getCoordById("client1")).thenReturn(coordClient1);
+        when(clientService.getCoordById("client2")).thenReturn(coordClient2);
+        when(clientService.getCoordById("client3")).thenReturn(coordClient3);
+
+        List<String> result = little.algoLittle(idClients, idUser);
+    }
+
 //    @Test
 //    void testAlgoLittle() {
 //        // Données simulées pour le test
@@ -78,4 +98,4 @@
 //        assertThrows(IllegalArgumentException.class, () -> little.algoLittle(idClients, idUser),
 //                "Une exception doit être levée pour une liste de clients vide.");
 //    }
-//}
+}

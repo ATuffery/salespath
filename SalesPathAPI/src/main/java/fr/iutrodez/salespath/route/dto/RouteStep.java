@@ -12,10 +12,10 @@ public class RouteStep {
     @Schema(implementation = Client.class, description = "Informations du client")
     private Client client;
 
-    @Schema(description = "Statut de l'étape", example = "1")
-    private int status;
+    @Schema(description = "Statut de l'étape", example = "VISITED")
+    private String status;
 
-    public RouteStep(Client client, int status) {
+    public RouteStep(Client client, String status) {
         this.client = client;
         this.status = status;
     }
@@ -28,11 +28,11 @@ public class RouteStep {
         this.client = client;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

@@ -49,8 +49,8 @@ public class Route {
     )
     private ArrayList<Coordinates> localisation;
 
-    @Schema(description = "Statut du parcours", example = "1")
-    private int status;
+    @Schema(description = "Statut du parcours", example = "STARTED")
+    private String status;
 
     /**
      * Constructeur par défaut
@@ -65,7 +65,7 @@ public class Route {
      * @param status Statut
      */
     public Route(String id, Long idSalesPerson, Long itineraryId, String itineraryName,
-                 Date endDate, ArrayList<RouteStep> steps, ArrayList<Coordinates> localisation, int status) {
+                 Date endDate, ArrayList<RouteStep> steps, ArrayList<Coordinates> localisation, String status) {
         this.id = UUID.randomUUID().toString();
 
         this.idSalesPerson = idSalesPerson;
@@ -144,11 +144,11 @@ public class Route {
         this.localisation = localisation;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

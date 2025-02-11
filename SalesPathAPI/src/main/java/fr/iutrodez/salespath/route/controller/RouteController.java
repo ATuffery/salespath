@@ -108,7 +108,7 @@ public class RouteController {
 
                 Client client = clientOpt.get();
 
-                stepsList.add(new RouteStep(client, 2));
+                stepsList.add(new RouteStep(client, "UNVISITED"));
 
             }
 

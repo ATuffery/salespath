@@ -112,19 +112,19 @@ public class AccountService {
      * Permet de mettre à jour les informations d'un commercial
      * @param id l'ID du commercial à mettre à jour
      * @param request les informations à mettre à jour
-     * @return true si la mise à jour a réussi
      * @throws DifferentPasswordException si le mot de passe actuel est incorrect
      * @throws RuntimeException si une erreur est survenue lors de la mise à jour
      * @throws IllegalArgumentException si le compte n'existe pas
      */
-    public boolean updateSalesPerson(Long id, SalesPersonUpdateRequest request) throws DifferentPasswordException {
+    public void updateSalesPerson(Long id, SalesPersonUpdateRequest request) throws DifferentPasswordException {
         SalesPerson existing = accountRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Account not found for ID : " + id));
 
         // On vérifie que l'email n'est pas déjà utilisé
         accountRepository.findByEmail(request.getSalesPerson().getEmail())
-                .ifPresent(error -> {
-                    throw new IllegalArgumentException("An account with this email already exists");
+                         .filter(salesPerson -> !salesPerson.getId().equals(id))
+                         .ifPresent(error -> {
+                            throw new IllegalArgumentException("An account with this email already exists");
                 });
 
         // On vérifie les mots de passe
@@ -154,7 +154,6 @@ public class AccountService {
 
         try {
             accountRepository.save(existing);
-            return true;
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the account: " + e.getMessage());
         }

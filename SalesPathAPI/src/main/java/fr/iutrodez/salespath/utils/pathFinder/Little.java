@@ -17,16 +17,27 @@ public class Little {
     public ClientService clientService;
 
     private int cout = 0;
-    private List<Double[]> listeDistances;
+    private List<double[]> listeDistances;
     private int taille;
 
+    /**
+     * Algorithme de Little pour trouver le chemin optimal.
+     * @param idClients Liste des ID des clients
+     * @param idUser ID de l'utilisateur (point de départ)
+     * @return Liste des ID des clients dans l'ordre optimal
+     */
     public List<String> algoLittle(String[] idClients, Long idUser) {
         if (idClients == null || idClients.length == 0) {
             throw new IllegalArgumentException("La liste des clients ne peut pas être vide.");
         }
+
+        // Coordonnées du point de départ
         Double[] startingPoint = accountService.getCoordPerson(idUser);
         List<Double[]> clientCoords = new ArrayList<>();
 
+        clientCoords.add(startingPoint);
+
+        // Coordonnées des clients
         for (String idClient : idClients) {
             clientCoords.add(clientService.getCoordById(idClient));
         }
@@ -34,13 +45,14 @@ public class Little {
         taille = clientCoords.size();
         listeDistances = new ArrayList<>();
 
+        // Création de la matrice des distances
         for (int i = 0; i < taille; i++) {
-            Double[] row = new Double[taille];
+            double[] row = new double[taille];
             for (int j = 0; j < taille; j++) {
                 if (i == j) {
                     row[j] = Double.POSITIVE_INFINITY;
                 } else {
-                    row[j] = CalculDistance.getDistance(
+                    row[j] = CalculDistance.distanceCalculBirdFly(
                             clientCoords.get(i)[0], clientCoords.get(i)[1],
                             clientCoords.get(j)[0], clientCoords.get(j)[1]
                     );
@@ -48,127 +60,16 @@ public class Little {
             }
             listeDistances.add(row);
         }
-        List<int[]> tournée =  branchAndBound();
-        return getClientOrder(tournée, idClients);
+
+        return null;
     }
 
-    public List<int[]> branchAndBound() {
-        PriorityQueue<Noeud> file = new PriorityQueue<>(Comparator.comparingInt(n -> n.cout));
-        Noeud racine = new Noeud(listeDistances, cout, new ArrayList<>(), new ArrayList<>());
-        file.add(racine);
-        int meilleurCout = Integer.MAX_VALUE;
-        List<int[]> meilleureTournée = null;
-
-        while (!file.isEmpty()) {
-            Noeud courant = file.poll();
-            if (courant.trajetsInclus.size() == taille - 1) {
-                if (courant.cout < meilleurCout) {
-                    meilleurCout = courant.cout;
-                    meilleureTournée = courant.trajetsInclus;
-                }
-                continue;
-            }
-            int[] trajet = chercherMaxRegret(courant.matrice);
-            Noeud inclusion = genererNoeud(courant, trajet, true);
-            Noeud exclusion = genererNoeud(courant, trajet, false);
-            if (inclusion.cout < meilleurCout) file.add(inclusion);
-            if (exclusion.cout < meilleurCout) file.add(exclusion);
-        }
-        System.out.println("Meilleure tournée : " + meilleureTournée + " avec un coût de " + meilleurCout);
-        return meilleureTournée;
-    }
-
-    private List<String> getClientOrder(List<int[]> meilleureTournée, String[] idClients) {
-        List<String> orderedClients = new ArrayList<>();
-        for (int[] trajet : meilleureTournée) {
-            orderedClients.add(idClients[trajet[0]]);
-        }
-        return orderedClients;
-    }
-
-    private Noeud genererNoeud(Noeud parent, int[] trajet, boolean inclure) {
-        List<Double[]> nouvelleMatrice = new ArrayList<>(parent.matrice);
-        int nouveauCout = parent.cout;
-        List<int[]> nouveauxInclus = new ArrayList<>(parent.trajetsInclus);
-        List<int[]> nouveauxExclus = new ArrayList<>(parent.trajetsExclus);
-
-        if (inclure) {
-            nouveauxInclus.add(trajet);
-            reduireMatrice(nouvelleMatrice, trajet[0], trajet[1]);
-            nouveauCout += parent.matrice.get(trajet[0])[trajet[1]];
-        } else {
-            nouveauxExclus.add(trajet);
-            nouvelleMatrice.get(trajet[0])[trajet[1]] = Double.POSITIVE_INFINITY;
-        }
-        return new Noeud(nouvelleMatrice, nouveauCout, nouveauxInclus, nouveauxExclus);
-    }
-
-    private boolean verifSousTournee(List<int[]> trajets, int nouvelleVille) {
-        List<Integer> parcours = new ArrayList<>();
-        for (int[] trajet : trajets) {
-            parcours.add(trajet[0]);
-            parcours.add(trajet[1]);
-        }
-        return parcours.contains(nouvelleVille) && parcours.size() < taille;
-    }
-    private int[] chercherMaxRegret(List<Double[]> matrice) {
-        double maxRegret = 0;
-        int[] indice = new int[2];
-        for (int i = 0; i < matrice.size(); i++) {
-            for (int j = 0; j < matrice.get(i).length; j++) {
-                if (matrice.get(i)[j] == 0) {
-                    double regret = minCol(matrice, j, i) + minLigne(matrice, i, j);
-                    if (regret > maxRegret) {
-                        maxRegret = regret;
-                        indice[0] = i;
-                        indice[1] = j;
-                    }
-                }
+    private void reduceMatrix () {
+        for(int line = 0; line < listeDistances.size(); line++) {
+            for (int col = 0; col < listeDistances.size(); col++) {
+                
             }
         }
-        return indice;
     }
 
-    private double minCol(List<Double[]> matrice, int col, int line) {
-        double min = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < matrice.size(); i++) {
-            if (i != line) {
-                min = Math.min(min, matrice.get(i)[col]);
-            }
-        }
-        return min;
-    }
-
-    private double minLigne(List<Double[]> matrice, int line, int col) {
-        double min = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < matrice.get(line).length; i++) {
-            if (i != col) {
-                min = Math.min(min, matrice.get(line)[i]);
-            }
-        }
-        return min;
-    }
-
-    private void reduireMatrice(List<Double[]> matrice, int ligne, int colonne) {
-        for (int i = 0; i < matrice.size(); i++) {
-            matrice.get(i)[colonne] = Double.POSITIVE_INFINITY;
-        }
-        for (int j = 0; j < matrice.get(ligne).length; j++) {
-            matrice.get(ligne)[j] = Double.POSITIVE_INFINITY;
-        }
-    }
-}
-
-class Noeud {
-    List<Double[]> matrice;
-    int cout;
-    List<int[]> trajetsInclus;
-    List<int[]> trajetsExclus;
-
-    public Noeud(List<Double[]> matrice, int cout, List<int[]> trajetsInclus, List<int[]> trajetsExclus) {
-        this.matrice = matrice;
-        this.cout = cout;
-        this.trajetsInclus = new ArrayList<>(trajetsInclus);
-        this.trajetsExclus = new ArrayList<>(trajetsExclus);
-    }
 }
