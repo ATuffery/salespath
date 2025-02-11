@@ -421,7 +421,7 @@ public class RouteActivity extends AppCompatActivity {
                     fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            if (location != null && route != null) {
+                            if (route.getStatus() == RouteStatus.STARTED && location != null && route != null) {
                                 GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
                                 route.addLocation(currentPosition);
                             }
