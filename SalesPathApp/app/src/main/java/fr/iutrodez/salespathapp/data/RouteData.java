@@ -23,6 +23,7 @@ import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactCheckbox;
+import fr.iutrodez.salespathapp.contact.ContactStatus;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.itinerary.Step;
 import fr.iutrodez.salespathapp.route.Route;
@@ -57,10 +58,10 @@ public class RouteData {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONObject routeObj = response.getJSONObject("itinerary");
-                            String id = routeObj.optString("id");
-                            String startDateStr = routeObj.optString("startDate");
-                            String accountId = routeObj.optString("itineraryId");
+                            String id = response.optString("id");
+                            String name = response.optString("itineraryName");
+                            String startDateStr = response.optString("startDate");
+                            String accountId = response.optString("itineraryId");
                             Date startDate = Utils.parseStringToDate(startDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSS");
 
                             ArrayList<Contact> steps = new ArrayList<>();
@@ -69,21 +70,26 @@ public class RouteData {
                             if (stepsArray != null) {
                                 for (int i = 0; i < stepsArray.length(); i++) {
                                     JSONObject stepObject = stepsArray.getJSONObject(i);
-                                    String idClient = stepObject.optString("idClient", "");
-                                    String clientName = stepObject.optString("clientName", "Client inconnu");
-                                    String clientAddress = stepObject.optString("clientAddress", "Client inconnu");
-                                    double clientLatitude = stepObject.optDouble("clientLatitude", 0);
-                                    double clientLongitude = stepObject.optDouble("clientLongitude", 0);
-                                    String company = stepObject.optString("companyName");
-                                    boolean isClient = stepObject.optBoolean("isClient");
+                                    JSONObject clientObject = stepObject.getJSONObject("client");
+                                    String idClient = clientObject.optString("id", "");
+                                    String clientName = clientObject.optString("firstName", "Client inconnu");
+                                    clientName += clientObject.optString("lastName", "Client inconnu");
+                                    String clientAddress = clientObject.optString("address", "Client inconnu");
+                                    JSONArray coord = clientObject.getJSONArray("coordonates");
+                                    double clientLatitude = coord.getDouble(0);
+                                    double clientLongitude = coord.getDouble(1);
+                                    String company = clientObject.optString("enterpriseName");
+                                    boolean isClient = clientObject.optBoolean("client");
+                                    ContactStatus status = ContactStatus.valueOf(stepObject.optString("status"));
 
                                     Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient, company);
+                                    contact.setStatus(status);
 
                                     steps.add(contact);
                                 }
                             }
 
-                            listener.OnRouteDetailsLoaded(new Route(id, steps, startDate, accountId));
+                            listener.OnRouteDetailsLoaded(new Route(id, name, steps, startDate, accountId));
 
                         } catch (JSONException e) {
                             listener.onError("Erreur lors de la lecture des données.");

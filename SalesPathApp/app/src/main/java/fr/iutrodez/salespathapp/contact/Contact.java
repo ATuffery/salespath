@@ -1,13 +1,14 @@
 package fr.iutrodez.salespathapp.contact;
 
+import org.osmdroid.util.GeoPoint;
+
 public class Contact {
     private String name;
     private String id;
     private String address;
     private String company;
     private boolean isClient;
-    private double latitude;
-    private double longitude;
+    private GeoPoint coord;
     private ContactCheckbox checkbox;
     private ContactStatus visited;
 
@@ -17,8 +18,7 @@ public class Contact {
         this.address = address;
         this.checkbox = isChecked;
         this.isClient = isClient;
-        this.latitude = lat;
-        this.longitude = lon;
+        this.coord = new GeoPoint(lat, lon);
         this.visited = ContactStatus.UNVISITED;
         this.company = company;
     }
@@ -45,11 +45,11 @@ public class Contact {
         checkbox = checked;
     }
 
-    public ContactStatus isVisited() {
+    public ContactStatus getStatus() {
         return visited;
     }
 
-    public void setVisited(ContactStatus visited) {
+    public void setStatus(ContactStatus visited) {
         this.visited = visited;
     }
 
@@ -58,12 +58,13 @@ public class Contact {
     }
 
     public double getLatitude() {
-        return latitude;
+        return this.coord.getLatitude();
     }
 
     public double getLongitude() {
-        return longitude;
+        return this.coord.getLongitude();
     }
+    public GeoPoint getCoord() { return this.coord; }
 
     public String getCompany() {
         return company;
