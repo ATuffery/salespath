@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,6 +73,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Convertie un drawable en Bitmap
+     * @param drawable Le drawable à convertir
+     * @return Le bitmap converti à partir du drawable
+     */
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable == null) {
             return null;
@@ -86,4 +93,13 @@ public class Utils {
     }
 
 
+    /**
+     * Vérifie si deux points sont identique
+     * @param pointA point A
+     * @param pointB point B
+     * @return true si le point A et B sont identique, false sinon
+     */
+    public static boolean isSameLocation(GeoPoint pointA, GeoPoint pointB) {
+        return pointA.getLatitude() == pointB.getLatitude() && pointA.getLongitude() == pointB.getLongitude();
+    }
 }

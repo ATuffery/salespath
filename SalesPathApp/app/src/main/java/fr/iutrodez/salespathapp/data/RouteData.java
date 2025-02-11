@@ -26,12 +26,18 @@ import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
 import fr.iutrodez.salespathapp.itinerary.Step;
 import fr.iutrodez.salespathapp.route.Route;
+import fr.iutrodez.salespathapp.route.RouteStatus;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class RouteData {
 
     public interface OnRouteDetailsLoadedListener {
         void OnRouteDetailsLoaded(Route route);
+        void onError(String errorMessage);
+    }
+
+    public interface OnRouteCreatedListener {
+        void onRouteCreated(String routeId);
         void onError(String errorMessage);
     }
 
@@ -104,7 +110,57 @@ public class RouteData {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * Requete permetant de créer un parcours à partir d'un itinéraire donnée et pour un commercial
+     * particulier
+     * @param context le contexte de l'activité
+     * @param apiKey l'api key
+     * @param accountId le numéro de compte du commercial
+     * @param itineraryId le numéro de l'itinéraire
+     * @param listener évènement notifiant d'une erreur ou du success
+     */
+    public static void createRoute(Context context, String apiKey, String accountId, String itineraryId, OnRouteCreatedListener listener) {
+        String url = Config.API_URL + "route?idSalesPerson=" + accountId + "&idItinerary=" + itineraryId;
 
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("status", RouteStatus.STARTED);
+        } catch (JSONException e) {
+            listener.onError("Erreur lors de la création du JSON.");
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String routeId = response.getString("id");
+                            listener.onRouteCreated(routeId);
+                        } catch (JSONException e) {
+                            listener.onError("Erreur lors de la lecture de la réponse.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        handleError(context, error, listener);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajouter la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonObjectRequest);
+    }
 
 
     /** Gestion des erreurs des requêtes */

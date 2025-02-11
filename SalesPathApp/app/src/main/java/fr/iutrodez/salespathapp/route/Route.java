@@ -1,11 +1,8 @@
 package fr.iutrodez.salespathapp.route;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import org.osmdroid.util.GeoPoint;
 
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.utils.Utils;
@@ -60,7 +57,9 @@ public class Route {
     }
 
     public void addLocation(GeoPoint localisation) {
-        this.localisation.add(localisation);
+        if (this.localisation.isEmpty() || !Utils.isSameLocation(this.localisation.get(this.localisation.size() - 1), localisation)) {
+            this.localisation.add(localisation);
+        }
     }
 
     public RouteStatus getStatus() {

@@ -3,7 +3,10 @@ package fr.iutrodez.salespathapp.route;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,14 +25,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -43,7 +48,6 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
-import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.contact.ContactStatus;
 import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
@@ -69,6 +73,8 @@ public class RouteActivity extends AppCompatActivity {
     private Button btnVisited;
     private Button btnCancelVisit;
     private Button btnPlayPause;
+    private final Handler locationHandler = new Handler(Looper.getMainLooper());
+    private final int LOCATION_UPDATE_INTERVAL = 5000;
 
     private static final int LOCATION_PERMISSION_REQUEST = 100;
 
@@ -110,10 +116,13 @@ public class RouteActivity extends AppCompatActivity {
         requestLocationPermission();
 
         // Charger les données de l'itinéraire
-        loadItineraryData();
+        loadRouteData();
     }
 
 
+    /**
+     * Affiche les informations du prochain contact
+     */
     private void displayContactInfo() {
         Contact current = this.route.getCurrentContact();
         this.nextContact.setText(current.getName());
@@ -124,6 +133,9 @@ public class RouteActivity extends AppCompatActivity {
         this.startedDate.setText("Tournée commencée le " + Utils.formatDateFr(this.route.getStartDate()));
     }
 
+    /**
+     * Affiche les informations de fin de tourné
+     */
     private void displayEndInfos() {
         this.nextContact.setText("Domicile");
         this.nextAddress.setText("");
@@ -141,7 +153,8 @@ public class RouteActivity extends AppCompatActivity {
         });
     }
 
-    private void loadItineraryData() {
+
+    private void loadRouteData() {
         RouteData.getRouteInfos(getBaseContext(), this.apiKey, routeId, new RouteData.OnRouteDetailsLoadedListener() {
             @Override
             public void OnRouteDetailsLoaded(Route data) {
@@ -158,11 +171,15 @@ public class RouteActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Ajoute les différents arrêts sur la carte
+     * @param itinerary
+     */
     private void addMarkers(Itinerary itinerary) {
         Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
 
         for (Step step : itinerary.getSteps()) {
-            GeoPoint point = new GeoPoint(step.getContact().getLatitude(), step.getContact().getLongitude());
+            org.osmdroid.util.GeoPoint point = new org.osmdroid.util.GeoPoint(step.getContact().getLatitude(), step.getContact().getLongitude());
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -175,7 +192,7 @@ public class RouteActivity extends AppCompatActivity {
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
-        mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
+        mapController.setCenter((IGeoPoint) new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
 
 
@@ -195,6 +212,10 @@ public class RouteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Envoie des données de la tournée vers l'API pour enregistrer les données en
+     * base de données.
+     */
     private void save() {
         String url = Config.API_URL + "route";
 
@@ -248,6 +269,10 @@ public class RouteActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * Grise les informations du contact suivant quand le parcours
+     * est en pause.
+     */
     private void uiOpacity() {
         float opacity = this.route.getStatus() == RouteStatus.PAUSED ? 0.3f : 1.0f;
         this.btnVisited.setAlpha(opacity);
@@ -262,6 +287,10 @@ public class RouteActivity extends AppCompatActivity {
         this.nextContactType.setAlpha(opacity);
     }
 
+    /**
+     * Met en pause/play la tournée
+     * @param btn le bouton play/pause
+     */
     public void playPause(View btn) {
         if (this.route.getStatus() == RouteStatus.PAUSED) {
             this.route.setStatus(RouteStatus.STARTED);
@@ -279,7 +308,9 @@ public class RouteActivity extends AppCompatActivity {
         }
     }
 
-    // Demander la permission de localisation
+    /**
+     * Demander la permission de localisation
+     */
     private void requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
@@ -288,7 +319,9 @@ public class RouteActivity extends AppCompatActivity {
         }
     }
 
-    // Gérer la réponse utilisateur pour la permission
+    /**
+     * Gérer la réponse utilisateur pour la permission
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -297,6 +330,9 @@ public class RouteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Récupère les informations du tracé de l'itinéraire depuis une API
+     */
     private void fetchRoute() {
         String API_URL = "https://router.project-osrm.org/route/v1/driving/";
 
@@ -328,6 +364,10 @@ public class RouteActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Extrait les informations du tracé de l'itinéraire retourné par l'API
+     * @param response
+     */
     private void processRouteResponse(JSONObject response) {
         try {
             JSONArray routes = response.getJSONArray("routes");
@@ -354,6 +394,10 @@ public class RouteActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Trace l'itinéraire sur la carte
+     * @param points
+     */
     private void drawRouteOnMap(List<GeoPoint> points) {
         runOnUiThread(() -> {
             if (points.isEmpty()) {
@@ -370,13 +414,22 @@ public class RouteActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Débute la géolocalisation
+     */
     private void startLocationUpdates() {
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setPersonIcon(Utils.drawableToBitmap(ContextCompat.getDrawable(this, R.drawable.my_location)));
         map.getOverlays().add(myLocationOverlay);
+
+        requestLocationUpdates();
     }
 
+    /**
+     * PopUp de confirmation de passage au contact suivant
+     * @param btn le bouton qui a ouvert la popup
+     */
     public void showNextContactConfirmation(View btn) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
@@ -392,6 +445,29 @@ public class RouteActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Enregistre à intervalle régulier la position du commercial
+     */
+    private void requestLocationUpdates() {
+        locationHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (ActivityCompat.checkSelfPermission(RouteActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null && route != null) {
+                                GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
+                                route.addLocation(currentPosition);
+                            }
+                        }
+                    });
+                }
+                locationHandler.postDelayed(this, LOCATION_UPDATE_INTERVAL);
+            }
+        }, LOCATION_UPDATE_INTERVAL);
     }
 
 }

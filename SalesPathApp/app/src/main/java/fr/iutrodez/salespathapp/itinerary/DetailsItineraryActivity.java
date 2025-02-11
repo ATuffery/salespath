@@ -76,15 +76,7 @@ public class DetailsItineraryActivity extends BaseActivity {
 
                     contacts.clear();
                     for (Step step : itinerary.getSteps()) {
-                        contacts.add(new Contact(
-                                step.getContact().getId(),
-                                step.getContact().getName(),
-                                step.getContact().getAddress(),
-                                step.getContact().getLatitude(),
-                                step.getContact().getLongitude(),
-                                ContactCheckbox.NO_CHECKBOX,
-                                step.getContact().isClient()
-                        ));
+                        contacts.add(step.getContact());
                     }
 
                     // Mise à jour de l'affichage
@@ -126,6 +118,5 @@ public class DetailsItineraryActivity extends BaseActivity {
         intent.putExtra("accountId", getAccountId());
         startActivity(intent);
     }
-
 
 }
