@@ -63,7 +63,7 @@ public class ItinerariesActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayError(getBaseContext(), errorMessage);
+                Utils.displayToast(getBaseContext(), errorMessage);
             }
         });
     }
@@ -81,7 +81,7 @@ public class ItinerariesActivity extends BaseActivity {
 
                     Toast.makeText(ItinerariesActivity.this, "Itinéraire supprimé avec succès !", Toast.LENGTH_SHORT).show();
                 } else {
-                    Utils.displayError(getBaseContext(), message);
+                    Utils.displayToast(getBaseContext(), message);
                 }
             }
         });

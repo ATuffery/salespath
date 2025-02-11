@@ -79,7 +79,7 @@ public class CreateContactActivity extends BaseActivity {
             !CheckInput.text(phone, 10, 10) ||
             !CheckInput.text(type, 1, 50)) {
 
-            Utils.displayError(getBaseContext(), getString(R.string.typing_error));
+            Utils.displayToast(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
@@ -94,7 +94,7 @@ public class CreateContactActivity extends BaseActivity {
             jsonBody.put("isClient", type.equals("Client"));
             jsonBody.put("idPerson", getAccountId());
         } catch (JSONException e) {
-            Utils.displayError(getBaseContext(), getString(R.string.error_server));
+            Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -112,7 +112,7 @@ public class CreateContactActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayError(getBaseContext(), getString(R.string.error_server));
+                        Utils.displayToast(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override

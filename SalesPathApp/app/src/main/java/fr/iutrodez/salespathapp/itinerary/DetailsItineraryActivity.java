@@ -17,15 +17,14 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
-import fr.iutrodez.salespathapp.contact.ContactCheckbox;
 import fr.iutrodez.salespathapp.data.ItineraryData;
+import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -86,7 +85,7 @@ public class DetailsItineraryActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                runOnUiThread(() -> Utils.displayError(getBaseContext(), errorMessage));
+                runOnUiThread(() -> Utils.displayToast(getBaseContext(), errorMessage));
             }
         });
     }
@@ -112,11 +111,23 @@ public class DetailsItineraryActivity extends BaseActivity {
     }
 
     public void startRoute(View btn) {
-        Intent intent = new Intent(this, RouteActivity.class);
-        intent.putExtra("itineraryId", itineraryId);
-        intent.putExtra("apiKey", getApiKey());
-        intent.putExtra("accountId", getAccountId());
-        startActivity(intent);
+        RouteData.createRoute(this, getApiKey(), getAccountId(), itineraryId, new RouteData.OnRouteCreatedListener() {
+            @Override
+            public void onRouteCreated(String routeId) {
+                Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
+                intent.putExtra("routeId", routeId);
+                intent.putExtra("itineraryId", itineraryId);
+                intent.putExtra("apiKey", getApiKey());
+                intent.putExtra("accountId", getAccountId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Utils.displayToast(getBaseContext(), errorMessage);
+            }
+        });
     }
+
 
 }

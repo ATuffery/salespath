@@ -66,13 +66,13 @@ public class ContactsActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
-                    Utils.displayError(getBaseContext(), e.getMessage());
+                    Utils.displayToast(getBaseContext(), e.getMessage());
                 }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayError(getBaseContext(), errorMessage);
+                Utils.displayToast(getBaseContext(), errorMessage);
             }
         });
     }

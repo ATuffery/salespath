@@ -40,7 +40,7 @@ public class Utils {
     }
 
     /** Méthode pour afficher une erreur  */
-    public static void displayError(Context context, String msg) {
+    public static void displayToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 

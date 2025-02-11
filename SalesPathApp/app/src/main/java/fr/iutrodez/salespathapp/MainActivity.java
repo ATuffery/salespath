@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayError(getBaseContext(), errorMessage);
+                Utils.displayToast(getBaseContext(), errorMessage);
             }
         });
     }
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayError(getBaseContext(), errorMessage);
+                Utils.displayToast(getBaseContext(), errorMessage);
             }
         });
     }
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
                 marker.setIcon(markerIcon);
                 map.getOverlays().add(marker);
             } catch (JSONException e) {
-                Utils.displayError(getBaseContext(), getString(R.string.error_server));
+                Utils.displayToast(getBaseContext(), getString(R.string.error_server));
             }
         }
 

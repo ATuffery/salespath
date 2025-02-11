@@ -143,7 +143,7 @@ public class RouteActivity extends AppCompatActivity {
         this.btnCancelVisit.setVisibility(View.GONE);
         this.btnVisited.setText("Terminer la tournée");
         this.btnVisited.setOnClickListener((e) -> {
-            Utils.displayError(getBaseContext(), "Pour terminer la tournée, faites un appui long sur ce bouton.");
+            Utils.displayToast(getBaseContext(), "Pour terminer la tournée, faites un appui long sur ce bouton.");
         });
         this.btnVisited.setOnLongClickListener((e) -> {
             this.route.setStatus(RouteStatus.FINISHED);
@@ -166,7 +166,7 @@ public class RouteActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-                runOnUiThread(() -> Utils.displayError(getBaseContext(), errorMessage));
+                runOnUiThread(() -> Utils.displayToast(getBaseContext(), errorMessage));
             }
         });
     }
@@ -238,7 +238,7 @@ public class RouteActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Utils.displayError(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
+            Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
             return;
         }
 
@@ -246,13 +246,13 @@ public class RouteActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Utils.displayError(getBaseContext(), "Sauvegarde éffectuée !");
+                        Utils.displayToast(getBaseContext(), "Sauvegarde éffectuée !");
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayError(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
+                        Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la sauvegarde.");
                     }
                 }) {
             @Override
@@ -357,7 +357,7 @@ public class RouteActivity extends AppCompatActivity {
                     processRouteResponse(response);
                 },
                 error -> {
-                    Utils.displayError(getBaseContext(), "Erreur lors de la récupération de l'itinéraire.");
+                    Utils.displayToast(getBaseContext(), "Erreur lors de la récupération de l'itinéraire.");
                 }
         );
 
@@ -386,10 +386,10 @@ public class RouteActivity extends AppCompatActivity {
 
                 drawRouteOnMap(routePoints);
             } else {
-                Utils.displayError(getBaseContext(), "Aucun itinéraire trouvé !");
+                Utils.displayToast(getBaseContext(), "Aucun itinéraire trouvé !");
             }
         } catch (Exception e) {
-            Utils.displayError(getBaseContext(),getString(R.string.error_server));
+            Utils.displayToast(getBaseContext(),getString(R.string.error_server));
         }
     }
 

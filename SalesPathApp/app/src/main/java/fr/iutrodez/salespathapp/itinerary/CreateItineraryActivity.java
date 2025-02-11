@@ -76,7 +76,7 @@ public class CreateItineraryActivity extends BaseActivity {
                         contactList.add(contact);
 
                     } catch (JSONException e) {
-                        Utils.displayError(getBaseContext(), "Erreur lors de la lecture des données.");
+                        Utils.displayToast(getBaseContext(), "Erreur lors de la lecture des données.");
                     }
                 }
 
@@ -87,7 +87,7 @@ public class CreateItineraryActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayError(getBaseContext(), errorMessage);
+                Utils.displayToast(getBaseContext(), errorMessage);
             }
         });
     }
@@ -109,7 +109,7 @@ public class CreateItineraryActivity extends BaseActivity {
 
         if (!CheckInput.text(name, 1, 50) ||
             contacts.size() == 0 || contacts.size() > Config.MAX_ITINERARY_STEP) {
-            Utils.displayError(getBaseContext(), getString(R.string.typing_error));
+            Utils.displayToast(getBaseContext(), getString(R.string.typing_error));
             return;
         }
 
@@ -123,7 +123,7 @@ public class CreateItineraryActivity extends BaseActivity {
             jsonBody.put("itinerary", itinerary);
             jsonBody.put("idClients", contactsSteps);
         } catch (JSONException e) {
-            Utils.displayError(getBaseContext(), getString(R.string.error_server));
+            Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
 
         Log.e("DATA", jsonBody.toString());
@@ -144,7 +144,7 @@ public class CreateItineraryActivity extends BaseActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Utils.displayError(getBaseContext(), getString(R.string.error_server));
+                        Utils.displayToast(getBaseContext(), getString(R.string.error_server));
                     }
                 }) {
             @Override
