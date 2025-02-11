@@ -100,14 +100,14 @@
                 android:id="@+id/contactType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prospect"
+                android:text=""
                 android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/prospectName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="M. Martin"
+                android:text=""
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
                 android:id="@+id/prospectCompany"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25 Avenue de Bordeaux"
+                android:text=""
                 android:textSize="@dimen/text_size_small"
                 />
 
@@ -123,7 +123,7 @@
                 android:id="@+id/prospectAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25 Avenue de Bordeaux"
+                android:text=""
                 android:layout_marginBottom="@dimen/margin_bottom_extra_large"
                 android:textSize="@dimen/text_size_small"
                 />

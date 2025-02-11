@@ -129,6 +129,7 @@ public class RouteActivity extends AppCompatActivity {
         this.nextCompany.setText(current.getCompany());
         this.nextContactType.setText(current.isClient() ? "Client" : "Prospect");
         this.startedDate.setText("Tournée commencée le " + Utils.formatDateFr(this.route.getStartDate()));
+        this.nbVisit.setText("Contact visités : " + this.route.nbVisit());
     }
 
     /**
@@ -137,6 +138,7 @@ public class RouteActivity extends AppCompatActivity {
     private void displayEndInfos() {
         this.nextContact.setText("Domicile");
         this.nextAddress.setText("");
+        this.nextCompany.setText("");
         this.nextContactType.setVisibility(View.GONE);
         this.btnCancelVisit.setVisibility(View.GONE);
         this.btnVisited.setText("Terminer la tournée");
@@ -159,6 +161,7 @@ public class RouteActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     route = data;
                     addMarkers();
+                    displayContactInfo();
                     fetchRoute();
                 });
             }
@@ -190,7 +193,7 @@ public class RouteActivity extends AppCompatActivity {
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
-        mapController.setCenter((IGeoPoint) new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
+        mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
 
 
@@ -282,6 +285,7 @@ public class RouteActivity extends AppCompatActivity {
         this.nextStop.setAlpha(opacity);
         this.nextContact.setAlpha(opacity);
         this.nextAddress.setAlpha(opacity);
+        this.nextCompany.setAlpha(opacity);
         this.nextContactType.setAlpha(opacity);
     }
 
