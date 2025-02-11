@@ -24,9 +24,9 @@ public class RouteService {
      * @param route L'objet Route à créer.
      * @throws RuntimeException En cas d'erreur lors de la création.
      */
-    public void createRoute(Route route) {
+    public Route createRoute(Route route) {
         try {
-            routeRepository.save(route);
+            return routeRepository.save(route);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

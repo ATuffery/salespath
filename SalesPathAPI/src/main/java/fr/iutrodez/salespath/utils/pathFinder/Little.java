@@ -21,6 +21,9 @@ public class Little {
     private int taille;
 
     public List<String> algoLittle(String[] idClients, Long idUser) {
+        if (idClients == null || idClients.length == 0) {
+            throw new IllegalArgumentException("La liste des clients ne peut pas être vide.");
+        }
         Double[] startingPoint = accountService.getCoordPerson(idUser);
         List<Double[]> clientCoords = new ArrayList<>();
 
@@ -37,7 +40,7 @@ public class Little {
                 if (i == j) {
                     row[j] = Double.POSITIVE_INFINITY;
                 } else {
-                    row[j] = CalculDistance.distanceCalculBirdFly(
+                    row[j] = CalculDistance.getDistance(
                             clientCoords.get(i)[0], clientCoords.get(i)[1],
                             clientCoords.get(j)[0], clientCoords.get(j)[1]
                     );

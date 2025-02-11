@@ -29,6 +29,9 @@ public class ItineraryStepWithClient {
     @Schema(description = "Si le client est un client")
     private boolean isClient;
 
+    @Schema(description = "Nom de l'entreprise")
+    private String companyName;
+
     public String getIdItinerary() {
         return idItinerary;
     }
@@ -91,5 +94,13 @@ public class ItineraryStepWithClient {
 
     public void setClient(boolean client) {
         isClient = client;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

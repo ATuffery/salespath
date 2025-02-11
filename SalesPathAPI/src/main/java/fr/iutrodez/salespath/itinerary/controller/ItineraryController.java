@@ -22,10 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/itinerary")
@@ -124,6 +121,7 @@ public class ItineraryController {
                         enrichedStep.setClientLongitude(client.getCoordonates()[1]);
                         enrichedStep.setClientAddress(client.getAddress());
                         enrichedStep.setClient(client.getClient());
+                        enrichedStep.setCompanyName(client.getEnterpriseName());
 
                         return enrichedStep;
                     }).toArray(ItineraryStepWithClient[]::new);
@@ -150,7 +148,7 @@ public class ItineraryController {
             } else {
                 return ResponseEntity.status(404).body(Map.of("error", "Itinerary not found for this Id"));
             }
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));

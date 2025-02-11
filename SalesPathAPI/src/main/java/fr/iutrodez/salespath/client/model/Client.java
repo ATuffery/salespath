@@ -17,36 +17,36 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Client")
 public class Client {
 
-    @Schema(description = "Nom de l'entreprise du client", example = "Entreprise XYZ")
+    @Schema(description = "Nom de l'entreprise du client")
     private String enterpriseName;
 
-    @Schema(description = "Adresse du client", example = "123 Rue Exemple")
+    @Schema(description = "Adresse du client")
     private String address;
 
-    @Schema(description = "Description de l'entreprise", example = "Société de consulting")
+    @Schema(description = "Description de l'entreprise")
     private String description;
 
-    @Schema(description = "Prénom du contact", example = "Jean")
+    @Schema(description = "Prénom du contact")
     private String firstName;
 
-    @Schema(description = "Nom de famille du contact", example = "Dupont")
+    @Schema(description = "Nom de famille du contact")
     private String lastName;
 
-    @Schema(description = "Numéro de téléphone du client", example = "0123456789")
+    @Schema(description = "Numéro de téléphone du client")
     private String phoneNumber;
 
-    @Schema(description = "Indique si le client est actif", example = "true")
+    @Schema(description = "Indique si le client est actif")
     private Boolean isClient;
 
-    @Schema(description = "Coordonnées GPS du client", example = "[48.8566, 2.3522]")
+    @Schema(description = "Coordonnées GPS du client")
     private Double[] coordinates;
 
-    @Schema(description = "ID de la personne associée au client", example = "12345")
+    @Schema(description = "ID de la personne associée au client")
     private Long idPerson;
 
     @Id
     @GeneratedValue
-    @Schema(description = "Identifiant unique du client", example = "1")
+    @Schema(description = "Identifiant unique du client")
     private String id;
 
     /**

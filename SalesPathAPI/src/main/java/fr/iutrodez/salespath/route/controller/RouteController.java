@@ -118,8 +118,8 @@ public class RouteController {
             route.setSteps(stepsList);
             route.setStartDate(LocalDateTime.now());
 
-            routeService.createRoute(route);
-            return ResponseEntity.status(201).body(Map.of("success", "Route ajoutée avec succès"));
+            Route newRoute = routeService.createRoute(route);
+            return ResponseEntity.status(201).body(Map.of("id", newRoute.getId()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué."  + e.getMessage()));
         }

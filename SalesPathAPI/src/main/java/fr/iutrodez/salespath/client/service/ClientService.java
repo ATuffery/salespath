@@ -60,25 +60,24 @@ public class ClientService {
      *
      * @param id L'ID du client.
      * @return L'objet Client.
-     * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe pas.
+     * @throws NoSuchElementException Si le client avec l'ID spécifié n'existe pas.
      */
     public Client getClientById(String id) {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Client non trouvé avec l'ID : " + id));
+                .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
     }
 
     /**
      * Supprime un client à partir de son ID.
      * 
      * @param id L'ID du client à supprimer.
-     * @throws RuntimeException En cas d'erreur lors de la suppression.
+     * @throws NoSuchElementException Si le client avec l'ID spécifié n'existe pas.
      */
     public void deleteClientById(String id) {
-        try {
-            clientRepository.deleteClientById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la suppression du client par ID : " + e.getMessage());
-        }
+        clientRepository.findById(id)
+                        .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
+
+        clientRepository.deleteClientById(id);
     }
 
     /**
@@ -86,14 +85,12 @@ public class ClientService {
      * 
      * @param updatedClient L'objet Client contenant les nouvelles données.
      * @param id            L'ID du client à mettre à jour.
-     * @throws IllegalArgumentException Si le client avec l'ID spécifié n'existe
-     *                                  pas.
+     * @throws NoSuchElementException Si le client avec l'ID spécifié n'existe pas.
      * @throws RuntimeException         En cas d'erreur lors de la récupération des coordonnées
      */
     public void updateClient(Client updatedClient, String id) {
-        // Recherche du client à partir de son ID, et gestion du cas où il n'est pas trouvé
         Client existingClient = clientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Client introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new NoSuchElementException("Client introuvable avec l'ID : " + id));
 
         if (updatedClient.getCoordonates() != existingClient.getCoordonates()) {
             try {
