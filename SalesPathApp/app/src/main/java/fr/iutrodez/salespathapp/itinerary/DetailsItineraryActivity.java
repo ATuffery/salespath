@@ -116,7 +116,6 @@ public class DetailsItineraryActivity extends BaseActivity {
             public void onRouteCreated(String routeId) {
                 Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
                 intent.putExtra("routeId", routeId);
-                intent.putExtra("itineraryId", itineraryId);
                 intent.putExtra("apiKey", getApiKey());
                 intent.putExtra("accountId", getAccountId());
                 startActivity(intent);

@@ -50,8 +50,6 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.contact.Contact;
 import fr.iutrodez.salespathapp.contact.ContactStatus;
 import fr.iutrodez.salespathapp.data.RouteData;
-import fr.iutrodez.salespathapp.itinerary.Itinerary;
-import fr.iutrodez.salespathapp.itinerary.Step;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class RouteActivity extends AppCompatActivity {
@@ -131,6 +129,7 @@ public class RouteActivity extends AppCompatActivity {
         this.nextCompany.setText(current.getCompany());
         this.nextContactType.setText(current.isClient() ? "Client" : "Prospect");
         this.startedDate.setText("Tournée commencée le " + Utils.formatDateFr(this.route.getStartDate()));
+        this.nbVisit.setText("Contact visités : " + this.route.nbVisit());
     }
 
     /**
@@ -139,6 +138,7 @@ public class RouteActivity extends AppCompatActivity {
     private void displayEndInfos() {
         this.nextContact.setText("Domicile");
         this.nextAddress.setText("");
+        this.nextCompany.setText("");
         this.nextContactType.setVisibility(View.GONE);
         this.btnCancelVisit.setVisibility(View.GONE);
         this.btnVisited.setText("Terminer la tournée");
@@ -160,6 +160,8 @@ public class RouteActivity extends AppCompatActivity {
             public void OnRouteDetailsLoaded(Route data) {
                 runOnUiThread(() -> {
                     route = data;
+                    addMarkers();
+                    displayContactInfo();
                     fetchRoute();
                 });
             }
@@ -173,17 +175,16 @@ public class RouteActivity extends AppCompatActivity {
 
     /**
      * Ajoute les différents arrêts sur la carte
-     * @param itinerary
      */
-    private void addMarkers(Itinerary itinerary) {
+    private void addMarkers() {
         Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
 
-        for (Step step : itinerary.getSteps()) {
-            org.osmdroid.util.GeoPoint point = new org.osmdroid.util.GeoPoint(step.getContact().getLatitude(), step.getContact().getLongitude());
+        for (Contact contact : this.route.getSteps()) {
+            org.osmdroid.util.GeoPoint point = new org.osmdroid.util.GeoPoint(contact.getLatitude(), contact.getLongitude());
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setTitle(step.getContact().getName());
+            marker.setTitle(contact.getName());
             marker.setIcon(markerIcon);
             map.getOverlays().add(marker);
         }
@@ -192,7 +193,7 @@ public class RouteActivity extends AppCompatActivity {
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(Config.MAP_DEFAULT_ZOOM - 2);
-        mapController.setCenter((IGeoPoint) new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
+        mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
 
 
@@ -203,9 +204,9 @@ public class RouteActivity extends AppCompatActivity {
     public void contactAction(View btn) {
         ContactStatus status = btn.getId() == R.id.cancelVisitBtn ? ContactStatus.SKIPPED : ContactStatus.VISITED;
         Contact current = this.route.getCurrentContact();
-        current.setVisited(status);
+        current.setStatus(status);
         this.nbVisit.setText("Contacts visités : " + this.route.nbVisit());
-        if (!this.route.nextStep()) {
+        if (this.route.getCurrentStep() == -1) {
             this.displayEndInfos();
         } else {
             this.displayContactInfo();
@@ -284,6 +285,7 @@ public class RouteActivity extends AppCompatActivity {
         this.nextStop.setAlpha(opacity);
         this.nextContact.setAlpha(opacity);
         this.nextAddress.setAlpha(opacity);
+        this.nextCompany.setAlpha(opacity);
         this.nextContactType.setAlpha(opacity);
     }
 
@@ -338,7 +340,7 @@ public class RouteActivity extends AppCompatActivity {
 
         StringBuilder urlBuilder = new StringBuilder(API_URL);
 
-        for (Contact contact : contacts) {
+        for (Contact contact : this.route.getSteps()) {
             urlBuilder.append(contact.getLongitude()).append(",").append(contact.getLatitude()).append(";");
         }
 

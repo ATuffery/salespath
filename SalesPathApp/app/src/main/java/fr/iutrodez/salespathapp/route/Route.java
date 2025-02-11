@@ -5,22 +5,23 @@ import java.util.Date;
 import org.osmdroid.util.GeoPoint;
 
 import fr.iutrodez.salespathapp.contact.Contact;
+import fr.iutrodez.salespathapp.contact.ContactStatus;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class Route {
 
     private String routeId;
     private ArrayList<Contact> steps;
-    private int currentStep;
     private ArrayList<GeoPoint> localisation;
     private RouteStatus status;
     private Date startDate;
     private String accountId;
+    private String name;
 
-    public Route(String routeId, ArrayList<Contact> steps, Date startDate, String accountId) {
+    public Route(String routeId, String name, ArrayList<Contact> steps, Date startDate, String accountId) {
         this.routeId = routeId;
         this.steps = steps;
-        this.currentStep = 0;
+        this.name = name;
         this.localisation = new ArrayList<>();
         this.status = RouteStatus.STARTED;
         this.startDate = startDate;
@@ -36,20 +37,12 @@ public class Route {
     }
 
     public int getCurrentStep() {
-        return currentStep;
-    }
-
-    /**
-     * Défini l'index de l'étape courante
-     * @param currentStep index de l'étape courante
-     * @return true si l'index est correct, false sinon
-     */
-    public boolean setCurrentStep(int currentStep) {
-        if (currentStep <= this.steps.size() - 1) {
-            this.currentStep = currentStep;
-            return true;
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).getStatus() == ContactStatus.UNVISITED) {
+                return i;
+            }
         }
-        return false;
+        return -1; // Retourne -1 si aucun client n'est à l'état UNVISITED
     }
 
     public ArrayList<GeoPoint> getLocalisation() {
@@ -75,13 +68,7 @@ public class Route {
     }
 
 
-    public Contact getCurrentContact() {
-        return this.steps.get(this.currentStep);
-    }
-
-    public boolean nextStep() {
-        return this.setCurrentStep(this.getCurrentStep() + 1);
-    }
+    public Contact getCurrentContact() { return this.steps.get(this.getCurrentStep()); }
 
     /**
      * Retourne une chaine de caractère avec le nombre de
@@ -89,7 +76,7 @@ public class Route {
      * @return le nombre de visite effectuée sur le nombre de visite total
      */
     public String nbVisit() {
-        return this.getCurrentStep() + 1 + "/" + this.getSteps().size();
+        return (this.getCurrentStep() == -1 ? this.getSteps().size() : this.getCurrentStep())  + "/" + this.getSteps().size();
     }
 
     public String getRouteId() {

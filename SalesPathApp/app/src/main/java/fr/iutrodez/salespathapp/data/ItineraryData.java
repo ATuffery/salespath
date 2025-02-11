@@ -115,11 +115,12 @@ public class ItineraryData {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject itineraryObject = response.getJSONObject("itinerary");
-                            int idItinerary = itineraryObject.optInt("idItinerary", -1);
-                            String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
-                            String codeUser = itineraryObject.optString("codeUser", "");
-                            String date =  itineraryObject.optString("creationDate", "");
-                            int nbSteps =  itineraryObject.optInt("nbSteps", 0);
+                            JSONObject itineraryObject2 = itineraryObject.getJSONObject("itinerary");
+                            int idItinerary = itineraryObject2.optInt("idItinerary", -1);
+                            String nameItinerary = itineraryObject2.optString("nameItinerary", "Nom inconnu");
+                            String codeUser = itineraryObject2.optString("codeUser", "");
+                            String date =  itineraryObject2.optString("creationDate", "");
+                            int nbSteps =  itineraryObject2.optInt("nbSteps", 0);
 
                             Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                             itinerary.setNbSteps(nbSteps);
