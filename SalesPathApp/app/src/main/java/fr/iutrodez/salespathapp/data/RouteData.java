@@ -180,20 +180,26 @@ public class RouteData {
         JSONObject routeData = new JSONObject();
         try {
             routeData.put("id", route.getRouteId());
+
             if (route.getStatus() == RouteStatus.FINISHED) {
                 routeData.put("endDate", new Date());
             }
+
             routeData.put("status", route.getStatus().ordinal());
 
+            // Création du tableau des étapes
             JSONArray stepsArray = new JSONArray();
             for (Contact step : route.getSteps()) {
                 JSONObject stepObject = new JSONObject();
-                stepObject.put("idClient", step.getId());
-                stepObject.put("status", step.getStatus());
+                JSONObject clientObject = new JSONObject();
+                clientObject.put("id", step.getId());
+                stepObject.put("client", clientObject);
+                stepObject.put("status", step.getStatus().ordinal());
                 stepsArray.put(stepObject);
             }
             routeData.put("steps", stepsArray);
 
+            // Création du tableau de localisation
             JSONArray localisationArray = new JSONArray();
             for (GeoPoint point : route.getLocalisation()) {
                 JSONObject pointObject = new JSONObject();
@@ -202,6 +208,7 @@ public class RouteData {
                 localisationArray.put(pointObject);
             }
             routeData.put("localisation", localisationArray);
+
         } catch (JSONException e) {
             listener.onError("Erreur lors de la création du JSON.");
             return;
