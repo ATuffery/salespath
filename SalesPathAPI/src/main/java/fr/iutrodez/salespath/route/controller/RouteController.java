@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -116,7 +117,7 @@ public class RouteController {
             route.setItineraryId(idItinerary);
             route.setItineraryName(itinerary.getNameItinerary());
             route.setSteps(stepsList);
-            route.setStartDate(LocalDateTime.now());
+            route.setStartDate(LocalDateTime.now(ZoneId.of("Europe/Paris")));
 
             Route newRoute = routeService.createRoute(route);
             return ResponseEntity.status(201).body(Map.of("id", newRoute.getId()));
