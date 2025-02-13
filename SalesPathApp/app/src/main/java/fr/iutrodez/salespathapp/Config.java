@@ -27,4 +27,10 @@ public class Config {
      */
     public static final int MAX_ITINERARY_STEP = 8;
 
+    /**
+     * Intervale de temps entre chaque enregistrement de la position du
+     * commercial lors de la réalisation d'une tournée
+     */
+    public static final int LOCATION_UPDATE_INTERVAL = 5000;
+
 }

@@ -67,7 +67,6 @@ public class RouteActivity extends AppCompatActivity {
     private Button btnCancelVisit;
     private Button btnPlayPause;
     private final Handler locationHandler = new Handler(Looper.getMainLooper());
-    private final int LOCATION_UPDATE_INTERVAL = 5000;
 
     private static final int LOCATION_PERMISSION_REQUEST = 100;
 
@@ -474,9 +473,9 @@ public class RouteActivity extends AppCompatActivity {
                         }
                     });
                 }
-                locationHandler.postDelayed(this, LOCATION_UPDATE_INTERVAL);
+                locationHandler.postDelayed(this, Config.LOCATION_UPDATE_INTERVAL);
             }
-        }, LOCATION_UPDATE_INTERVAL);
+        }, Config.LOCATION_UPDATE_INTERVAL);
     }
 
     public void confirmEndRoute(View btn) {
