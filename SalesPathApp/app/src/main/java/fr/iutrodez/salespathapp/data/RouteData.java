@@ -264,6 +264,7 @@ public class RouteData {
                                 String name = routeObject.optString("itineraryName");
                                 String startDateStr = routeObject.optString("startDate");
                                 String accountId = routeObject.optString("idSalesPerson");
+                                RouteStatus routeStatus = RouteStatus.fromInt(routeObject.optInt("status"));
                                 Date startDate = Utils.parseStringToDate(startDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSS");
 
                                 ArrayList<Contact> steps = new ArrayList<>();
@@ -294,6 +295,7 @@ public class RouteData {
                                 }
 
                                 Route route = new Route(id, name, steps, startDate, accountId);
+                                route.setStatus(routeStatus);
                                 routes.add(route);
                             }
                         } catch (Exception e) {
