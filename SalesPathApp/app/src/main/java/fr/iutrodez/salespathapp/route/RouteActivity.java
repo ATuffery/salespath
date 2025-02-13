@@ -58,6 +58,7 @@ public class RouteActivity extends AppCompatActivity {
     private String routeId;
     private TextView title;
     private String apiKey;
+    private String accountId;
     private TextView nextContact;
     private TextView nextAddress;
     private TextView nextContactType;
@@ -89,6 +90,7 @@ public class RouteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         this.routeId = intent.getStringExtra("routeId");
         this.apiKey = intent.getStringExtra("apiKey");
+        this.accountId = intent.getStringExtra("accountId");
         boolean hasBackupRestore = intent.hasExtra("backupRestore");
         boolean backupRestore = intent.getBooleanExtra("backupRestore", false);
 
@@ -102,7 +104,7 @@ public class RouteActivity extends AppCompatActivity {
         // Gestion des cas possibles
         if (backupRestore) {
             // Reprise d'une tournée sauvegardée
-            this.route = RouteSaver.loadRoute(getBaseContext());
+            this.route = RouteSaver.loadRoute(getBaseContext(), this.accountId);
             if (this.route != null) {
                 displayContactInfo();
                 addMarkers();
@@ -113,7 +115,7 @@ public class RouteActivity extends AppCompatActivity {
             }
         } else if (hasBackupRestore) {
             // Fin de tournée
-            this.route = RouteSaver.loadRoute(getBaseContext());
+            this.route = RouteSaver.loadRoute(getBaseContext(), this.accountId);
             endRoute();
         } else {
             // Nouvelle tournée
@@ -136,7 +138,7 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private void resumeRoute() {
-        this.route = RouteSaver.loadRoute(this);
+        this.route = RouteSaver.loadRoute(this, this.accountId);
         if (this.route != null) {
             displayContactInfo();
             fetchRoute();
@@ -149,7 +151,7 @@ public class RouteActivity extends AppCompatActivity {
         if (this.route != null) {
             this.route.setStatus(RouteStatus.FINISHED);
             save();
-            RouteSaver.clearRoute(this);
+            RouteSaver.clearRoute(this, this.route);
         }
         Utils.displayToast(this, "Tournée terminée.");
         finish();
@@ -192,7 +194,7 @@ public class RouteActivity extends AppCompatActivity {
     private void endRoute() {
         this.route.setStatus(RouteStatus.FINISHED);
         save();
-        RouteSaver.clearRoute(getBaseContext());
+        RouteSaver.clearRoute(getBaseContext(), this.route);
         finish();
     }
 
@@ -477,6 +479,28 @@ public class RouteActivity extends AppCompatActivity {
                 locationHandler.postDelayed(this, LOCATION_UPDATE_INTERVAL);
             }
         }, LOCATION_UPDATE_INTERVAL);
+    }
+
+    public void confirmEndRoute(View btn) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Terminer la tournée");
+        builder.setMessage("Etes vous sur de vouloir terminer la tournée de façon définitive ?");
+
+        builder.setPositiveButton("Oui, terminer", (dialog, which) -> {
+            endRoute();
+        });
+
+        builder.setNegativeButton("Non, continuer", (dialog, which) -> {
+            //Ferme la fenetre
+        });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Empêche le retour arrière
     }
 
 }

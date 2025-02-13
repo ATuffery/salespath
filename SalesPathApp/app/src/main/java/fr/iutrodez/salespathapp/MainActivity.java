@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
 
         loadContacts();
 
-        Route backup = RouteSaver.loadRoute(this);
+        Route backup = RouteSaver.loadRoute(this, getAccountId());
         if (backup != null) {
             Log.d("MainActivity", "Saved route accountId: " + backup.getAccountId() + ", Current accountId: " + getAccountId());
             if (backup.getAccountId().equals(getAccountId())) {
@@ -88,6 +88,7 @@ public class MainActivity extends BaseActivity {
             intent.putExtra("backupRestore", true);
             intent.putExtra("routeId", savedRoute.getRouteId());
             intent.putExtra("apiKey", getApiKey());
+            intent.putExtra("accountId", getAccountId());
             startActivity(intent);
         });
 
@@ -96,10 +97,12 @@ public class MainActivity extends BaseActivity {
             intent.putExtra("backupRestore", false);
             intent.putExtra("routeId", savedRoute.getRouteId());
             intent.putExtra("apiKey", getApiKey());
+            intent.putExtra("accountId", getAccountId());
             startActivity(intent);
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         dialog.show();
     }
 

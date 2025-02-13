@@ -15,14 +15,14 @@ public class RouteSaver {
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
         String routeJson = gson.toJson(route);
-        editor.putString(ROUTE_KEY, routeJson);
+        editor.putString(ROUTE_KEY + "#" + route.getAccountId(), routeJson);
         editor.apply();
         Log.d("RouteSaver", "Route saved: " + routeJson);
     }
 
-    public static Route loadRoute(Context context) {
+    public static Route loadRoute(Context context, String accountId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String routeJson = prefs.getString(ROUTE_KEY, null);
+        String routeJson = prefs.getString(ROUTE_KEY + "#" + accountId, null);
         Log.d("RouteSaver", "Route saved: " + routeJson);
         if (routeJson == null) {
             return null;
@@ -31,10 +31,10 @@ public class RouteSaver {
         return gson.fromJson(routeJson, Route.class);
     }
 
-    public static void clearRoute(Context context) {
+    public static void clearRoute(Context context, Route route) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(ROUTE_KEY);
+        editor.remove(ROUTE_KEY + "#" + route.getAccountId());
         editor.apply();
     }
 }
