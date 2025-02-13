@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp.contact;
+package fr.iutrodez.salespathapp.enums;
 
 public enum ContactStatus {
     VISITED, SKIPPED, UNVISITED

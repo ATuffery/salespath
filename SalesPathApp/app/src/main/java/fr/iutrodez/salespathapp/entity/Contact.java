@@ -1,6 +1,9 @@
-package fr.iutrodez.salespathapp.contact;
+package fr.iutrodez.salespathapp.entity;
 
 import org.osmdroid.util.GeoPoint;
+
+import fr.iutrodez.salespathapp.enums.ContactCheckbox;
+import fr.iutrodez.salespathapp.enums.ContactStatus;
 
 public class Contact {
     private String name;

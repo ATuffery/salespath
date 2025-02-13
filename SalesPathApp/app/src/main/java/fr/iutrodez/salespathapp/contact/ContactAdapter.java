@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.entity.Contact;
+import fr.iutrodez.salespathapp.enums.ContactCheckbox;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 

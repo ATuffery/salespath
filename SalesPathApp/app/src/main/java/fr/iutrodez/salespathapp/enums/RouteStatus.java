@@ -1,4 +1,4 @@
-package fr.iutrodez.salespathapp.route;
+package fr.iutrodez.salespathapp.enums;
 
 public enum RouteStatus {
 

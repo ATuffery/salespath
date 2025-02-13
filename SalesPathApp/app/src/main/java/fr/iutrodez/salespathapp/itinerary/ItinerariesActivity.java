@@ -15,6 +15,7 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
 import fr.iutrodez.salespathapp.data.ItineraryData;
+import fr.iutrodez.salespathapp.entity.Itinerary;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class ItinerariesActivity extends BaseActivity {

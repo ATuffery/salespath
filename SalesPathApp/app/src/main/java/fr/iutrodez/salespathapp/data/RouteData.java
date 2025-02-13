@@ -22,13 +22,11 @@ import java.util.Map;
 
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
-import fr.iutrodez.salespathapp.contact.Contact;
-import fr.iutrodez.salespathapp.contact.ContactCheckbox;
-import fr.iutrodez.salespathapp.contact.ContactStatus;
-import fr.iutrodez.salespathapp.itinerary.Itinerary;
-import fr.iutrodez.salespathapp.itinerary.Step;
-import fr.iutrodez.salespathapp.route.Route;
-import fr.iutrodez.salespathapp.route.RouteStatus;
+import fr.iutrodez.salespathapp.entity.Contact;
+import fr.iutrodez.salespathapp.enums.ContactCheckbox;
+import fr.iutrodez.salespathapp.enums.ContactStatus;
+import fr.iutrodez.salespathapp.entity.Route;
+import fr.iutrodez.salespathapp.enums.RouteStatus;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class RouteData {

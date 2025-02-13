@@ -1,6 +1,4 @@
-package fr.iutrodez.salespathapp.itinerary;
-
-import fr.iutrodez.salespathapp.contact.Contact;
+package fr.iutrodez.salespathapp.entity;
 
 /**
  * Représente une étape d'un itinéraire

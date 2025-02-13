@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import fr.iutrodez.salespathapp.entity.Route;
+
 public class RouteSaver {
     private static final String PREFS_NAME = "salespath_prefs";
     private static final String ROUTE_KEY = "saved_route";

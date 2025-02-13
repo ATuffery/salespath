@@ -19,8 +19,6 @@ import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,7 +27,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.views.MapView;
@@ -40,16 +37,15 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
-import fr.iutrodez.salespathapp.contact.Contact;
-import fr.iutrodez.salespathapp.contact.ContactStatus;
+import fr.iutrodez.salespathapp.entity.Contact;
+import fr.iutrodez.salespathapp.enums.ContactStatus;
 import fr.iutrodez.salespathapp.data.RouteData;
+import fr.iutrodez.salespathapp.entity.Route;
+import fr.iutrodez.salespathapp.enums.RouteStatus;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class RouteActivity extends AppCompatActivity {

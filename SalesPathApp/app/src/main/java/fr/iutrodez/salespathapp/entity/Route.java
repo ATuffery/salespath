@@ -1,11 +1,11 @@
-package fr.iutrodez.salespathapp.route;
+package fr.iutrodez.salespathapp.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
 import org.osmdroid.util.GeoPoint;
 
-import fr.iutrodez.salespathapp.contact.Contact;
-import fr.iutrodez.salespathapp.contact.ContactStatus;
+import fr.iutrodez.salespathapp.enums.ContactStatus;
+import fr.iutrodez.salespathapp.enums.RouteStatus;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class Route {

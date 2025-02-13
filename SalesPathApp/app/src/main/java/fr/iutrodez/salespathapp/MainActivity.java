@@ -24,13 +24,12 @@ import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
-import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.itinerary.CreateItineraryActivity;
 import fr.iutrodez.salespathapp.itinerary.DetailsItineraryActivity;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.ContactData;
-import fr.iutrodez.salespathapp.itinerary.Itinerary;
-import fr.iutrodez.salespathapp.route.Route;
+import fr.iutrodez.salespathapp.entity.Itinerary;
+import fr.iutrodez.salespathapp.entity.Route;
 import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.route.RouteSaver;
 import fr.iutrodez.salespathapp.utils.Utils;

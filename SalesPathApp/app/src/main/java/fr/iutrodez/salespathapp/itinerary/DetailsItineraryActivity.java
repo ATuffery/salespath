@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
-import fr.iutrodez.salespathapp.contact.Contact;
+import fr.iutrodez.salespathapp.entity.Contact;
 import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.RouteData;
+import fr.iutrodez.salespathapp.entity.Itinerary;
+import fr.iutrodez.salespathapp.entity.Step;
 import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
