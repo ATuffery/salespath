@@ -57,9 +57,7 @@ public class RouteActivity extends AppCompatActivity {
     private MapView map;
     private String routeId;
     private TextView title;
-    private ArrayList<Contact> contacts;
     private String apiKey;
-    private String accountId;
     private TextView nextContact;
     private TextView nextAddress;
     private TextView nextContactType;
@@ -83,20 +81,47 @@ public class RouteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.contacts = new ArrayList<>();
-
         // Configure OSMDroid
         Configuration.getInstance().setUserAgentValue(getPackageName());
         setContentView(R.layout.activity_route);
 
-        // Récupérer l'ID du parcours depuis l'intent
+        // Récupérer l'ID du parcours et autres données de l'intent
         Intent intent = getIntent();
         this.routeId = intent.getStringExtra("routeId");
         this.apiKey = intent.getStringExtra("apiKey");
-        this.accountId = intent.getStringExtra("accountId");
+        boolean hasBackupRestore = intent.hasExtra("backupRestore");
+        boolean backupRestore = intent.getBooleanExtra("backupRestore", false);
 
         // Initialisation des composants UI
-        this.title = findViewById(R.id.itineraryTitle);
+        initializeUI();
+
+        // Initialiser la localisation
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        requestLocationPermission();
+
+        // Gestion des cas possibles
+        if (backupRestore) {
+            // Reprise d'une tournée sauvegardée
+            this.route = RouteSaver.loadRoute(getBaseContext());
+            if (this.route != null) {
+                displayContactInfo();
+                addMarkers();
+                fetchRoute();
+            } else {
+                Utils.displayToast(getBaseContext(), "Erreur : aucune tournée sauvegardée trouvée.");
+                finish();
+            }
+        } else if (hasBackupRestore) {
+            // Fin de tournée
+            this.route = RouteSaver.loadRoute(getBaseContext());
+            endRoute();
+        } else {
+            // Nouvelle tournée
+            loadRouteData();
+        }
+    }
+
+    private void initializeUI() {
         this.nextAddress = findViewById(R.id.prospectAddress);
         this.nextContact = findViewById(R.id.prospectName);
         this.nextContactType = findViewById(R.id.contactType);
@@ -108,13 +133,26 @@ public class RouteActivity extends AppCompatActivity {
         this.btnPlayPause = findViewById(R.id.playPause);
         this.nextStop = findViewById(R.id.nextStop);
         this.map = findViewById(R.id.map);
+    }
 
-        // Initialiser la localisation
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        requestLocationPermission();
+    private void resumeRoute() {
+        this.route = RouteSaver.loadRoute(this);
+        if (this.route != null) {
+            displayContactInfo();
+            fetchRoute();
+        } else {
+            Utils.displayToast(this, "Aucune tournée en cours trouvée.");
+        }
+    }
 
-        // Charger les données de l'itinéraire
-        loadRouteData();
+    private void terminateRoute() {
+        if (this.route != null) {
+            this.route.setStatus(RouteStatus.FINISHED);
+            save();
+            RouteSaver.clearRoute(this);
+        }
+        Utils.displayToast(this, "Tournée terminée.");
+        finish();
     }
 
 
@@ -146,13 +184,17 @@ public class RouteActivity extends AppCompatActivity {
             Utils.displayToast(getBaseContext(), "Pour terminer la tournée, faites un appui long sur ce bouton.");
         });
         this.btnVisited.setOnLongClickListener((e) -> {
-            this.route.setStatus(RouteStatus.FINISHED);
-            save();
-            finish();
+            endRoute();
             return true;
         });
     }
 
+    private void endRoute() {
+        this.route.setStatus(RouteStatus.FINISHED);
+        save();
+        RouteSaver.clearRoute(getBaseContext());
+        finish();
+    }
 
     private void loadRouteData() {
         RouteData.getRouteInfos(getBaseContext(), this.apiKey, routeId, new RouteData.OnRouteDetailsLoadedListener() {
@@ -160,6 +202,7 @@ public class RouteActivity extends AppCompatActivity {
             public void OnRouteDetailsLoaded(Route data) {
                 runOnUiThread(() -> {
                     route = data;
+                    RouteSaver.saveRoute(getBaseContext(), route);
                     addMarkers();
                     displayContactInfo();
                     fetchRoute();
@@ -211,6 +254,7 @@ public class RouteActivity extends AppCompatActivity {
         } else {
             this.displayContactInfo();
         }
+        RouteSaver.saveRoute(this, route);
     }
 
     /**
@@ -260,6 +304,7 @@ public class RouteActivity extends AppCompatActivity {
             this.btnPlayPause.setText("Pause");
             this.btnPlayPause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pause, 0, 0, 0);
             uiOpacity();
+            RouteSaver.saveRoute(this, route);
         } else if (this.route.getStatus() == RouteStatus.STARTED) {
             this.route.setStatus(RouteStatus.PAUSED);
             this.btnPlayPause.setText("Reprendre");
@@ -424,6 +469,7 @@ public class RouteActivity extends AppCompatActivity {
                             if (route.getStatus() == RouteStatus.STARTED && location != null && route != null) {
                                 GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
                                 route.addLocation(currentPosition);
+                                RouteSaver.saveRoute(getBaseContext(), route);
                             }
                         }
                     });

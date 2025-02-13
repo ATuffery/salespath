@@ -4,9 +4,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -22,11 +24,15 @@ import java.util.ArrayList;
 
 import fr.iutrodez.salespathapp.card.CardWithTwoLines;
 import fr.iutrodez.salespathapp.card.CardWithTwoLinesAdapteur;
+import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.itinerary.CreateItineraryActivity;
 import fr.iutrodez.salespathapp.itinerary.DetailsItineraryActivity;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.ContactData;
 import fr.iutrodez.salespathapp.itinerary.Itinerary;
+import fr.iutrodez.salespathapp.route.Route;
+import fr.iutrodez.salespathapp.route.RouteActivity;
+import fr.iutrodez.salespathapp.route.RouteSaver;
 import fr.iutrodez.salespathapp.utils.Utils;
 
 public class MainActivity extends BaseActivity {
@@ -57,6 +63,44 @@ public class MainActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         loadContacts();
+
+        Route backup = RouteSaver.loadRoute(this);
+        if (backup != null) {
+            Log.d("MainActivity", "Saved route accountId: " + backup.getAccountId() + ", Current accountId: " + getAccountId());
+            if (backup.getAccountId().equals(getAccountId())) {
+                showResumePopup(backup);
+            } else {
+                Log.d("MainActivity", "Account mismatch.");
+            }
+        } else {
+            Log.d("MainActivity", "No route found.");
+        }
+
+    }
+
+    private void showResumePopup(Route savedRoute) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reprendre la tournée ?");
+        builder.setMessage("Une tournée est en cours. Voulez-vous la reprendre ou la terminer ?");
+
+        builder.setPositiveButton("Continuer", (dialog, which) -> {
+            Intent intent = new Intent(this, RouteActivity.class);
+            intent.putExtra("backupRestore", true);
+            intent.putExtra("routeId", savedRoute.getRouteId());
+            intent.putExtra("apiKey", getApiKey());
+            startActivity(intent);
+        });
+
+        builder.setNegativeButton("Terminer", (dialog, which) -> {
+            Intent intent = new Intent(this, RouteActivity.class);
+            intent.putExtra("backupRestore", false);
+            intent.putExtra("routeId", savedRoute.getRouteId());
+            intent.putExtra("apiKey", getApiKey());
+            startActivity(intent);
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void loadItineraries() {

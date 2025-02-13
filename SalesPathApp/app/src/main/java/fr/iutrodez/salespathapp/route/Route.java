@@ -15,8 +15,8 @@ public class Route {
     private ArrayList<GeoPoint> localisation;
     private RouteStatus status;
     private Date startDate;
-    private String accountId;
     private String name;
+    private String accountId;
 
     public Route(String routeId, String name, ArrayList<Contact> steps, Date startDate, String accountId) {
         this.routeId = routeId;
@@ -88,4 +88,6 @@ public class Route {
     }
 
     public void resetLocalisation() { this.localisation.clear(); }
+
+    public String getAccountId() { return accountId; }
 }

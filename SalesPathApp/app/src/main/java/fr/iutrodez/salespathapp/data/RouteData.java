@@ -67,7 +67,7 @@ public class RouteData {
                             String id = response.optString("id");
                             String name = response.optString("itineraryName");
                             String startDateStr = response.optString("startDate");
-                            String accountId = response.optString("itineraryId");
+                            String accountId = response.optString("idSalesPerson");
                             Date startDate = Utils.parseStringToDate(startDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSS");
 
                             ArrayList<Contact> steps = new ArrayList<>();
