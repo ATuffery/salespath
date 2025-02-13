@@ -134,6 +134,7 @@ public class RouteActivity extends AppCompatActivity {
         this.startedDate = findViewById(R.id.startedAt);
         this.btnPlayPause = findViewById(R.id.playPause);
         this.nextStop = findViewById(R.id.nextStop);
+        this.title = findViewById(R.id.itineraryTitle);
         this.map = findViewById(R.id.map);
     }
 
@@ -204,6 +205,7 @@ public class RouteActivity extends AppCompatActivity {
             public void OnRouteDetailsLoaded(Route data) {
                 runOnUiThread(() -> {
                     route = data;
+                    title.setText(route.getName());
                     RouteSaver.saveRoute(getBaseContext(), route);
                     addMarkers();
                     displayContactInfo();

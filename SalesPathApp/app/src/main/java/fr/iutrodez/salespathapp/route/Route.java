@@ -90,4 +90,6 @@ public class Route {
     public void resetLocalisation() { this.localisation.clear(); }
 
     public String getAccountId() { return accountId; }
+
+    public String getName() { return name; }
 }
