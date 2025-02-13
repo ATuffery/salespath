@@ -27,13 +27,13 @@ public class RouteListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_list);
+        this.routes = new ArrayList<>();
 
         this.recyclerView = findViewById(R.id.recyclerView);
         adapter = new CardWithTwoLinesAdapteur(routes);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.routes = new ArrayList<>();
         getRoutes();
     }
 
