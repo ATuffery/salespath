@@ -1,5 +1,6 @@
 package fr.iutrodez.salespath.route.service;
 
+import fr.iutrodez.salespath.route.dto.RouteStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import fr.iutrodez.salespath.route.repository.IRouteRepository;
@@ -81,8 +82,20 @@ public class RouteService {
 
         existingRoute.setEndDate(route.getEndDate());
         existingRoute.setStatus(route.getStatus());
+
+        if (existingRoute.getLocalisation() == null) {
+            existingRoute.setLocalisation(new ArrayList<>());
+        }
+
         existingRoute.getLocalisation().addAll(route.getLocalisation());
-        existingRoute.setSteps(route.getSteps());
+
+        for (RouteStep stepExisting : existingRoute.getSteps()) {
+            for (RouteStep step : route.getSteps()) {
+                if (stepExisting.getClient().getId().equals(step.getClient().getId())) {
+                    stepExisting.setStatus(step.getStatus());
+                }
+            }
+        }
 
         routeRepository.save(existingRoute);
     }
