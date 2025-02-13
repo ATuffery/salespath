@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import fr.iutrodez.salespathapp.auth.LoginActivity;
 import fr.iutrodez.salespathapp.contact.ContactsActivity;
 import fr.iutrodez.salespathapp.itinerary.ItinerariesActivity;
+import fr.iutrodez.salespathapp.route.RouteListActivity;
 import fr.iutrodez.salespathapp.user.MyAccountActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -65,6 +66,8 @@ public class BaseActivity extends AppCompatActivity {
 
         } else if (id == R.id.nav_parcours) {
             // Action pour "Mes parcours"
+            Intent intent = new Intent(this, RouteListActivity.class);
+            startActivity(intent);
             return true;
 
         } else if (id == R.id.nav_itineraires) {

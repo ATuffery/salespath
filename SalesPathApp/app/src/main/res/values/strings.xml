@@ -11,6 +11,7 @@
     <string name="login">Déjà un compte ? Connectez-vous.</string>
     <string name="contacts">Mes contacts</string>
     <string name="itineraries">Mes itinéraires</string>
+    <string name="tours">Mes tournées</string>
     <string name="add">Ajouter</string>
     <string name="addContact">Ajouter un contact</string>
     <string name="editContact">Modifier un contact</string>

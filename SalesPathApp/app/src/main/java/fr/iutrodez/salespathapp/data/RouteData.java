@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -33,6 +34,11 @@ public class RouteData {
 
     public interface OnRouteDetailsLoadedListener {
         void OnRouteDetailsLoaded(Route route);
+        void onError(String errorMessage);
+    }
+
+    public interface OnRouteListLoadedListener {
+        void OnRouteListLoaded(ArrayList<Route> routes);
         void onError(String errorMessage);
     }
 
@@ -238,6 +244,86 @@ public class RouteData {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
+
+
+    public static void getRoutesForAccount(Context baseContext, String apiKey, String accountId, OnRouteListLoadedListener OnRouteListLoadedListener) {
+        String url = Config.API_URL + "route/" + accountId;
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        ArrayList<Route> routes = new ArrayList<>();
+
+                        try {
+                            for (int j = 0; j < response.length(); j++) { // Boucle sur toutes les routes
+                                JSONObject routeObject = response.getJSONObject(j);
+
+                                String id = routeObject.optString("id");
+                                String name = routeObject.optString("itineraryName");
+                                String startDateStr = routeObject.optString("startDate");
+                                String accountId = routeObject.optString("idSalesPerson");
+                                Date startDate = Utils.parseStringToDate(startDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+                                ArrayList<Contact> steps = new ArrayList<>();
+
+                                JSONArray stepsArray = routeObject.optJSONArray("steps");
+                                if (stepsArray != null) {
+                                    for (int i = 0; i < stepsArray.length(); i++) {
+                                        JSONObject stepObject = stepsArray.getJSONObject(i);
+                                        JSONObject clientObject = stepObject.getJSONObject("client");
+
+                                        String idClient = clientObject.optString("id", "");
+                                        String clientName = clientObject.optString("firstName", "Client inconnu") + " " +
+                                                clientObject.optString("lastName", "Client inconnu");
+                                        String clientAddress = clientObject.optString("address", "Client inconnu");
+
+                                        JSONArray coord = clientObject.getJSONArray("coordonates");
+                                        double clientLatitude = coord.getDouble(0);
+                                        double clientLongitude = coord.getDouble(1);
+
+                                        String company = clientObject.optString("enterpriseName");
+                                        boolean isClient = clientObject.optBoolean("client");
+                                        ContactStatus status = ContactStatus.valueOf(stepObject.optString("status"));
+
+                                        Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient, company);
+                                        contact.setStatus(status);
+                                        steps.add(contact);
+                                    }
+                                }
+
+                                Route route = new Route(id, name, steps, startDate, accountId);
+                                routes.add(route);
+                            }
+                        } catch (Exception e) {
+                            OnRouteListLoadedListener.onError("Erreur lors de la création du JSON : " + e.getMessage());
+                            return;
+                        }
+
+                        // Envoi de la liste des routes via le callback
+                        OnRouteListLoadedListener.OnRouteListLoaded(routes);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        handleError(baseContext, error, OnRouteListLoadedListener);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajouter la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(baseContext);
+        requestQueue.add(jsonArrayRequest);
+    }
+
 
 
     /** Gestion des erreurs des requêtes */
