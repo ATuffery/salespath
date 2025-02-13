@@ -30,12 +30,8 @@ public class Itinerary {
         this.steps.add(step);
     }
 
-    public void setNbSteps(int nbSteps) {
-        this.nbSteps = nbSteps;
-    }
-
     public int getNbSteps() {
-        return nbSteps;
+        return this.steps.size();
     }
 
     public ArrayList<Contact> getSteps() {

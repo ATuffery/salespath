@@ -68,7 +68,6 @@ public class ItineraryData {
 
                                 Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                                 itineraries.add(itinerary);
-                                itinerary.setNbSteps(nbSteps);
                             }
                             listener.OnItinerariesLoaded(itineraries);
                         } catch (JSONException e) {
@@ -121,7 +120,6 @@ public class ItineraryData {
                             int nbSteps =  itineraryObject2.optInt("nbSteps", 0);
 
                             Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
-                            itinerary.setNbSteps(nbSteps);
 
                             JSONArray stepsArray = response.optJSONArray("steps");
                             if (stepsArray != null) {
