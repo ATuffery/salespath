@@ -64,7 +64,6 @@ public class ItineraryData {
                                 String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
                                 String codeUser = itineraryObject.optString("codeUser", "");
                                 String date = itineraryObject.optString("creationDate", "");
-                                int nbSteps =  itineraryObject.optInt("nbSteps", 0);
 
                                 Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
                                 itineraries.add(itinerary);
@@ -117,7 +116,6 @@ public class ItineraryData {
                             String nameItinerary = itineraryObject2.optString("nameItinerary", "Nom inconnu");
                             String codeUser = itineraryObject2.optString("codeUser", "");
                             String date =  itineraryObject2.optString("creationDate", "");
-                            int nbSteps =  itineraryObject2.optInt("nbSteps", 0);
 
                             Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
 
@@ -125,7 +123,6 @@ public class ItineraryData {
                             if (stepsArray != null) {
                                 for (int i = 0; i < stepsArray.length(); i++) {
                                     JSONObject stepObject = stepsArray.getJSONObject(i);
-                                    int step = stepObject.optInt("step", 0);
                                     String idClient = stepObject.optString("idClient", "");
                                     String clientName = stepObject.optString("clientName", "Client inconnu");
                                     String clientAddress = stepObject.optString("clientAddress", "Client inconnu");
