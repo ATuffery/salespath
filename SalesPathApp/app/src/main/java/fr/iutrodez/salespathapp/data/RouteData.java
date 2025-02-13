@@ -253,6 +253,7 @@ public class RouteData {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.d("resp", response.toString());
                         ArrayList<Route> routes = new ArrayList<>();
 
                         try {
@@ -284,7 +285,7 @@ public class RouteData {
 
                                         String company = clientObject.optString("enterpriseName");
                                         boolean isClient = clientObject.optBoolean("client");
-                                        ContactStatus status = ContactStatus.valueOf(stepObject.optString("status"));
+                                        ContactStatus status = ContactStatus.fromInt(stepObject.optInt("status"));
 
                                         Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient, company);
                                         contact.setStatus(status);
@@ -296,6 +297,7 @@ public class RouteData {
                                 routes.add(route);
                             }
                         } catch (Exception e) {
+                            Log.e("JSON", e.getMessage());
                             OnRouteListLoadedListener.onError("Erreur lors de la création du JSON : " + e.getMessage());
                             return;
                         }
