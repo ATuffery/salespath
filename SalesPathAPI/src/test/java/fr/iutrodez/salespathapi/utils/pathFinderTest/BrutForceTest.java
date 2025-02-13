@@ -45,24 +45,40 @@ class BrutForceTest {
 
     @Test
     void testBrutForce_EightClients() {
-        String[] clientIds = {"C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8"};
-        Long userId = 1L;
+        String[] idClients = {"client1", "client2", "client3", "client4", "client5", "client6", "client7", "client8"};
+        Long idUser = 1L;
 
-        when(accountService.getCoordPerson(userId)).thenReturn(new Double[]{48.8566, 2.3522});
-        when(clientService.getCoordById("C1")).thenReturn(new Double[]{48.8584, 2.2945});
-        when(clientService.getCoordById("C2")).thenReturn(new Double[]{48.8606, 2.3376});
-        when(clientService.getCoordById("C3")).thenReturn(new Double[]{48.8738, 2.2950});
-        when(clientService.getCoordById("C4")).thenReturn(new Double[]{48.8462, 2.3524});
-        when(clientService.getCoordById("C5")).thenReturn(new Double[]{48.8339, 2.3266});
-        when(clientService.getCoordById("C6")).thenReturn(new Double[]{48.8519, 2.3773});
-        when(clientService.getCoordById("C7")).thenReturn(new Double[]{48.8799, 2.3530});
-        when(clientService.getCoordById("C8")).thenReturn(new Double[]{48.8667, 2.3125});
+        // Coordonnées simulées pour le compte utilisateur et les clients
+        Double[] coordUser = {43.6047, 1.4442}; // Toulouse
+        Double[] coordClient1 = {45.7640, 4.8357}; // Lyon
+        Double[] coordClient2 = {48.8566, 2.3522}; // Paris
+        Double[] coordClient3 = {50.6292, 3.0573}; // Lille
+        Double[] coordClient4 = {43.8486, 3.0551}; // Montpellier
+        Double[] coordClient5 = {44.8378, -0.5792}; // Bordeaux
+        Double[] coordClient6 = {48.5734, 7.7521}; // Strasbourg
+        Double[] coordClient7 = {45.7640, 4.8357}; // Lyon (Réutilisation pour test)
+        Double[] coordClient8 = {47.2184, -1.5536}; // Nantes
 
-        String[] result = brutForce.brutForce(clientIds, userId);
+        // Simuler le comportement des services
+        when(accountService.getCoordPerson(idUser)).thenReturn(coordUser);
+        when(clientService.getCoordById("client1")).thenReturn(coordClient1);
+        when(clientService.getCoordById("client2")).thenReturn(coordClient2);
+        when(clientService.getCoordById("client3")).thenReturn(coordClient3);
+        when(clientService.getCoordById("client4")).thenReturn(coordClient4);
+        when(clientService.getCoordById("client5")).thenReturn(coordClient5);
+        when(clientService.getCoordById("client6")).thenReturn(coordClient6);
+        when(clientService.getCoordById("client7")).thenReturn(coordClient7);
+        when(clientService.getCoordById("client8")).thenReturn(coordClient8);
+
+        String[] result = brutForce.brutForce(idClients, idUser);
+
+        for (String idClient : result) {
+            System.out.println(idClient);
+        }
 
         assertNotNull(result);
-        assertEquals(clientIds.length, result.length);
-        assertTrue(Arrays.asList(clientIds).containsAll(Arrays.asList(result)));
+        assertEquals(idClients.length, result.length);
+        assertTrue(Arrays.asList(idClients).containsAll(Arrays.asList(result)));
     }
 
     @Test
