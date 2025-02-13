@@ -15,7 +15,7 @@ public class Itinerary {
     private String codeUser;
     private String dateCreation;
     private int nbSteps;
-    private List<Step> steps;
+    private ArrayList<Contact> steps;
 
     public Itinerary(int idItinerary, String nameItinerary, String codeUser, String date) {
         this.idItinerary = idItinerary;
@@ -26,7 +26,7 @@ public class Itinerary {
         this.steps = new ArrayList<>();
     }
 
-    public void addStep(Step step) {
+    public void addStep(Contact step) {
         this.steps.add(step);
     }
 
@@ -38,7 +38,7 @@ public class Itinerary {
         return nbSteps;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Contact> getSteps() {
         return steps;
     }
 

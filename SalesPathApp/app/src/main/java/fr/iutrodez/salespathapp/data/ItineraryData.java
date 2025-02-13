@@ -24,7 +24,6 @@ import fr.iutrodez.salespathapp.R;
 import fr.iutrodez.salespathapp.entity.Contact;
 import fr.iutrodez.salespathapp.enums.ContactCheckbox;
 import fr.iutrodez.salespathapp.entity.Itinerary;
-import fr.iutrodez.salespathapp.entity.Step;
 
 public class ItineraryData {
 
@@ -139,7 +138,7 @@ public class ItineraryData {
 
                                     Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient, company);
 
-                                    itinerary.addStep(new Step(idItinerary, step, contact));
+                                    itinerary.addStep(contact);
                                 }
                             }
 

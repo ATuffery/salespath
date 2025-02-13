@@ -26,7 +26,6 @@ import fr.iutrodez.salespathapp.contact.ContactAdapter;
 import fr.iutrodez.salespathapp.data.ItineraryData;
 import fr.iutrodez.salespathapp.data.RouteData;
 import fr.iutrodez.salespathapp.entity.Itinerary;
-import fr.iutrodez.salespathapp.entity.Step;
 import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -76,9 +75,7 @@ public class DetailsItineraryActivity extends BaseActivity {
                     addMarkers(itinerary);
 
                     contacts.clear();
-                    for (Step step : itinerary.getSteps()) {
-                        contacts.add(step.getContact());
-                    }
+                    contacts = itinerary.getSteps();
 
                     // Mise à jour de l'affichage
                     contactAdapter.notifyDataSetChanged();
@@ -95,12 +92,12 @@ public class DetailsItineraryActivity extends BaseActivity {
     private void addMarkers(Itinerary itinerary) {
         Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
 
-        for (Step step : itinerary.getSteps()) {
-            GeoPoint point = new GeoPoint(step.getContact().getLatitude(), step.getContact().getLongitude());
+        for (Contact contact : itinerary.getSteps()) {
+            GeoPoint point = new GeoPoint(contact.getLatitude(), contact.getLongitude());
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setTitle(step.getContact().getName());
+            marker.setTitle(contact.getName());
             marker.setIcon(markerIcon);
             map.getOverlays().add(marker);
         }
