@@ -14,7 +14,6 @@ public class Itinerary {
     private String nameItinerary;
     private String codeUser;
     private String dateCreation;
-    private int nbSteps;
     private ArrayList<Contact> steps;
 
     public Itinerary(int idItinerary, String nameItinerary, String codeUser, String date) {
@@ -22,7 +21,6 @@ public class Itinerary {
         this.nameItinerary = nameItinerary;
         this.codeUser = codeUser;
         this.dateCreation = date;
-        this.nbSteps = 0;
         this.steps = new ArrayList<>();
     }
 
