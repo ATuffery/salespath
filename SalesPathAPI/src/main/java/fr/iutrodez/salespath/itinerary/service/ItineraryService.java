@@ -10,6 +10,7 @@ import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
 import fr.iutrodez.salespath.utils.PathFinder;
 import fr.iutrodez.salespath.utils.pathFinder.BrutForce;
+import fr.iutrodez.salespath.utils.pathFinder.BrutForceThread;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ItineraryService {
     private IItineraryRepository itineraryRepository;
 
     @Autowired
-    private BrutForce bf;
+    private BrutForceThread bf;
 
     @Autowired
     private ItineraryStepService itineraryStepService;
@@ -35,6 +36,11 @@ public class ItineraryService {
     private IAccountRepository accountRepository;
 
     public void createItinerary(ItineraryAddRequest iti) {
+        itineraryRepository.existsByNameAndId(iti.getItinerary().getNameItinerary(), iti.getItinerary().getCodeUser())
+                .ifPresent(name -> {
+                    throw new IllegalArgumentException("Itinerary name already exists");
+                });
+
         try {
             String[] order = bf.brutForce(iti.getIdClients(),
                                                Long.parseLong(iti.getItinerary().getCodeUser()));
@@ -49,8 +55,6 @@ public class ItineraryService {
 
                 itineraryStepService.addStep(itiStep);
             }
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("The step already exists");
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the itinerary : " + e.getMessage());
         }

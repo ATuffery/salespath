@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 @Component
-public class BrutForce {
+public class BrutForceThread {
 
     @Autowired
     private AccountService accountService;
@@ -29,12 +30,6 @@ public class BrutForce {
         }
     }
 
-    /**
-     * Génère toutes les permutations possibles d'une liste.
-     *
-     * @param list Liste d'éléments à permuter
-     * @return Liste contenant toutes les permutations
-     */
     private static <T> List<List<T>> generatePermutations(List<T> list) {
         List<List<T>> permutations = new ArrayList<>();
         if (list.size() == 1) {
@@ -55,29 +50,19 @@ public class BrutForce {
         return permutations;
     }
 
-    /**
-     * Algorithme brute force pour trouver le chemin optimal.
-     *
-     * @param idClients Liste des IDs des clients
-     * @param idUser ID de l'utilisateur (point de départ)
-     * @return Liste des IDs clients dans l'ordre optimal
-     */
-    public String[] brutForce(String[] idClients, Long idUser) {
-        // Récupération des coordonnées du point de départ
+    public String[] brutForce(String[] idClients, Long idUser) throws InterruptedException, ExecutionException {
         Double[] startingPoint = accountService.getCoordPerson(idUser);
         List<Double[]> clientCoords = new ArrayList<>();
 
-        // Récupération des coordonnées des clients
         for (String idClient : idClients) {
             clientCoords.add(clientService.getCoordById(idClient));
         }
 
         checkValidPoints(startingPoint, clientCoords);
 
-        // Génération des permutations des clients
         List<List<Double[]>> permutations = generatePermutations(clientCoords);
 
-        // Créer un cache des distances
+        // Créer un cache de distances
         double[][] distanceCache = new double[clientCoords.size() + 1][clientCoords.size() + 1];
         for (int i = 0; i <= clientCoords.size(); i++) {
             for (int j = i + 1; j <= clientCoords.size(); j++) {
@@ -86,40 +71,54 @@ public class BrutForce {
             }
         }
 
-        List<Double[]> bestPath = null;
-        double minDistance = Double.MAX_VALUE;
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(availableProcessors);
+        List<Future<PathResult>> futures = new ArrayList<>();
 
-        // Parcours de toutes les permutations pour trouver le chemin optimal
-        for (List<Double[]> path : permutations) {
-            List<Double[]> fullPath = new ArrayList<>();
-            fullPath.add(startingPoint); // Ajout du point de départ
-            fullPath.addAll(path);
-            fullPath.add(startingPoint); // Retour au point de départ
+        // Diviser les permutations en groupes pour ne pas créer trop de threads
+        int groupSize = permutations.size() / availableProcessors;
+        for (int i = 0; i < availableProcessors; i++) {
+            int start = i * groupSize;
+            int end = (i == availableProcessors - 1) ? permutations.size() : (i + 1) * groupSize;
+            List<List<Double[]>> subList = permutations.subList(start, end);
 
-            double distance = calcTotalDistance(fullPath, clientCoords, distanceCache);
-            if (distance < minDistance) {
-                minDistance = distance;
-                bestPath = new ArrayList<>(fullPath);
+            Callable<PathResult> task = () -> {
+                PathResult bestLocalResult = new PathResult(null, Double.MAX_VALUE);
+                for (List<Double[]> path : subList) {
+                    List<Double[]> fullPath = new ArrayList<>();
+                    fullPath.add(startingPoint);
+                    fullPath.addAll(path);
+                    fullPath.add(startingPoint);
+
+                    double distance = calcTotalDistance(fullPath, clientCoords, distanceCache);
+                    if (distance < bestLocalResult.distance) {
+                        bestLocalResult = new PathResult(fullPath, distance);
+                    }
+                }
+                return bestLocalResult;
+            };
+            futures.add(executor.submit(task));
+        }
+
+        executor.shutdown();
+        PathResult bestResult = new PathResult(null, Double.MAX_VALUE);
+
+        for (Future<PathResult> future : futures) {
+            PathResult result = future.get();
+            if (result.distance < bestResult.distance) {
+                bestResult = result;
             }
         }
 
-        // Convertir la liste des coordonnées en liste d'IDs clients
+        List<Double[]> bestPath = bestResult.path;
         String[] optimalRoute = new String[idClients.length];
         for (int i = 0; i < bestPath.size() - 2; i++) {
-            optimalRoute[i] = idClients[clientCoords.indexOf(bestPath.get(i + 1))]; // On exclut le point de départ
+            optimalRoute[i] = idClients[clientCoords.indexOf(bestPath.get(i + 1))];
         }
 
         return optimalRoute;
     }
 
-    /**
-     * Calcule la distance totale d'un chemin donné en utilisant le cache des distances.
-     *
-     * @param path Liste de points ordonnés
-     * @param clientCoords Liste des coordonnées des clients
-     * @param distanceCache Cache des distances entre toutes les paires de points
-     * @return Distance totale
-     */
     private double calcTotalDistance(List<Double[]> path, List<Double[]> clientCoords, double[][] distanceCache) {
         double totalDistance = 0;
         for (int i = 0; i < path.size() - 1; i++) {
@@ -130,14 +129,17 @@ public class BrutForce {
         return totalDistance;
     }
 
-    /**
-     * Calcule la distance entre deux points.
-     *
-     * @param pointA Le premier point
-     * @param pointB Le deuxième point
-     * @return La distance entre les deux points
-     */
     private double calcDistance(Double[] pointA, Double[] pointB) {
         return CalculDistance.distanceCalculBirdFly(pointA[0], pointA[1], pointB[0], pointB[1]);
+    }
+
+    private static class PathResult {
+        List<Double[]> path;
+        double distance;
+
+        PathResult(List<Double[]> path, double distance) {
+            this.path = path;
+            this.distance = distance;
+        }
     }
 }
