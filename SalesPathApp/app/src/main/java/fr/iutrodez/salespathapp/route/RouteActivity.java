@@ -101,6 +101,7 @@ public class RouteActivity extends AppCompatActivity {
             // Reprise d'une tournée sauvegardée
             this.route = RouteSaver.loadRoute(getBaseContext(), this.accountId);
             if (this.route != null) {
+                title.setText(this.route.getName());
                 displayContactInfo();
                 addMarkers();
                 fetchRoute();
@@ -132,27 +133,6 @@ public class RouteActivity extends AppCompatActivity {
         this.title = findViewById(R.id.itineraryTitle);
         this.map = findViewById(R.id.map);
     }
-
-    private void resumeRoute() {
-        this.route = RouteSaver.loadRoute(this, this.accountId);
-        if (this.route != null) {
-            displayContactInfo();
-            fetchRoute();
-        } else {
-            Utils.displayToast(this, "Aucune tournée en cours trouvée.");
-        }
-    }
-
-    private void terminateRoute() {
-        if (this.route != null) {
-            this.route.setStatus(RouteStatus.FINISHED);
-            save();
-            RouteSaver.clearRoute(this, this.route);
-        }
-        Utils.displayToast(this, "Tournée terminée.");
-        finish();
-    }
-
 
     /**
      * Affiche les informations du prochain contact
