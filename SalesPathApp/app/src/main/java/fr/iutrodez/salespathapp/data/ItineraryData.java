@@ -64,8 +64,12 @@ public class ItineraryData {
                                 String nameItinerary = itineraryObject.optString("nameItinerary", "Nom inconnu");
                                 String codeUser = itineraryObject.optString("codeUser", "");
                                 String date = itineraryObject.optString("creationDate", "");
+                                int nbSteps = itineraryObject.optInt("nbSteps");
 
                                 Itinerary itinerary = new Itinerary(idItinerary, nameItinerary, codeUser, date);
+                                for (int y = 0 ; y < nbSteps ; y++) {
+                                    itinerary.addStep(new Contact("","","",0.0,0.0,ContactCheckbox.UNCHECKED, true, ""));
+                                }
                                 itineraries.add(itinerary);
                             }
                             listener.OnItinerariesLoaded(itineraries);
