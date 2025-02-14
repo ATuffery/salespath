@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -75,9 +76,7 @@ public class DetailsItineraryActivity extends BaseActivity {
                     addMarkers(itinerary);
 
                     contacts.clear();
-                    contacts = itinerary.getSteps();
-
-                    // Mise à jour de l'affichage
+                    contacts.addAll(itinerary.getSteps());
                     contactAdapter.notifyDataSetChanged();
                 });
             }

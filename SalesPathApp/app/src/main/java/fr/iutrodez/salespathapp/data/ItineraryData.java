@@ -136,7 +136,6 @@ public class ItineraryData {
                                     boolean isClient = stepObject.optBoolean("isClient");
 
                                     Contact contact = new Contact(idClient, clientName, clientAddress, clientLatitude, clientLongitude, ContactCheckbox.NO_CHECKBOX, isClient, company);
-
                                     itinerary.addStep(contact);
                                 }
                             }
