@@ -35,7 +35,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText passwordInput;
     private TextView msgError;
 
-    private final static String URL = Config.API_URL + "account/";
+    private final static String URL = Config.API_URL + "account";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
