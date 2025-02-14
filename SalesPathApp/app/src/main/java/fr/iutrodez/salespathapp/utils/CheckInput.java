@@ -24,8 +24,7 @@ public class CheckInput {
      * @return true si l'email est valide
      */
     public static boolean email(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return Pattern.compile(emailRegex).matcher(email).matches();
     }
 

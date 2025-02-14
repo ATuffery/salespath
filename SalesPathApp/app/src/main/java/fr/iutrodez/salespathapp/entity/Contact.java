@@ -32,48 +32,33 @@ public class Contact {
     public String getId() {
         return id;
     }
-    public String getAddress() {
-        return address;
-    }
-
+    public String getAddress() { return address; }
     public boolean isChecked() {
         return checkbox.equals(ContactCheckbox.CHECKED);
     }
-
     public boolean noCheckbox () {
         return checkbox.equals(ContactCheckbox.NO_CHECKBOX);
     }
-
     public void setChecked(ContactCheckbox checked) {
         checkbox = checked;
     }
-
     public ContactStatus getStatus() {
         return visited;
     }
-
     public void setStatus(ContactStatus visited) {
         this.visited = visited;
     }
-
     public boolean isClient() {
         return isClient;
     }
-
     public double getLatitude() {
         return this.coord.getLatitude();
     }
-
     public double getLongitude() {
         return this.coord.getLongitude();
     }
-    public GeoPoint getCoord() { return this.coord; }
-
     public String getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
 }

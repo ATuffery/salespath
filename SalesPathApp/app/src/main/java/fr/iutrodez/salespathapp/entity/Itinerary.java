@@ -32,9 +32,7 @@ public class Itinerary {
         return this.steps.size();
     }
 
-    public ArrayList<Contact> getSteps() {
-        return steps;
-    }
+    public ArrayList<Contact> getSteps() { return steps; }
 
     public String getNameItinerary() {
         return nameItinerary;
