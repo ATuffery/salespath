@@ -10,6 +10,7 @@ import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
 import fr.iutrodez.salespath.utils.PathFinder;
 import fr.iutrodez.salespath.utils.pathFinder.BrutForce;
+import fr.iutrodez.salespath.utils.pathFinder.BrutForceThread;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ItineraryService {
     private IItineraryRepository itineraryRepository;
 
     @Autowired
-    private BrutForce bf;
+    private BrutForceThread bf;
 
     @Autowired
     private ItineraryStepService itineraryStepService;
