@@ -44,9 +44,9 @@ public class RouteListActivity extends BaseActivity {
                 public void OnRouteListLoaded(ArrayList<Route> data) {
                     runOnUiThread(() -> {
                         for (Route route : data) {
-                            String steps = route.getSteps().size() + " contacts visités";
+                            String steps = route.countVisitedContact() + " contacts visités";
                             String date = "Commencé le " + Utils.formatDateFr(route.getStartDate());
-                            CardWithTwoLines card = new CardWithTwoLines(route.getName(), route.getStatus().toString(), date, steps, "Détails", () -> {
+                            CardWithTwoLines card = new CardWithTwoLines(route.getName(), "TERMINÉE", date, steps, "Détails", () -> {
                                 Intent intent = new Intent(RouteListActivity.this, RouteDetailsActivity.class);
                                 intent.putExtra("routeId", route.getRouteId());
                                 startActivity(intent);

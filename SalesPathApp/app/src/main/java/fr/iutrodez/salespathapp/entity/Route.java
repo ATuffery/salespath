@@ -92,4 +92,19 @@ public class Route {
     public String getAccountId() { return accountId; }
 
     public String getName() { return name; }
+
+    /**
+     * Compte le nombre de client visité
+     * @return le nombre de client visité
+     */
+    public int countVisitedContact() {
+        int nb = 0;
+        for (Contact contact:
+                this.steps) {
+            if (contact.getStatus().equals(ContactStatus.VISITED)) {
+                nb++;
+            }
+        }
+        return nb;
+    }
 }
