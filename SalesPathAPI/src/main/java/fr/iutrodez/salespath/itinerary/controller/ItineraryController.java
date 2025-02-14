@@ -44,7 +44,7 @@ public class ItineraryController {
             description = "Permet de créer un itinéraire en envoyant les informations nécessaires.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Itinéraire créé avec succès"),
-            @ApiResponse(responseCode = "404", description = "Erreur dans les données fournies"),
+            @ApiResponse(responseCode = "400", description = "Nom déjà utilisé pour un itinéraire"),
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PostMapping()
@@ -52,7 +52,7 @@ public class ItineraryController {
         try {
             itineraryService.createItinerary(itinerary);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }

@@ -35,6 +35,11 @@ public class ItineraryService {
     private IAccountRepository accountRepository;
 
     public void createItinerary(ItineraryAddRequest iti) {
+        itineraryRepository.existsByNameAndId(iti.getItinerary().getNameItinerary(), iti.getItinerary().getCodeUser())
+                .ifPresent(name -> {
+                    throw new IllegalArgumentException("Itinerary name already exists");
+                });
+
         try {
             String[] order = bf.brutForce(iti.getIdClients(),
                                                Long.parseLong(iti.getItinerary().getCodeUser()));
@@ -49,8 +54,6 @@ public class ItineraryService {
 
                 itineraryStepService.addStep(itiStep);
             }
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("The step already exists");
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the itinerary : " + e.getMessage());
         }
