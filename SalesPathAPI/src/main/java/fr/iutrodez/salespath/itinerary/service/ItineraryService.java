@@ -2,6 +2,7 @@ package fr.iutrodez.salespath.itinerary.service;
 
 import fr.iutrodez.salespath.account.model.SalesPerson;
 import fr.iutrodez.salespath.account.repository.IAccountRepository;
+import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import fr.iutrodez.salespath.itinerarystep.repository.IItineraryStepRepository;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
@@ -15,6 +16,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service

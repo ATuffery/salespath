@@ -19,8 +19,9 @@ public interface IItineraryRepository extends JpaRepository<Itinerary, Long> {
     Optional<Itinerary[]> findByIdUser(Long id);
 
     /**
-     * Permet de vérifier si un itinéraire existe en fonction de son nom
+     * Permet de vérifier si un itinéraire existe en fonction de son nom pour un utilisateur donné
      * @param name le nom de l'itinéraire
+     * @param id l'id de l'utilisateur
      * @return le nom s'il existe
      */
     @Query("SELECT i.nameItinerary FROM Itinerary i WHERE i.nameItinerary = :name AND i.codeUser = :id")

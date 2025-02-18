@@ -14,6 +14,7 @@ import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import fr.iutrodez.salespath.route.dto.Coordinates;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -175,4 +176,46 @@ public class ItineraryController {
         }
     }
 
+    /**
+     * Vérifie si un client est utilisé dans une étape d'un itinéraire
+     * @param idClient L'identifiant du client
+     * @return 200 avec un objet Json pour indiquer si le client est utilisé,
+     *         404 si l'id du client n'existe pas,
+     *         500 en cas d'erreur de serveur/base de donnée
+     */
+    @Operation(summary = "Vérifier si un client est utilisé dans un itinéraire")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Information si le client est utilisé ou pas",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "success": false
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Client non trouvé",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Client introuvable avec l'ID : 7402a264-0f10-4489-9199-754ddc2ba1dD"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Erreur serveur ou base de données : ..."
+                                 }
+                             """)))
+    })
+    @GetMapping("/verify/{idClient}")
+    public ResponseEntity<?> verifyUtilisation(@PathVariable String idClient) {
+        try {
+            return ResponseEntity.ok(Map.of("success", itineraryStepService.existsByIdClient(idClient)));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur serveur ou base de données : "
+                                                                          + e.getMessage()));
+        }
+    }
 }

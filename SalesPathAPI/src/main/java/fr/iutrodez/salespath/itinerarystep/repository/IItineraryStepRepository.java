@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,7 @@ public interface IItineraryStepRepository extends JpaRepository<ItineraryStep, S
     @Modifying
     @Query("DELETE FROM ItineraryStep i WHERE i.idItinerary = :idItinerary")
     void deleteByIdItinerary(@Param("idItinerary") String idItinerary);
+
+    @Query("SELECT COUNT(i) > 0 FROM ItineraryStep i WHERE i.idClient = :idClient")
+    boolean existsByIdClient(@Param("idClient") String idClient);
 }
