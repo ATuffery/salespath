@@ -5,6 +5,7 @@ import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.itinerary.service.ItineraryService;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import fr.iutrodez.salespath.utils.exception.CoordinatesException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import fr.iutrodez.salespath.utils.Utils;
@@ -81,11 +82,29 @@ public class ClientService {
      * @param id L'ID du client à supprimer.
      * @throws NoSuchElementException Si le client avec l'ID spécifié n'existe pas.
      */
+    @Transactional
     public void deleteClientById(String id) {
         clientRepository.findById(id)
                         .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
 
+        // On supprime également les itinéraires associés
+        deleteItinerariesForClient(id);
+
         clientRepository.deleteClientById(id);
+    }
+
+    /**
+     * Supprime les itinéraires associés à un client.
+     * @param id L'ID du client.
+     * @throws RuntimeException En cas d'erreur lors de la suppression.
+     */
+    private void deleteItinerariesForClient(String id) {
+        List<String> itineraries = itineraryStepService.findByIdClient(id);
+        for (String idItinerary : itineraries) {
+            if (!itineraryService.deleteItinerary(Long.valueOf(idItinerary))) {
+                throw new RuntimeException("Erreur lors de la suppression de l'itinéraire : " + idItinerary);
+            }
+        }
     }
 
     /**
@@ -114,13 +133,7 @@ public class ClientService {
             }
 
             // Si l'adresse a changé, on supprime également les itinéraires associés
-            List<String> itineraries = itineraryStepService.findByIdClient(id);
-            for (String idItinerary : itineraries) {
-                if (!itineraryService.deleteItinerary(Long.valueOf(idItinerary))) {
-                    throw new RuntimeException("Erreur lors de la suppression de l'itinéraire : " + idItinerary);
-                }
-                // TODO régler la dépendance circulaire
-            }
+            deleteItinerariesForClient(id);
         }
 
         // Mise à jour des champs
