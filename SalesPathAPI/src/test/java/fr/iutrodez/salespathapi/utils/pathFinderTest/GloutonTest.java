@@ -1,6 +1,7 @@
 package fr.iutrodez.salespathapi.utils.pathFinderTest;
 
 import fr.iutrodez.salespath.account.service.AccountService;
+import fr.iutrodez.salespath.client.service.ClientCoordService;
 import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.utils.pathFinder.Glouton;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ class GloutonTest {
     private AccountService accountService;
 
     @Mock
-    private ClientService clientService;
+    private ClientCoordService clientService;
 
     @InjectMocks
     private Glouton glouton;

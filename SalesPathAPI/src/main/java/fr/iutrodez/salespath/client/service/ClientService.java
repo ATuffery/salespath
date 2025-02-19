@@ -2,6 +2,8 @@ package fr.iutrodez.salespath.client.service;
 
 import fr.iutrodez.salespath.client.repository.IClientRepository;
 import fr.iutrodez.salespath.client.model.Client;
+import fr.iutrodez.salespath.itinerary.service.ItineraryService;
+import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import fr.iutrodez.salespath.utils.exception.CoordinatesException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,12 @@ public class ClientService {
 
     @Autowired
     private IClientRepository clientRepository;
+
+    @Autowired
+    private ItineraryStepService itineraryStepService;
+
+    @Autowired
+    private ItineraryService itineraryService;
 
     /**
      * Crée un nouveau client et l'enregistre dans la base de données.
@@ -86,13 +94,15 @@ public class ClientService {
      * @param updatedClient L'objet Client contenant les nouvelles données.
      * @param id            L'ID du client à mettre à jour.
      * @throws NoSuchElementException Si le client avec l'ID spécifié n'existe pas.
-     * @throws RuntimeException         En cas d'erreur lors de la récupération des coordonnées
+     * @throws RuntimeException         En cas d'erreur lors de la récupération des coordonnées ou
+     *                                  en cas d'erreur lors de la supprzssion des itinéraires.
      */
     public void updateClient(Client updatedClient, String id) {
         Client existingClient = clientRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Client introuvable avec l'ID : " + id));
 
-        if (updatedClient.getCoordonates() != existingClient.getCoordonates()) {
+        // Si l'adresse a changé on met à jour les coordonnées
+        if (!updatedClient.getAddress().equals(existingClient.getAddress())) {
             try {
                 double[] coord = Utils.GetCoordByAddress(updatedClient.getAddress());
 
@@ -101,6 +111,15 @@ public class ClientService {
                 }
             } catch (CoordinatesException e) {
                 throw new RuntimeException("Erreur lors de la récupération des coordonnées : " + e.getMessage());
+            }
+
+            // Si l'adresse a changé, on supprime également les itinéraires associés
+            List<String> itineraries = itineraryStepService.findByIdClient(id);
+            for (String idItinerary : itineraries) {
+                if (!itineraryService.deleteItinerary(Long.valueOf(idItinerary))) {
+                    throw new RuntimeException("Erreur lors de la suppression de l'itinéraire : " + idItinerary);
+                }
+                // TODO régler la dépendance circulaire
             }
         }
 
@@ -117,25 +136,5 @@ public class ClientService {
 
         // Sauvegarde des modifications
         clientRepository.save(existingClient);
-    }
-
-    /**
-     * Récupère les coordonnées d'un client à partir de son ID.
-     * @param id L'ID du client.
-     * @return Un tableau de coordonnées (latitude, longitude).
-     */
-    public Double[] getCoordById(String id) {
-        try {
-            Optional<Client> clientOptional = clientRepository.findById(id);
-
-            if (clientOptional.isPresent()) {
-                Client client = clientOptional.get();
-                return client.getCoordonates();
-            } else {
-                throw new RuntimeException("Client non trouvé avec l'ID : " + id);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la récupération des coordonnées du client : " + e.getMessage());
-        }
     }
 }

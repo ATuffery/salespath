@@ -7,6 +7,7 @@ import fr.iutrodez.salespath.itinerarystep.repository.IItineraryStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -61,5 +62,18 @@ public class ItineraryStepService {
                         .orElseThrow(() -> new NoSuchElementException("Client introuvable avec l'ID : " + idClient));
 
         return itineraryStepRepository.existsByIdClient(idClient);
+    }
+
+    /**
+     * Récupère les id des itinéraires qui possèdent le client en étape
+     * @param idClient L'identifiant du client
+     * @return Les id des itinéraires
+     * @throws NoSuchElementException Si le client n'existe pas
+     */
+    public List<String> findByIdClient(String idClient) {
+        clientRepository.findById(idClient)
+                        .orElseThrow(() -> new NoSuchElementException("Client introuvable avec l'ID : " + idClient));
+
+        return itineraryStepRepository.findByIdClient(idClient);
     }
 }

@@ -1,7 +1,7 @@
 package fr.iutrodez.salespath.utils.pathFinder;
 
 import fr.iutrodez.salespath.account.service.AccountService;
-import fr.iutrodez.salespath.client.service.ClientService;
+import fr.iutrodez.salespath.client.service.ClientCoordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class BrutForceThread {
     private AccountService accountService;
 
     @Autowired
-    private ClientService clientService;
+    private ClientCoordService clientCoordService;
 
     private static void checkValidPoints(Double[] startingPoint, List<Double[]> points) throws IllegalArgumentException {
         if (points == null || points.size() < 2) {
@@ -55,7 +55,7 @@ public class BrutForceThread {
         List<Double[]> clientCoords = new ArrayList<>();
 
         for (String idClient : idClients) {
-            clientCoords.add(clientService.getCoordById(idClient));
+            clientCoords.add(clientCoordService.getCoordById(idClient));
         }
 
         checkValidPoints(startingPoint, clientCoords);

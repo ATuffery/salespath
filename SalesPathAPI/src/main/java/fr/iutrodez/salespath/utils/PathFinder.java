@@ -3,6 +3,7 @@ package fr.iutrodez.salespath.utils;
 
 import fr.iutrodez.salespath.account.model.SalesPerson;
 import fr.iutrodez.salespath.account.service.AccountService;
+import fr.iutrodez.salespath.client.service.ClientCoordService;
 import fr.iutrodez.salespath.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,14 +14,14 @@ import java.util.List;
 @Component
 public class PathFinder {
 
-    private ClientService clientService;
+    private ClientCoordService clientService;
 
     private AccountService accountService;
 
     private SalesPerson person;
 
     @Autowired
-    public PathFinder(ClientService clientService, AccountService accountService) {
+    public PathFinder(ClientCoordService clientService, AccountService accountService) {
         this.clientService = clientService;
         this.accountService = accountService;
     }
