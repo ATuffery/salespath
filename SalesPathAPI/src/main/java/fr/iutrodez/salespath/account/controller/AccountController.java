@@ -47,7 +47,7 @@ public class AccountController {
                          content = @Content(mediaType = "application/json",
                          examples = @ExampleObject(value = """
                                 {
-                                    "error": "Account not found"
+                                    "error": "Invalid email or password"
                                 }
                                 """))),
             @ApiResponse(responseCode = "500", description = "Erreur de base de données",
@@ -61,14 +61,11 @@ public class AccountController {
     @GetMapping(value = "/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         try {
-            Optional<SalesPerson> salesPersonOptional = accountService.login(email, password);
+            SalesPerson salesPerson = accountService.login(email, password);
 
-            if (salesPersonOptional.isPresent()) {
-                SalesPerson salesPerson = salesPersonOptional.get();
-                return ResponseEntity.ok(Map.of("apiKey", salesPerson.getApiKey(), "id", salesPerson.getId()));
-            } else {
-                return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
-            }
+            return ResponseEntity.ok(Map.of("apiKey", salesPerson.getApiKey(), "id", salesPerson.getId()));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Database error : " + e.getMessage()));
         }

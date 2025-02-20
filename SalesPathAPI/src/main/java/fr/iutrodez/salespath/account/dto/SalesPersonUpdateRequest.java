@@ -3,6 +3,9 @@ package fr.iutrodez.salespath.account.dto;
 import fr.iutrodez.salespath.account.model.SalesPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Requête de mise à jour d'un commercial
+ */
 public class SalesPersonUpdateRequest {
 
     @Schema(description = "Ancien mot de passe du commercial")

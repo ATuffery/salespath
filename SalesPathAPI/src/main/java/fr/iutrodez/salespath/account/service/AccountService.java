@@ -43,30 +43,21 @@ public class AccountService {
      * @return la clé API de l'utilisateur si l'utilisateur existe,
      *         vide sinon
      */
-    public Optional<SalesPerson> login(String email, String password) {
-        Optional<SalesPerson> userOpt = accountRepository.findByEmail(email);
-
-        if (userOpt.isPresent()) {
-            SalesPerson user = userOpt.get();
-
-            // On vérifie que le mot de passe soit correct
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return Optional.of(user);
-            }
-        }
-
-        return Optional.empty();
+    public SalesPerson login(String email, String password) {
+        return accountRepository.findByEmail(email)
+                                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
+                                .orElseThrow(() -> new NoSuchElementException("Invalid email or password."));
     }
+
 
     /**
      * Permet d'ajouter un commercial en base de données
      * Vérifie que l'email ne soit pas utilisé dans un autre compte
-     * 
+     *
      * @param salesPerson les infos de la personne à ajouter
-     * @return sauvegarde les infos de la personne en base de données
      * @throws IllegalArgumentException si l'email est déjà utilisé
      */
-    public SalesPerson addSalesPerson(SalesPerson salesPerson) {
+    public void addSalesPerson(SalesPerson salesPerson) {
         // On vérifie que l'email n'est pas déjà utilisé
         accountRepository.findByEmail(salesPerson.getEmail())
                 .ifPresent(existing -> {
@@ -89,7 +80,7 @@ public class AccountService {
             salesPerson.setLatitude(coord[0]);
             salesPerson.setLongitude(coord[1]);
 
-            return accountRepository.save(salesPerson);
+            accountRepository.save(salesPerson);
         } catch (CoordinatesException e) {
             throw new RuntimeException("Error while getting coordinates : " + e.getMessage());
 
@@ -128,7 +119,8 @@ public class AccountService {
                 });
 
         // On vérifie les mots de passe
-        if (!request.getOldPassword().isEmpty() && !passwordEncoder.matches(request.getOldPassword(), existing.getPassword())) {
+        if (!request.getOldPassword().isEmpty() && !passwordEncoder.matches(request.getOldPassword(),
+                                                                            existing.getPassword())) {
             throw new DifferentPasswordException("Invalid old password");
         }
 
@@ -166,13 +158,13 @@ public class AccountService {
      * @return le commercial correspondant
      * @throws RuntimeException en cas de problème avec la base de données
      */
-    public Map getSalesPerson(String apiKey) {
+    public Map<String, Object> getSalesPerson(String apiKey) {
         try {
             Optional<SalesPerson> salesPersonOptional = accountRepository.findByApiKey(apiKey);
 
             SalesPerson salesPerson = salesPersonOptional.get();
 
-            Map<String, Object> response = Map.of (
+            return Map.of (
                     "firstName", salesPerson.getFirstName(),
                     "lastName", salesPerson.getLastName(),
                     "email", salesPerson.getEmail(),
@@ -180,8 +172,6 @@ public class AccountService {
                     "latitude", salesPerson.getLatitude(),
                     "longitude", salesPerson.getLongitude()
             );
-
-            return response;
         } catch (Exception e) {
             throw new RuntimeException("Error while trying to get the account : " + e.getMessage());
         }
