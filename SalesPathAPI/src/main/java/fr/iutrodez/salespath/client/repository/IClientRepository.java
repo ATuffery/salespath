@@ -7,7 +7,6 @@ import java.util.Optional;
 
 /**
  * Interface de repository pour gérer les opérations CRUD liées aux clients.
- * Étend {@link MongoRepository} pour bénéficier des méthodes standard de gestion des documents MongoDB.
  */
 public interface IClientRepository extends MongoRepository<Client, String> {
 

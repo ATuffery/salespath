@@ -73,7 +73,7 @@ public class ClientService {
      */
     public Client getClientById(String id) {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
+                               .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
     }
 
     /**
