@@ -4,13 +4,16 @@ import fr.iutrodez.salespath.itinerarystep.dto.ItineraryStepWithClient;
 import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Informations sur l'itinéraire et ses étapes, avec les détails des clients.
+ */
 @Schema(description = "Informations sur l'itinéraire et ses étapes, avec les détails des clients.")
 public class ItineraryInfos {
 
-    @Schema(description = "Informations sur l'itinéraire", required = true)
+    @Schema(implementation = ItineraryWithCoordinates.class)
     private ItineraryWithCoordinates itinerary;
 
-    @Schema(description = "Liste des étapes associées à l'itinéraire", required = true)
+    @Schema(implementation = ItineraryStepWithClient.class)
     private ItineraryStepWithClient[] steps;
 
     public ItineraryWithCoordinates getItinerary() {

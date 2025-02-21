@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Interface permettant de gérer les itinéraires en base de données
+ */
 @Repository
 public interface IItineraryRepository extends JpaRepository<Itinerary, Long> {
 

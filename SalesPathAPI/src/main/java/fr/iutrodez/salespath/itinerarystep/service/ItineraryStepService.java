@@ -26,6 +26,8 @@ public class ItineraryStepService {
     /**
      * Ajoute une étape à un itinéraire
      * @param itineraryStep L'étape à ajouter
+     * @throws IllegalArgumentException Si l'étape existe déjà
+     * @throws RuntimeException Si une erreur survient lors de la sauvegarde
      */
     public void addStep(ItineraryStep itineraryStep) {
         // On vérifie qu'une clé n'existe pas déjà
@@ -46,9 +48,12 @@ public class ItineraryStepService {
      * Récupère les étapes d'un itinéraire
      * @param idItinerary L'identifiant de l'itinéraire
      * @return Les étapes de l'itinéraire
+     * @throws NoSuchElementException Si l'itinéraire n'existe pas
      */
-    public Optional<ItineraryStep[]> getSteps(String idItinerary) {
-        return itineraryStepRepository.findByIdItinerary(idItinerary);
+    public ItineraryStep[] getSteps(String idItinerary) {
+        return itineraryStepRepository.findByIdItinerary(idItinerary)
+                                      .orElseThrow(() -> new NoSuchElementException("Itinerary not found with the ID : "
+                                                                                    + idItinerary));
     }
 
     /**

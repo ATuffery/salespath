@@ -2,6 +2,8 @@ package fr.iutrodez.salespath.client.controller;
 
 import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.client.model.Client;
+import fr.iutrodez.salespath.itinerary.service.ItineraryClientService;
+import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -24,6 +26,9 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private ItineraryClientService itineraryClientService;
 
     /**
      * Endpoint pour créer un nouveau client.
@@ -179,7 +184,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable String id) {
         try {
-            clientService.deleteClientById(id);
+            itineraryClientService.deleteClientById(id);
             return ResponseEntity.status(200).body(Map.of("success", "Suppression effectuée"));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error",e.getMessage()));
@@ -223,7 +228,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@RequestBody Client client, @PathVariable String id) {
         try {
-            clientService.updateClient(client, id);
+            itineraryClientService.updateClient(client, id);
             return ResponseEntity.status(200).body(Map.of("success", "Mise à jour effectuée"));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));

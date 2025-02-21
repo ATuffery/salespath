@@ -1,5 +1,6 @@
 package fr.iutrodez.salespath.itinerary.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,20 +9,28 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Représete un itinéraire
+ */
 @Entity
+@Schema(description = "Informations sur un itinéraire")
 public class Itinerary {
 
     @Id
     @GeneratedValue
     private Long idItinerary;
 
+    @Schema(description = "Nom de l'itinéraire")
     private String nameItinerary;
 
+    @Schema(description = "Id de l'utilisateur")
     private String codeUser;
 
+    @Schema(description = "Date de création de l'itinéraire")
     @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @Schema(description = "Nombre d'étapes de l'itinéraire")
     @Column(nullable = false)
     private int nbSteps = 0;
 

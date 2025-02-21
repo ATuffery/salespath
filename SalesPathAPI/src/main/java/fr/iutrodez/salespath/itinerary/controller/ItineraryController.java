@@ -35,120 +35,99 @@ public class ItineraryController {
     @Autowired
     private ItineraryStepService itineraryStepService;
 
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private AccountService accountService;
-
+    /**
+     * Crée un nouvel itinéraire
+     * @param itinerary Les informations de l'itinéraire à créer
+     * @return 201 si l'itinéraire a été créé avec succès,
+     *        404 si le nom de l'itinéraire existe déjà,
+     *        500 en cas d'erreur de sauvegarde
+     */
     @Operation(summary = "Créer un nouvel itinéraire",
             description = "Permet de créer un itinéraire en envoyant les informations nécessaires.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Itinéraire créé avec succès"),
-            @ApiResponse(responseCode = "400", description = "Nom déjà utilisé pour un itinéraire"),
-            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+            @ApiResponse(responseCode = "201", description = "Itinéraire créé avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "success": "Itinerary created"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Nom déjà utilisé pour un itinéraire",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Itinerary name already exists"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Error while saving the itinerary : ..."
+                                 }
+                             """)))
     })
     @PostMapping()
     public ResponseEntity<?> createItinerary(@RequestBody ItineraryAddRequest itinerary) {
         try {
             itineraryService.createItinerary(itinerary);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
         return ResponseEntity.status(201).body(Map.of("success", "Itinerary created"));
     }
 
+    /**
+     * Récupère les itinéraires d'un utilisateur
+     * @param idUser L'identifiant de l'utilisateur
+     * @return 200 avec les informations des itinéraire,
+     *        404 si l'utilisateur n'existe pas ou n'a pas d'itinéraire,
+     *        500 en cas d'erreur de serveur/base de donnée
+     */
     @Operation(summary = "Obtenir les itinéraires d'un utilisateur",
             description = "Permet de récupérer tous les itinéraires associés à un utilisateur en fonction de son ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Itinéraires récupérés avec succès"),
-            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
-            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+            @ApiResponse(responseCode = "200", description = "Itinéraires récupérés avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 [
+                                     {
+                                         "idItinerary": 1102,
+                                         "nameItinerary": "test_modif",
+                                         "codeUser": "2",
+                                         "creationDate": "2025-02-20T21:46:28",
+                                         "nbSteps": 3
+                                     },
+                                     {
+                                         "idItinerary": 1152,
+                                         "nameItinerary": "test_modif_2",
+                                         "codeUser": "2",
+                                         "creationDate": "2025-02-21T08:16:35",
+                                         "nbSteps": 3
+                                     }
+                                 ]
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé ou aucun itinéraire pour l'utilisateur",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Account not found for ID : 22"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "..."
+                                 }
+                             """)))
     })
     @GetMapping("/{idUser}")
     public ResponseEntity<?> getItineraryUser(@PathVariable Long idUser) {
         try {
-            Optional<Itinerary[]> itinerariesOpt = itineraryService.getItineraryUser(idUser);
-
-            Itinerary[] itineraries = itinerariesOpt.get();
-            return ResponseEntity.status(200).body(itineraries);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(Map.of("error", "Id user not found"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @Operation(summary = "Récupérer les informations d'un itinéraire avec les étapes",
-            description = "Cette méthode permet de récupérer les informations détaillées pour un itinéraire, y compris les informations sur les clients pour chaque étape.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Informations sur l'itinéraire récupérées avec succès",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ItineraryInfos.class))),
-                    @ApiResponse(responseCode = "404", description = "Itinéraire ou étapes non trouvés",
-                            content = @Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "500", description = "Erreur serveur interne",
-                            content = @Content(mediaType = "application/json"))
-            })
-    @GetMapping("/getInfos/{id}")
-    public ResponseEntity<?> getInfos(@PathVariable Long id) {
-        try {
-            // On récupère l'itinéraire
-            Optional<Itinerary> itineraryOpt = itineraryService.getItinerary(id);
-
-            if (itineraryOpt.isPresent()) {
-                Itinerary itinerary = itineraryOpt.get();
-
-                // On récupère les étapes de l'itinéraire
-                Optional<ItineraryStep[]> stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
-
-                if (stepsOpt.isPresent()) {
-                    ItineraryStep[] steps = stepsOpt.get();
-                    List<ItineraryStep> stepsList = Arrays.asList(steps);
-
-                    // Ajouter les informations des clients
-                    ItineraryStepWithClient[] stepsWithClient = (ItineraryStepWithClient[]) stepsList.stream().map(step -> {
-                        Client client = clientService.getClientById(step.getIdClient());
-
-                        ItineraryStepWithClient enrichedStep = new ItineraryStepWithClient();
-                        enrichedStep.setIdItinerary(step.getIdItinerary());
-                        enrichedStep.setIdClient(step.getIdClient());
-                        enrichedStep.setStep(step.getStep());
-
-                        enrichedStep.setClientName(client.getLastName() + ' ' + client.getFirstName());
-                        enrichedStep.setClientLatitude(client.getCoordonates()[0]);
-                        enrichedStep.setClientLongitude(client.getCoordonates()[1]);
-                        enrichedStep.setClientAddress(client.getAddress());
-                        enrichedStep.setClient(client.getClient());
-                        enrichedStep.setCompanyName(client.getEnterpriseName());
-
-                        return enrichedStep;
-                    }).toArray(ItineraryStepWithClient[]::new);
-
-                    // On récupère les coordonnées du domicile du commercial
-                    Double[] coord = accountService.getCoordPerson(Long.valueOf(itinerary.getCodeUser()));
-                    Coordinates coordinates = new Coordinates();
-                    coordinates.setLatitude(coord[0]);
-                    coordinates.setLongitude(coord[1]);
-
-                    // On crée l'objet de réponse
-                    ItineraryWithCoordinates itineraryWithCoordinates = new ItineraryWithCoordinates();
-                    itineraryWithCoordinates.setItinerary(itinerary);
-                    itineraryWithCoordinates.setCoordinates(coordinates);
-
-                    ItineraryInfos infos = new ItineraryInfos();
-                    infos.setItinerary(itineraryWithCoordinates);
-                    infos.setSteps(stepsWithClient);
-
-                    return ResponseEntity.status(200).body(infos);
-                } else {
-                    return ResponseEntity.status(404).body(Map.of("error", "No steps found for this itinerary"));
-                }
-            } else {
-                return ResponseEntity.status(404).body(Map.of("error", "Itinerary not found for this Id"));
-            }
+            return ResponseEntity.status(200).body(itineraryService.getItineraryUser(idUser));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (RuntimeException e) {
@@ -156,12 +135,76 @@ public class ItineraryController {
         }
     }
 
+    /**
+     * Récupère les informations d'un itinéraire
+     * @param id L'identifiant de l'itinéraire
+     * @return 200 avec les informations de l'itinéraire,
+     *       404 si l'itinéraire n'existe pas,
+     *       500 en cas d'erreur de serveur/base de donnée
+     */
+    @Operation(summary = "Récupérer les informations d'un itinéraire avec les étapes",
+            description = "Cette méthode permet de récupérer les informations détaillées pour un itinéraire, y compris les informations sur les clients pour chaque étape.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Informations sur l'itinéraire récupérées avec succès",
+                                 content = @Content(mediaType = "application/json",
+                                 schema = @Schema(implementation = ItineraryInfos.class))),
+                    @ApiResponse(responseCode = "404", description = "Itinéraire ou étapes non trouvés",
+                                 content = @Content(mediaType = "application/json",
+                                 examples = @ExampleObject(value = """
+                                         {
+                                              "error": "Itinerary not found for ID : 1105"
+                                          }
+                                     """))),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur interne",
+                                 content = @Content(mediaType = "application/json",
+                                 examples = @ExampleObject(value = """
+                                         {
+                                             "error": "..."
+                                         }
+                                     """)))
+            })
+    @GetMapping("/getInfos/{id}")
+    public ResponseEntity<?> getInfos(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(itineraryService.getAllInfos(id));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * Supprime un itinéraire
+     * @param id L'identifiant de l'itinéraire
+     * @return 200 si l'itinéraire a été supprimé avec succès,
+     *       404 si l'itinéraire n'existe pas,
+     *       500 en cas d'erreur de serveur/base de donnée
+     */
     @Operation(summary = "Supprimer un itinéraire",
             description = "Permet de supprimer un itinéraire à partir de son identifiant.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Itinéraire supprimé avec succès"),
-            @ApiResponse(responseCode = "404", description = "Itinéraire non trouvé"),
-            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+            @ApiResponse(responseCode = "200", description = "Itinéraire supprimé avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "success": "Itinerary deleted successfully"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Itinéraire non trouvé",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Itinerary not found"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Error deleting itinerary : ..."
+                                 }
+                             """)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteItinerary(@PathVariable Long id) {

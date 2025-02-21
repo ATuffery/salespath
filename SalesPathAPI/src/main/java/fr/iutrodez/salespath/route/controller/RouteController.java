@@ -90,14 +90,7 @@ public class RouteController {
             // On récupère les clients de l'itinéraire
             ArrayList<RouteStep> stepsList = new ArrayList<>();
 
-            Optional<ItineraryStep[]> stepsOpt = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
-
-            if (stepsOpt.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "Aucun client trouvé pour l'itinéraire : "
-                                                                               + itinerary.getIdItinerary()));
-            }
-
-            ItineraryStep[] steps = stepsOpt.get();
+            ItineraryStep[] steps = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
 
             for (ItineraryStep step : steps) {
                 Optional<Client> clientOpt = clientRepository.findById(step.getIdClient());
@@ -121,6 +114,9 @@ public class RouteController {
 
             Route newRoute = routeService.createRoute(route);
             return ResponseEntity.status(201).body(Map.of("id", newRoute.getId()));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", "Aucun client trouvé pour l'itinéraire : "
+                                                                          + e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué."  + e.getMessage()));
         }
