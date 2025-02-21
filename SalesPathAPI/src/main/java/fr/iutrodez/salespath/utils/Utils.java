@@ -9,6 +9,9 @@ import fr.iutrodez.salespath.utils.exception.CoordinatesException;
 
 import java.util.Properties;
 
+/**
+ * Classe utilitaire permettant de récupérer les coordonnées d'un client à partir de son adresse.
+ */
 public class Utils {
 
     /**
