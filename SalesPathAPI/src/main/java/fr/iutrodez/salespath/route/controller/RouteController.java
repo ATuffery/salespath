@@ -39,14 +39,6 @@ public class RouteController {
 
     @Autowired
     private RouteService routeService;
-    @Autowired
-    private IAccountRepository accountRepository;
-    @Autowired
-    private IItineraryRepository itineraryRepository;
-    @Autowired
-    private IClientRepository clientRepository;
-    @Autowired
-    private ItineraryStepService itineraryStepService;
 
     /**
      * Endpoint pour créer une nouvelle route.
@@ -54,7 +46,7 @@ public class RouteController {
      * @param idItinerary L'ID de l'itinéraire.
      * @param route L'objet Route à ajouter.
      * @return Une réponse HTTP avec un code 201 si réussi, un code 500 en cas de problème avec la BDD ou un code 404
-     * si le commercial/l'itinéraire n'existe pas
+     * si le commercial/l'itinéraire/le client n'existe pas
      */
     @Operation(summary = "Créer une nouvelle route",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -62,61 +54,37 @@ public class RouteController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = Route.class))))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parcours ajouté avec succès"),
+            @ApiResponse(responseCode = "201", description = "Parcours ajouté avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "id": "67b8718700fa9e42a1968b45"
+                             }
+                             """))),
             @ApiResponse(responseCode = "404", description = "ID commerical non trouvé, ID itinéraire non trouvé " +
-                                                             "ou ID client non trouvé"),
-            @ApiResponse(responseCode = "500", description = "Erreur lors de la sauvegarde du parcours")
+                                                             "ou ID client non trouvé",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "error": "Itinéraire non trouvé pour l'ID : 1157"
+                             }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur lors de la sauvegarde du parcours",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                            {
+                                "error": "Ajout non effectué : ..."
+                            }
+                             """)))
     })
     @PostMapping()
     public ResponseEntity<?> createNewRoute(@RequestParam Long idSalesPerson, @RequestParam Long idItinerary,
                                             @RequestBody Route route) {
         try {
-            // On vérifie que le commercial existe
-            Optional<SalesPerson> salesPersonOpt = accountRepository.findById(idSalesPerson);
-
-            if (salesPersonOpt.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "ID commercial non trouvé"));
-            }
-
-            // On vérifie que l'itinéraire existe
-            Optional<Itinerary> itineraryOpt = itineraryRepository.findById(idItinerary);
-
-            if (itineraryOpt.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "ID itinéraire non trouvé"));
-            }
-
-            Itinerary itinerary = itineraryOpt.get();
-
-            // On récupère les clients de l'itinéraire
-            ArrayList<RouteStep> stepsList = new ArrayList<>();
-
-            ItineraryStep[] steps = itineraryStepService.getSteps(String.valueOf(itinerary.getIdItinerary()));
-
-            for (ItineraryStep step : steps) {
-                Optional<Client> clientOpt = clientRepository.findById(step.getIdClient());
-
-                if (clientOpt.isEmpty()) {
-                    return ResponseEntity.status(404).body(Map.of("error", "Client non trouvé : "
-                                                                                   + step.getIdClient()));
-                }
-
-                Client client = clientOpt.get();
-
-                stepsList.add(new RouteStep(client, "UNVISITED"));
-
-            }
-
-            route.setIdSalesPerson(idSalesPerson);
-            route.setItineraryId(idItinerary);
-            route.setItineraryName(itinerary.getNameItinerary());
-            route.setSteps(stepsList);
-            route.setStartDate(LocalDateTime.now(ZoneId.of("Europe/Paris")));
-
-            Route newRoute = routeService.createRoute(route);
+            Route newRoute = routeService.createRoute(route, idSalesPerson, idItinerary);
             return ResponseEntity.status(201).body(Map.of("id", newRoute.getId()));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(404).body(Map.of("error", "Aucun client trouvé pour l'itinéraire : "
-                                                                          + e.getMessage()));
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ajout non effectué."  + e.getMessage()));
         }
@@ -133,19 +101,26 @@ public class RouteController {
                     @ApiResponse(responseCode = "200", description = "Liste des parcours",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = Route.class))),
-                    @ApiResponse(responseCode = "404", description = "ID commercial non trouvé"),
-                    @ApiResponse(responseCode = "500", description = "Erreur lors de la récupération du parcours")})
+                    @ApiResponse(responseCode = "404", description = "ID commercial non trouvé",
+                                 content = @Content(mediaType = "application/json",
+                                    examples = @ExampleObject(value = """
+                                        {
+                                            "error": "Utilisateur non trouvé pour l'ID : 1157"
+                                        }
+                                    """))),
+                    @ApiResponse(responseCode = "500", description = "Erreur lors de la récupération du parcours",
+                                 content = @Content(mediaType = "application/json",
+                                    examples = @ExampleObject(value = """
+                                        {
+                                            "error": "Erreur lors de la récupération des parcours : ..."
+                                        }
+                                    """)))})
     @GetMapping(value = "/{idSalesPerson}")
     public ResponseEntity<?> getAllRoutes(@PathVariable Long idSalesPerson) {
         try {
-            // On vérifie que le commercial existe
-            Optional<SalesPerson> salesPersonOpt = accountRepository.findById(idSalesPerson);
-
-            if (salesPersonOpt.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "ID commercial non trouvé"));
-            }
-
             return ResponseEntity.status(200).body(routeService.getAllRoutes(idSalesPerson));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la récupération des parcours : "
                                                                           + e.getMessage()));
@@ -163,8 +138,20 @@ public class RouteController {
                     @ApiResponse(responseCode = "200", description = "Détails du parcours",
                                  content = @Content(mediaType = "application/json",
                                  schema = @Schema(implementation = Route.class))),
-                    @ApiResponse(responseCode = "404", description = "Parcours non trouvé"),
-                    @ApiResponse(responseCode = "500", description = "Erreur lors de la récupération du parcours")})
+                    @ApiResponse(responseCode = "404", description = "Parcours non trouvé",
+                                 content = @Content(mediaType = "application/json",
+                                 examples = @ExampleObject(value = """
+                                     {
+                                         "error": "Parcours non trouvé pour l'ID : 1157"
+                                     }
+                                 """))),
+                    @ApiResponse(responseCode = "500", description = "Erreur lors de la récupération du parcours",
+                                 content = @Content(mediaType = "application/json",
+                                 examples = @ExampleObject(value = """
+                                     {
+                                         "error": "Erreur lors de la récupération du parcours : ..."
+                                     }
+                                 """)))})
     @GetMapping(value = "/getOne/{idRoute}")
     public ResponseEntity<?> getOneRoute(@PathVariable String idRoute) {
         try {
@@ -185,9 +172,27 @@ public class RouteController {
      */
     @Operation(summary = "Supprimer un parcours", description = "Cette méthode permet de supprimer un parcours en fonction de son identifiant.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parcours supprimé avec succès"),
-            @ApiResponse(responseCode = "404", description = "Parcours non trouvé"),
-            @ApiResponse(responseCode = "500", description = "Erreur lors de la suppression du parcours")
+            @ApiResponse(responseCode = "200", description = "Parcours supprimé avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "success": "Parcours supprimé avec succès"
+                             }
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Parcours non trouvé",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "error": "Parcours non trouvé pour l'ID : 1157"
+                             }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur lors de la suppression du parcours",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "error": "Erreur lors de la suppression du parcours : ..."
+                             }
+                             """)))
     })
     @DeleteMapping(value = "/{idRoute}")
     public ResponseEntity<?> deleteRoute(@PathVariable String idRoute) {
@@ -214,9 +219,27 @@ public class RouteController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = Route.class))))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parcours mis à jour avec succès"),
-            @ApiResponse(responseCode = "404", description = "Parcours non trouvé"),
-            @ApiResponse(responseCode = "500", description = "Erreur lors de la mise à jour du parcours")
+            @ApiResponse(responseCode = "200", description = "Parcours mis à jour avec succès",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "success": "Parcours mis à jour avec succès"
+                             }
+                             """))),
+            @ApiResponse(responseCode = "404", description = "Parcours non trouvé",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "error": "Parcours non trouvé pour l'ID : 1157"
+                             }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur lors de la mise à jour du parcours",
+                         content = @Content(mediaType = "application/json",
+                         examples = @ExampleObject(value = """
+                             {
+                                 "error": "Erreur lors de la mise à jour du parcours : ..."
+                             }
+                             """)))
     })
     @PutMapping()
     public ResponseEntity<?> updateRoute(@RequestBody Route route) {
