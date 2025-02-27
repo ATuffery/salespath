@@ -91,7 +91,7 @@ class BrutForceMultiThreadedTest {
         assertThrows(IllegalArgumentException.class, () -> {
             try {
                 brutForce.brutForce(clientIds, userId);
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -107,7 +107,7 @@ class BrutForceMultiThreadedTest {
         assertThrows(IllegalArgumentException.class, () -> {
             try {
                 brutForce.brutForce(clientIds, userId);
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });

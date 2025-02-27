@@ -50,7 +50,7 @@ public class BrutForceThread {
         return permutations;
     }
 
-    public String[] brutForce(String[] idClients, Long idUser) throws InterruptedException, ExecutionException {
+    public String[] brutForce(String[] idClients, Long idUser) throws InterruptedException {
         Double[] startingPoint = accountService.getCoordPerson(idUser);
         List<Double[]> clientCoords = new ArrayList<>();
 
@@ -59,30 +59,31 @@ public class BrutForceThread {
         }
 
         checkValidPoints(startingPoint, clientCoords);
-
         List<List<Double[]>> permutations = generatePermutations(clientCoords);
 
         // Créer un cache de distances
         double[][] distanceCache = new double[clientCoords.size() + 1][clientCoords.size() + 1];
         for (int i = 0; i <= clientCoords.size(); i++) {
             for (int j = i + 1; j <= clientCoords.size(); j++) {
-                double distance = calcDistance(i == 0 ? startingPoint : clientCoords.get(i - 1), j == 0 ? startingPoint : clientCoords.get(j - 1));
-                distanceCache[i][j] = distanceCache[j][i] = distance;  // La distance entre i et j est la même dans les deux sens
+                double distance = calcDistance(i == 0 ? startingPoint : clientCoords.get(i - 1),
+                        j == 0 ? startingPoint : clientCoords.get(j - 1));
+                distanceCache[i][j] = distanceCache[j][i] = distance;
             }
         }
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(availableProcessors);
-        List<Future<PathResult>> futures = new ArrayList<>();
+        ConcurrentLinkedQueue<PathResult> results = new ConcurrentLinkedQueue<>();
 
-        // Diviser les permutations en groupes pour ne pas créer trop de threads
         int groupSize = permutations.size() / availableProcessors;
+        List<Thread> threads = new ArrayList<>();
+
         for (int i = 0; i < availableProcessors; i++) {
             int start = i * groupSize;
             int end = (i == availableProcessors - 1) ? permutations.size() : (i + 1) * groupSize;
             List<List<Double[]>> subList = permutations.subList(start, end);
 
-            Callable<PathResult> task = () -> {
+            Runnable task = () -> {
                 PathResult bestLocalResult = new PathResult(null, Double.MAX_VALUE);
                 for (List<Double[]> path : subList) {
                     List<Double[]> fullPath = new ArrayList<>();
@@ -95,16 +96,20 @@ public class BrutForceThread {
                         bestLocalResult = new PathResult(fullPath, distance);
                     }
                 }
-                return bestLocalResult;
+                results.add(bestLocalResult);
             };
-            futures.add(executor.submit(task));
+
+            Thread thread = new Thread(task);
+            threads.add(thread);
+            thread.start();
         }
 
-        executor.shutdown();
-        PathResult bestResult = new PathResult(null, Double.MAX_VALUE);
+        for (Thread thread : threads) {
+            thread.join();
+        }
 
-        for (Future<PathResult> future : futures) {
-            PathResult result = future.get();
+        PathResult bestResult = new PathResult(null, Double.MAX_VALUE);
+        for (PathResult result : results) {
             if (result.distance < bestResult.distance) {
                 bestResult = result;
             }
