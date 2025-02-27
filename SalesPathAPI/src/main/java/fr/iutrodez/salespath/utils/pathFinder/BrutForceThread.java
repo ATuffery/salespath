@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+/**
+ * Classe permettant de trouver le chemin optimal par force brute en utilisant plusieurs threads.
+ */
 @Component
 public class BrutForceThread {
 
@@ -18,18 +21,32 @@ public class BrutForceThread {
     @Autowired
     private ClientCoordService clientCoordService;
 
+    /**
+     * Vérifie la validité des points donnés.
+     *
+     * @param startingPoint Le point de départ.
+     * @param points La liste des points à visiter.
+     * @throws IllegalArgumentException si les points sont invalides.
+     */
     private static void checkValidPoints(Double[] startingPoint, List<Double[]> points) throws IllegalArgumentException {
         if (points == null || points.size() < 2) {
-            throw new IllegalArgumentException("Points cannot be null and must have at least two elements");
+            throw new IllegalArgumentException("Points ne peut pas être null ou contenir moins de 2 éléments");
         }
         if (startingPoint == null) {
-            throw new IllegalArgumentException("Starting point can't be null");
+            throw new IllegalArgumentException("Le point de départ ne peut pas être null");
         }
         if (points.contains(startingPoint)) {
-            throw new IllegalArgumentException("Starting point cannot be contained in the list of points");
+            throw new IllegalArgumentException("Le point de départ ne peut pas être un point à visiter");
         }
     }
 
+    /**
+     * Génère toutes les permutations possibles d'une liste.
+     *
+     * @param list La liste des éléments.
+     * @param <T>  Le type des éléments de la liste.
+     * @return Une liste contenant toutes les permutations possibles.
+     */
     private static <T> List<List<T>> generatePermutations(List<T> list) {
         List<List<T>> permutations = new ArrayList<>();
         if (list.size() == 1) {
@@ -39,7 +56,6 @@ public class BrutForceThread {
                 T current = list.get(i);
                 List<T> remaining = new ArrayList<>(list);
                 remaining.remove(i);
-
                 List<List<T>> remainingPermutations = generatePermutations(remaining);
                 for (List<T> perm : remainingPermutations) {
                     perm.add(0, current);
@@ -50,6 +66,14 @@ public class BrutForceThread {
         return permutations;
     }
 
+    /**
+     * Trouve le chemin optimal entre les clients en utilisant la méthode de force brute multi-threadée.
+     *
+     * @param idClients Liste des identifiants des clients.
+     * @param idUser    Identifiant de l'utilisateur.
+     * @return Un tableau de chaînes représentant l'ordre optimal des clients.
+     * @throws InterruptedException si l'exécution des threads est interrompue.
+     */
     public String[] brutForce(String[] idClients, Long idUser) throws InterruptedException {
         Double[] startingPoint = accountService.getCoordPerson(idUser);
         List<Double[]> clientCoords = new ArrayList<>();
@@ -61,7 +85,7 @@ public class BrutForceThread {
         checkValidPoints(startingPoint, clientCoords);
         List<List<Double[]>> permutations = generatePermutations(clientCoords);
 
-        // Créer un cache de distances
+        // Création d'un cache de distances pour éviter les recalculs inutiles
         double[][] distanceCache = new double[clientCoords.size() + 1][clientCoords.size() + 1];
         for (int i = 0; i <= clientCoords.size(); i++) {
             for (int j = i + 1; j <= clientCoords.size(); j++) {
@@ -108,6 +132,7 @@ public class BrutForceThread {
             thread.join();
         }
 
+        // Recherche du meilleur chemin parmi les résultats des threads
         PathResult bestResult = new PathResult(null, Double.MAX_VALUE);
         for (PathResult result : results) {
             if (result.distance < bestResult.distance) {
@@ -115,6 +140,7 @@ public class BrutForceThread {
             }
         }
 
+        // Conversion du meilleur chemin en identifiants de clients
         List<Double[]> bestPath = bestResult.path;
         String[] optimalRoute = new String[idClients.length];
         for (int i = 0; i < bestPath.size() - 2; i++) {
@@ -124,6 +150,9 @@ public class BrutForceThread {
         return optimalRoute;
     }
 
+    /**
+     * Calcule la distance totale d'un chemin donné.
+     */
     private double calcTotalDistance(List<Double[]> path, List<Double[]> clientCoords, double[][] distanceCache) {
         double totalDistance = 0;
         for (int i = 0; i < path.size() - 1; i++) {
@@ -134,10 +163,16 @@ public class BrutForceThread {
         return totalDistance;
     }
 
+    /**
+     * Calcule la distance entre deux points.
+     */
     private double calcDistance(Double[] pointA, Double[] pointB) {
         return CalculDistance.distanceCalculBirdFly(pointA[0], pointA[1], pointB[0], pointB[1]);
     }
 
+    /**
+     * Classe interne pour stocker un chemin et sa distance associée.
+     */
     private static class PathResult {
         List<Double[]> path;
         double distance;
