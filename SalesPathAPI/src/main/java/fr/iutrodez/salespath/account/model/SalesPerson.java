@@ -37,7 +37,7 @@ public class SalesPerson {
     private double longitude;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public SalesPerson() {
