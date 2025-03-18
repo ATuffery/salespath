@@ -123,12 +123,6 @@ public class RouteDetailsActivity extends BaseActivity {
             return;
         }
 
-        // Debug des points
-        Log.d("MapDebug", "Nombre de points : " + points.size());
-        for (GeoPoint point : points) {
-            Log.d("MapDebug", "Point : " + point.getLatitude() + ", " + point.getLongitude());
-        }
-
         // Création de la polyline
         Polyline routeLine = new Polyline();
         routeLine.setPoints(points);
