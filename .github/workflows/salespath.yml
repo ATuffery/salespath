@@ -46,12 +46,12 @@ jobs:
 
     - name: Update application.properties with MySQL credentials  # Mise à jour du fichier application.properties avec les identifiants MySQL
       run: |
-        # Remplace les placeholders dans application.properties par les secrets
-        sed -i 's/<db_username>/${{ secrets.MYSQL_USER }}/' SalesPathAPI/src/main/resources/application.properties
-        sed -i 's/<db_password>/${{ secrets.MYSQL_PASSWORD }}/' SalesPathAPI/src/main/resources/application.properties
-        sed -i 's/<db_url>/${{ secrets.MYSQL_URL }}/' SalesPathAPI/src/main/resources/application.properties
-        sed -i 's/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/' SalesPathAPI/src/main/resources/application.properties
-        sed -i 's/<mongo>/${{ secrets.MONGO }}/' SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<db_username>/${{ secrets.MYSQL_USER }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<db_password>/${{ secrets.MYSQL_PASSWORD }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<db_url>|${{ secrets.MYSQL_URL }}|g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<mongo>|${{ secrets.MONGO }}|g" SalesPathAPI/src/main/resources/application.properties
+
 
     - name: Compile with skip tests  # Compilation avec Maven en sautant les tests
       run: mvn -B package --file pom.xml -DskipTests  # Lancer la commande Maven avec l'option pour ignorer les tests
