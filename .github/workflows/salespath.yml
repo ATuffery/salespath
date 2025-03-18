@@ -74,11 +74,17 @@ jobs:
 
     - name: Run Docker Compose remotely  # Exécution de Docker Compose à distance
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
-          cd /ec2-user/home/  # Aller dans le répertoire Docker
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
+        chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+
+        ssh -i /tmp/private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
+          cd /home/ec2-user/  # Aller dans le répertoire approprié
           sudo docker compose down  # Arrêter et supprimer les containers existants
           sudo docker compose up -d --build  # Lancer Docker Compose avec l'option de build en mode détaché
         EOF
+
+        rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
+
 
     - name: Clean up remote docker folder  # Nettoyage du répertoire distant
       run: |
