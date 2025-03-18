@@ -140,7 +140,6 @@ public class RouteDetailsActivity extends BaseActivity {
         // Rafraîchir la carte
         map.postInvalidate();
 
-        Log.e("MapDebug", "Route ajoutée !");
     }
 
 }
