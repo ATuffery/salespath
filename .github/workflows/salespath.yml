@@ -69,7 +69,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}  # Clé privée stockée dans les secrets GitHub
         port: 22
         source: "SalesPathAPI/Docker/*"  # Fichiers source à copier depuis le répertoire Docker
-        target: "/ec2-user/home/"  # Destination sur le serveur distant
+        target: "/home/ec2-user/"  # Destination sur le serveur distant
         recursive: true  # Copie récursive des fichiers
 
     - name: Run Docker Compose remotely  # Exécution de Docker Compose à distance
