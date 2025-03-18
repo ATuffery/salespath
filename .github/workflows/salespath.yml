@@ -33,7 +33,7 @@ jobs:
   deploy:
     needs: build  # Ce job dépend du job 'build', il sera exécuté après lui
     runs-on: ubuntu-latest  # Le job s'exécute sur la dernière version d'Ubuntu disponible
-    if: github.ref == 'refs/heads/main'  # Ce job ne s'exécute que si la branche est 'main'
+    # if: github.ref == 'refs/heads/main'  # Ce job ne s'exécute que si la branche est 'main'
 
     steps:
     - uses: actions/checkout@v4  # Action pour récupérer le code source du dépôt
