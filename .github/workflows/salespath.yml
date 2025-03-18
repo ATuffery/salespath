@@ -61,18 +61,13 @@ jobs:
       run: |
         cp SalesPathAPI/target/*.jar SalesPathAPI/Docker  # Copie du fichier .jar généré vers le dossier Docker
 
-    - name: Check if Docker directory exists
-      run: |
-        ls -l SalesPathAPI
-        ls -l SalesPathAPI/Docker/
-
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
         chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
 
         # Copie du dossier Docker contenant le .jar et le docker-compose.yml
-        scp -i /tmp/private_key -o StrictHostKeyChecking=no -r SalesPathAPI/Docker/* ec2-user@${{ secrets.REMOTE_HOST }}:/home/ec2-user/
+        scp -i /tmp/private_key -o StrictHostKeyChecking=no -r SalesPathAPI/Docker ec2-user@${{ secrets.REMOTE_HOST }}:/home/ec2-user/
 
         rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
 
