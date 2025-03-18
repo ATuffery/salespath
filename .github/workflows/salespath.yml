@@ -57,9 +57,9 @@ jobs:
       run: mvn -B package --file pom.xml -DskipTests  # Lancer la commande Maven avec l'option pour ignorer les tests
       working-directory: SalesPathAPI  # Répertoire de travail où se trouve le projet Maven
 
-    - name: Copy .jar to docker/api  # Copie du fichier .jar dans le répertoire Docker
+    - name: Copy .jar to Docker  # Copie du fichier .jar dans le répertoire Docker
       run: |
-        cp SalesPathAPI/target/*.jar SalesPathAPI/Docker/api/  # Copie du fichier .jar généré vers le dossier Docker
+        cp SalesPathAPI/target/*.jar SalesPathAPI/Docker/  # Copie du fichier .jar généré vers le dossier Docker
 
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
       uses: appleboy/ssh-action@master
