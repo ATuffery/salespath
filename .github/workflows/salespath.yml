@@ -79,8 +79,8 @@ jobs:
 
         ssh -i /tmp/private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
           cd /home/ec2-user/  # Aller dans le répertoire approprié
-          sudo docker compose down  # Arrêter et supprimer les containers existants
-          sudo docker compose up -d --build  # Lancer Docker Compose avec l'option de build en mode détaché
+          sudo docker-compose down  # Arrêter et supprimer les containers existants
+          sudo docker-compose up -d --build  # Lancer Docker Compose avec l'option de build en mode détaché
         EOF
 
         rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
