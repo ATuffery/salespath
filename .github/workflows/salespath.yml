@@ -1,10 +1,16 @@
 name: Salespath API
 
+# on:
+#   push:
+#     branches: [ "*" ]  # Lors d'un push sur n'importe quelle branche
+#   pull_request:
+#     branches: [ "*" ]  # Lors d'une demande de pull sur n'importe quelle branche
 on:
-  push:
-    branches: [ "*" ]  # Lors d'un push sur n'importe quelle branche
-  pull_request:
-    branches: [ "*" ]  # Lors d'une demande de pull sur n'importe quelle branche
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        default: "DEV"
 
 jobs:
   build:
