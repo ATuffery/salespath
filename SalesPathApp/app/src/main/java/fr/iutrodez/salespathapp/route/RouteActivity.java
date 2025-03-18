@@ -104,7 +104,6 @@ public class RouteActivity extends AppCompatActivity {
                 title.setText(this.route.getName());
                 displayContactInfo();
                 addMarkers();
-                fetchRoute();
             } else {
                 Utils.displayToast(getBaseContext(), "Erreur : aucune tournée sauvegardée trouvée.");
                 finish();
@@ -184,7 +183,6 @@ public class RouteActivity extends AppCompatActivity {
                     RouteSaver.saveRoute(getBaseContext(), route);
                     addMarkers();
                     displayContactInfo();
-                    fetchRoute();
                 });
             }
 
@@ -317,87 +315,25 @@ public class RouteActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Récupère les informations du tracé de l'itinéraire depuis une API
-     */
-    private void fetchRoute() {
-        String API_URL = "https://router.project-osrm.org/route/v1/driving/";
-
-        StringBuilder urlBuilder = new StringBuilder(API_URL);
-
-        for (Contact contact : this.route.getSteps()) {
-            urlBuilder.append(contact.getLongitude()).append(",").append(contact.getLatitude()).append(";");
-        }
-
-        // Supprimer le dernier ";"
-        urlBuilder.setLength(urlBuilder.length() - 1);
-
-        urlBuilder.append("?overview=full&geometries=geojson");
-
-        String finalUrl = urlBuilder.toString();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, finalUrl, null,
-                response -> {
-                    processRouteResponse(response);
-                },
-                error -> {
-                    Utils.displayToast(getBaseContext(), "Erreur lors de la récupération de l'itinéraire.");
-                }
-        );
-
-        queue.add(jsonObjectRequest);
-    }
-
-    /**
-     * Extrait les informations du tracé de l'itinéraire retourné par l'API
-     * @param response
-     */
-    private void processRouteResponse(JSONObject response) {
-        try {
-            JSONArray routes = response.getJSONArray("routes");
-            if (routes.length() > 0) {
-                JSONArray coordinates = routes.getJSONObject(0)
-                        .getJSONObject("geometry")
-                        .getJSONArray("coordinates");
-
-                List<GeoPoint> routePoints = new ArrayList<>();
-                for (int i = 0; i < coordinates.length(); i++) {
-                    JSONArray coord = coordinates.getJSONArray(i);
-                    double lon = coord.getDouble(0);
-                    double lat = coord.getDouble(1);
-                    routePoints.add(new GeoPoint(lat, lon));
-                }
-
-                drawRouteOnMap(routePoints);
-            } else {
-                Utils.displayToast(getBaseContext(), "Aucun itinéraire trouvé !");
-            }
-        } catch (Exception e) {
-            Utils.displayToast(getBaseContext(),getString(R.string.error_server));
-        }
-    }
-
 
     /**
      * Trace l'itinéraire sur la carte
-     * @param points
      */
-    private void drawRouteOnMap(List<GeoPoint> points) {
+    private void drawRouteOnMap() {
         runOnUiThread(() -> {
-            if (points.isEmpty()) {
+            ArrayList<GeoPoint> points = this.route.getLocalisation();
+
+            if (points == null || points.size() < 2) {
                 return;
             }
 
             Polyline routeLine = new Polyline();
             routeLine.setPoints(points);
-            routeLine.setColor(R.color.grey);
+            routeLine.setColor(getResources().getColor(R.color.primary));
             routeLine.setWidth(8);
 
             map.getOverlays().add(routeLine);
-            map.invalidate(); // Rafraîchir la carte
+            map.invalidate();
         });
     }
 
@@ -448,6 +384,7 @@ public class RouteActivity extends AppCompatActivity {
                             if (route.getStatus() == RouteStatus.STARTED && location != null && route != null) {
                                 GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
                                 route.addLocation(currentPosition);
+                                drawRouteOnMap();
                                 RouteSaver.saveRoute(getBaseContext(), route);
                             }
                         }

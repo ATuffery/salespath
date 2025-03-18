@@ -47,7 +47,7 @@ public class Itinerary {
     }
 
     public String getDateCreation() {
-        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRANCE);
         LocalDateTime dateTime = LocalDateTime.parse(dateCreation, inputFormat);
         return dateTime.format(outputFormat);
