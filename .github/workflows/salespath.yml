@@ -61,6 +61,10 @@ jobs:
       run: |
         cp SalesPathAPI/target/*.jar SalesPathAPI/Docker  # Copie du fichier .jar généré vers le dossier Docker
 
+    - name: Check if Docker directory exists
+      run: |
+        ls -l SalesPathAPI/Docker
+
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
