@@ -59,7 +59,7 @@ jobs:
 
     - name: Copy .jar to Docker  # Copie du fichier .jar dans le répertoire Docker
       run: |
-        cp SalesPathAPI/target/*.jar SalesPathAPI/Docker/  # Copie du fichier .jar généré vers le dossier Docker
+        cp SalesPathAPI/target/*.jar SalesPathAPI/Docker  # Copie du fichier .jar généré vers le dossier Docker
 
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
       uses: appleboy/ssh-action@master
