@@ -83,7 +83,7 @@ public class RouteData {
                                     JSONObject clientObject = stepObject.getJSONObject("client");
                                     String idClient = clientObject.optString("id", "");
                                     String clientName = clientObject.optString("firstName", "Client inconnu");
-                                    clientName += clientObject.optString("lastName", "Client inconnu");
+                                    clientName += " " + clientObject.optString("lastName", "Client inconnu");
                                     String clientAddress = clientObject.optString("address", "Client inconnu");
                                     JSONArray coord = clientObject.getJSONArray("coordonates");
                                     double clientLatitude = coord.getDouble(0);
@@ -98,8 +98,21 @@ public class RouteData {
                                     steps.add(contact);
                                 }
                             }
+                            Route route = new Route(id, name, steps, startDate, accountId);
 
-                            listener.OnRouteDetailsLoaded(new Route(id, name, steps, startDate, accountId));
+                            JSONArray loc = response.optJSONArray("localisation");
+
+                            if (loc != null) {
+                                for (int y = 0; y < loc.length(); y++) {
+                                    JSONObject obj = (JSONObject) loc.get(y);
+                                    double clientLatitude = obj.getDouble("latitude");
+                                    double clientLongitude = obj.getDouble("longitude");
+                                    Log.e("LOC", clientLatitude + ";" + clientLongitude);
+                                    route.addLocation(new GeoPoint(clientLatitude, clientLongitude));
+                                }
+                            }
+
+                            listener.OnRouteDetailsLoaded(route);
 
                         } catch (JSONException e) {
                             listener.onError("Erreur lors de la lecture des données.");
@@ -189,7 +202,7 @@ public class RouteData {
                 routeData.put("endDate", Utils.formatDateToISOString(new Date()));
             }
 
-            routeData.put("status", route.getStatus().ordinal());
+            routeData.put("status", route.getStatus().name());
 
             // Création du tableau des étapes
             JSONArray stepsArray = new JSONArray();
@@ -198,7 +211,7 @@ public class RouteData {
                 JSONObject clientObject = new JSONObject();
                 clientObject.put("id", step.getId());
                 stepObject.put("client", clientObject);
-                stepObject.put("status", step.getStatus().ordinal());
+                stepObject.put("status", step.getStatus().name());
                 stepsArray.put(stepObject);
             }
             routeData.put("steps", stepsArray);

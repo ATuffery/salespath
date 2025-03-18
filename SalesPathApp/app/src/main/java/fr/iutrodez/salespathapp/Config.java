@@ -5,7 +5,7 @@ public class Config {
     /**
      * URL de l'API
      */
-    public static final String API_URL = "http://ec2-52-47-174-172.eu-west-3.compute.amazonaws.com:8080/";
+    public static final String API_URL = "http://ec2-35-180-71-227.eu-west-3.compute.amazonaws.com:8080/";
 
     /**
      * Latitude utilisé par défaut sur les cartes
