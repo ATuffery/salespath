@@ -62,15 +62,15 @@ jobs:
         cp SalesPathAPI/target/*.jar SalesPathAPI/Docker  # Copie du fichier .jar généré vers le dossier Docker
 
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ec2-user  # Utilisateur par défaut pour Amazon Linux
-        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Clé privée stockée dans les secrets GitHub
-        port: 22
-        source: "SalesPathAPI/Docker/*"  # Fichiers source à copier depuis le répertoire Docker
-        target: "/home/ec2-user/"  # Destination sur le serveur distant
-        recursive: true  # Copie récursive des fichiers
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
+        chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+
+        # Copie du dossier Docker contenant le .jar et le docker-compose.yml
+        scp -i /tmp/private_key -o StrictHostKeyChecking=no -r SalesPathAPI/Docker/* ec2-user@${{ secrets.REMOTE_HOST }}:/home/ec2-user/
+
+        rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
+
 
     - name: Run Docker Compose remotely  # Exécution de Docker Compose à distance
       run: |
