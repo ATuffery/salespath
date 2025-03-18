@@ -101,12 +101,15 @@ public class RouteData {
                             Route route = new Route(id, name, steps, startDate, accountId);
 
                             JSONArray loc = response.optJSONArray("localisation");
-                            for (int y = 0; y < loc.length(); y++) {
-                                JSONObject obj = (JSONObject) loc.get(y);
-                                double clientLatitude = obj.getDouble("latitude");
-                                double clientLongitude = obj.getDouble("longitude");
-                                Log.e("LOC", clientLatitude + ";" + clientLongitude);
-                                route.addLocation(new GeoPoint(clientLatitude, clientLongitude));
+
+                            if (loc != null) {
+                                for (int y = 0; y < loc.length(); y++) {
+                                    JSONObject obj = (JSONObject) loc.get(y);
+                                    double clientLatitude = obj.getDouble("latitude");
+                                    double clientLongitude = obj.getDouble("longitude");
+                                    Log.e("LOC", clientLatitude + ";" + clientLongitude);
+                                    route.addLocation(new GeoPoint(clientLatitude, clientLongitude));
+                                }
                             }
 
                             listener.OnRouteDetailsLoaded(route);
