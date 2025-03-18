@@ -63,7 +63,8 @@ jobs:
 
     - name: Check if Docker directory exists
       run: |
-        ls -l SalesPathAPI/Docker
+        ls -l SalesPathAPI
+        ls -l SalesPathAPI/Docker/
 
     - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
       run: |
