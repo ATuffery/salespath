@@ -55,8 +55,6 @@ public class RouteDetailsActivity extends BaseActivity {
 
         this.steps = new ArrayList<>();
         this.recyclerView = findViewById(R.id.recyclerView);
-        adapter = new RouteStepAdapter(steps);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         this.intent = getIntent();
         this.routeId = intent.getStringExtra("routeId");
@@ -71,6 +69,11 @@ public class RouteDetailsActivity extends BaseActivity {
             public void OnRouteDetailsLoaded(Route data) {
                 route = data;
                 steps = route.getSteps();
+                adapter = new RouteStepAdapter(steps);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
                 displayInfos();
             }
 
@@ -104,10 +107,6 @@ public class RouteDetailsActivity extends BaseActivity {
     }
 
     private void displayInfos() {
-        recyclerView.setAdapter(adapter);
-        // Mettre à jour l'adaptateur
-        adapter.notifyDataSetChanged();
-
         this.title.setText(this.route.getName());
         this.startDate.setText("Commencé le " + Utils.formatDateFr(this.route.getStartDate()));
         this.nbSteps.setText(this.steps.size() > 1 ? this.steps.size() + " étapes" : this.steps.size() + " étape");
