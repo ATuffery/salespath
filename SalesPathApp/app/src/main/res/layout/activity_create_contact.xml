@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addContact"
+            android:layout_marginVertical="@dimen/margin_bottom_large"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/msgError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:layout_marginBottom="@dimen/margin_bottom_extra_large"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_marginHorizontal="@dimen/margin_horizontal"
+            android:textColor="@color/alert"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/company"
+            android:layout_marginBottom="@dimen/margin_bottom_large"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/companyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/companyName"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <EditText
+            android:id="@+id/companyAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/companyAddress"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="150"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <EditText
+            android:id="@+id/companyDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/companyDescription"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="250"
+            android:maxLines="3"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/customer"
+            android:layout_marginVertical="@dimen/margin_bottom_large"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contactLastName"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contactFirstName"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contactPhoneNumber"
+            android:layout_marginHorizontal="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/padding_default"
+            android:inputType="text"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/type"
+            android:layout_marginVertical="@dimen/margin_bottom_large"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <RadioGroup
+            android:id="@+id/contactType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/typeProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prospect"
+                android:textColor="@color/black"
+                android:buttonTint="@color/primary"/>
+
+            <RadioButton
+                android:id="@+id/typeContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_horizontal"
+                android:layout_marginBottom="@dimen/margin_bottom_large"
+                android:text="@string/customer"
+                android:textColor="@color/black"
+                android:buttonTint="@color/primary"/>
+
+        </RadioGroup>
+
+        <!-- Créer Button -->
+        <Button
+            android:id="@+id/create_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Créer"
+            android:layout_marginHorizontal="@dimen/margin_horizontal"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/button_padding"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/margin_bottom_extra_large"
+            android:onClick="create"/>
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Supprimer"
+            android:layout_marginHorizontal="@dimen/margin_horizontal"
+            android:layout_marginBottom="@dimen/margin_bottom_medium"
+            android:padding="@dimen/button_padding"
+            android:backgroundTint="@color/alert"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/margin_bottom_small"/>
+
+    </LinearLayout>
+</android.widget.ScrollView>

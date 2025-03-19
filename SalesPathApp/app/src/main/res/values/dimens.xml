@@ -1,0 +1,24 @@
+<resources>
+    <!-- Marges -->
+    <dimen name="margin_horizontal">32dp</dimen>
+    <dimen name="margin_bottom_small">8dp</dimen>
+    <dimen name="margin_bottom_medium">16dp</dimen>
+    <dimen name="margin_bottom_large">24dp</dimen>
+    <dimen name="margin_bottom_extra_large">30dp</dimen>
+
+    <!-- Tailles de vue -->
+    <dimen name="logo_width">200dp</dimen>
+    <dimen name="logo_height">100dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_large">25sp</dimen>
+    <dimen name="text_size_medium">17sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_extra_small">10sp</dimen>
+
+    <!-- Paddings -->
+    <dimen name="padding_default">12dp</dimen>
+
+    <!-- Buttons -->
+    <dimen name="button_padding">12dp</dimen>
+</resources>

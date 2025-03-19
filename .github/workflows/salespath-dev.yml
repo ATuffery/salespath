@@ -1,0 +1,94 @@
+name: Salespath API dev
+
+# on:
+#   push:
+#     branches: [ "*" ]  # Lors d'un push sur n'importe quelle branche
+#   pull_request:
+#     branches: [ "*" ]  # Lors d'une demande de pull sur n'importe quelle branche
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        default: "DEV"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Le job s'exécute sur la dernière version d'Ubuntu disponible
+
+    steps:
+    - uses: actions/checkout@v4  # Action pour récupérer le code source du dépôt
+
+    - name: Set up JDK 17  # Configuration de la version 17 de Java
+      uses: actions/setup-java@v4  # Action pour configurer Java
+      with:
+        java-version: '17'  # Spécifie la version de Java
+        distribution: 'corretto'  # Utilisation de la distribution Amazon Corretto de Java
+        cache: maven  # Mise en cache des dépendances Maven pour améliorer la performance
+
+    - name: Build with Maven  # Exécution de la commande de build Maven
+      run: mvn -B package --file pom.xml  # Lancer la commande Maven pour empaqueter le projet
+      working-directory: SalesPathAPI  # Répertoire où se trouve le fichier pom.xml (projet Maven)
+
+  deploy:
+    needs: build  # Ce job dépend du job 'build', il sera exécuté après lui
+    runs-on: ubuntu-latest  # Le job s'exécute sur la dernière version d'Ubuntu disponible
+    # if: github.ref == 'refs/heads/main'  # Ce job ne s'exécute que si la branche est 'main'
+
+    steps:
+    - uses: actions/checkout@v4  # Action pour récupérer le code source du dépôt
+
+    - name: Set up JDK 17 for deploy  # Configuration de Java 17 pour le déploiement
+      uses: actions/setup-java@v4  # Action pour configurer Java
+      with:
+        java-version: '17'  # Spécifie la version de Java
+        distribution: 'corretto'  # Utilisation de la distribution Amazon Corretto de Java
+
+    - name: Update application.properties with MySQL credentials  # Mise à jour du fichier application.properties avec les identifiants MySQL
+      run: |
+        sed -i "s/<db_username>/${{ secrets.MYSQL_USER }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<db_password>/${{ secrets.MYSQL_PASSWORD }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<db_url>|${{ secrets.MYSQL_URL }}|g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<mongo>|${{ secrets.MONGO }}|g" SalesPathAPI/src/main/resources/application.properties
+
+
+    - name: Compile with skip tests  # Compilation avec Maven en sautant les tests
+      run: mvn -B package --file pom.xml -DskipTests  # Lancer la commande Maven avec l'option pour ignorer les tests
+      working-directory: SalesPathAPI  # Répertoire de travail où se trouve le projet Maven
+
+    - name: Copy .jar to Docker  # Copie du fichier .jar dans le répertoire Docker
+      run: |
+        ls SalesPathAPI -lart
+        cp SalesPathAPI/target/*.jar SalesPathAPI/Docker/  # Copie du fichier .jar généré vers le dossier Docker
+
+    - name: Deploy to remote server via SSH  # Déploiement via SSH avec clé privée
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
+        chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+
+        # Copie du dossier Docker contenant le .jar et le docker-compose.yml
+        scp -i /tmp/private_key -o StrictHostKeyChecking=no -r SalesPathAPI/Docker ec2-user@${{ secrets.REMOTE_HOST }}:/home/ec2-user/
+
+        rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
+
+
+    - name: Run Docker Compose remotely  # Exécution de Docker Compose à distance
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key  # Sauvegarde la clé privée dans un fichier temporaire
+        chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+
+        ssh -i /tmp/private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
+          cd /home/ec2-user/  # Aller dans le répertoire approprié
+          sudo docker-compose down  # Arrêter et supprimer les containers existants
+          sudo docker-compose up -d --build  # Lancer Docker Compose avec l'option de build en mode détaché
+        EOF
+
+        rm /tmp/private_key  # Supprime le fichier de clé privée après utilisation
+
+
+    - name: Clean up remote docker folder  # Nettoyage du répertoire distant
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
+          #rm -rf /ec2-user/home/*  # Supprimer tous les fichiers dans le répertoire Docker
+        EOF
