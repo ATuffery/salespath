@@ -1,6 +1,7 @@
 package fr.iutrodez.salespathapp.route;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -81,6 +82,9 @@ public class RouteActivity extends AppCompatActivity {
         // Configure OSMDroid
         Configuration.getInstance().setUserAgentValue(getPackageName());
         setContentView(R.layout.activity_route);
+
+        /** Bloque la rotation */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Récupérer l'ID du parcours et autres données de l'intent
         Intent intent = getIntent();
