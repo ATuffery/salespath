@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 17  # Version du JDK à utiliser
-          distribution: 'correto'  # Distribution utilisée (Amazon Corretto), d'autres options sont disponibles
+          distribution: 'corretto'  # Distribution utilisée (Amazon Corretto), d'autres options sont disponibles
 
       # Étape 3 : Mise en cache des paquets utilisés par SonarQube
       - name: Cache SonarQube packages
