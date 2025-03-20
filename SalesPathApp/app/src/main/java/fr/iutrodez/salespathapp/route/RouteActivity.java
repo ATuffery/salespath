@@ -111,6 +111,7 @@ public class RouteActivity extends AppCompatActivity {
                 title.setText(this.route.getName());
                 displayContactInfo();
                 addMarkers();
+                drawRouteOnMap();
             } else {
                 Utils.displayToast(getBaseContext(), "Erreur : aucune tournée sauvegardée trouvée.");
                 finish();
