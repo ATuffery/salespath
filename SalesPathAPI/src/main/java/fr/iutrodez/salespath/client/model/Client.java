@@ -6,9 +6,13 @@ import jakarta.persistence.Id;
 
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+
+import java.util.List;
 
 /**
  * Représentation d'un client dans Mongo DB
@@ -43,6 +47,9 @@ public class Client {
 
     @Schema(description = "ID de la personne associée au client")
     private Long idPerson;
+
+    @GeoSpatialIndexed
+    private List<Double> location;
 
     @Id
     @GeneratedValue

@@ -8,6 +8,7 @@ import fr.iutrodez.salespath.itinerary.model.Itinerary;
 import fr.iutrodez.salespath.itinerary.repository.IItineraryRepository;
 import fr.iutrodez.salespath.itinerarystep.model.ItineraryStep;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
+import fr.iutrodez.salespath.route.dto.Coordinates;
 import fr.iutrodez.salespath.route.dto.RouteStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

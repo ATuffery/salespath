@@ -1,7 +1,9 @@
 package fr.iutrodez.salespath.route.repository;
 
+import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.route.model.Route;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

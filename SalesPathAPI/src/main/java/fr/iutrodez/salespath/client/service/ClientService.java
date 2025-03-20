@@ -68,4 +68,26 @@ public class ClientService {
         return clientRepository.findById(id)
                                .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
     }
+
+
+    /**
+     * Récupère client et prospects a une distance inférieur à 200m et 1km
+     * @param lat latitude du user
+     * @param lon longitude du user
+     * @return la liste client et prospects
+     */
+    public List<Client> getClientProximity(double lat, double lon) {
+        try {
+            List<Client> clientProximity = clientRepository.findClientsWithin200m(lat,lon);
+            List<Client> prospectProximity = clientRepository.findProspectsWithin1Km(lat,lon);
+
+            for(Client client : prospectProximity) {
+                clientProximity.add(client);
+            }
+            return clientProximity;
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des clients par ID : " + e.getMessage());
+        }
+
+    }
 }

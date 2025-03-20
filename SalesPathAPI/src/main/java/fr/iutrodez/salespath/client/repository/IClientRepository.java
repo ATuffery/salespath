@@ -2,6 +2,8 @@ package fr.iutrodez.salespath.client.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import fr.iutrodez.salespath.client.model.Client;
+import org.springframework.data.mongodb.repository.Query;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +32,22 @@ public interface IClientRepository extends MongoRepository<Client, String> {
      * @param id L'ID unique du client à supprimer.
      */
     void deleteClientById(String id);
+
+    /**
+     * Recherche les prospects qui sont à moins de 1 km de la position du user
+     * @param latitude
+     * @param longitude
+     * @return la liste des prospects
+     */
+    @Query("{ location: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 1000 }, isClient: false } }")
+    List<Client> findProspectsWithin1Km(double latitude, double longitude);
+
+    /**
+     * Recherche si le client est a moins de 200m
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    @Query("{ location: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 200 }, isClient: true } }")
+    List<Client> findClientsWithin200m(double latitude, double longitude);
 }
