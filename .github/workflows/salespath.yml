@@ -13,7 +13,7 @@ on:
         default: "DEV"
 
 jobs:
-  build:
+    build:
     runs-on: ubuntu-latest  # Le job s'exécute sur la dernière version d'Ubuntu disponible
 
     steps:
@@ -26,9 +26,21 @@ jobs:
         distribution: 'corretto'  # Utilisation de la distribution Amazon Corretto de Java
         cache: maven  # Mise en cache des dépendances Maven pour améliorer la performance
 
-    - name: Build with Maven  # Exécution de la commande de build Maven
-      run: mvn -B package --file pom.xml  # Lancer la commande Maven pour empaqueter le projet
-      working-directory: SalesPathAPI  # Répertoire où se trouve le fichier pom.xml (projet Maven)
+    - name: Display application.properties  # Vérifier si le fichier est modifié par erreur
+      run: cat SalesPathAPI/src/main/resources/application.properties || echo "Fichier application.properties non trouvé"
+      
+    - name: List Maven Dependencies  # Lister toutes les dépendances installées
+      run: mvn dependency:tree -Dverbose -DoutputFile=dependencies.txt
+      working-directory: SalesPathAPI
+
+    - name: Check Maven Tests  # Lancer seulement les tests pour voir les erreurs exactes
+      run: mvn test -B --file pom.xml
+      working-directory: SalesPathAPI
+
+    - name: Build with Maven  # Construction du projet sans tests
+      run: mvn -B package --file pom.xml -DskipTests
+      working-directory: SalesPathAPI
+
 
   deploy:
     needs: build  # Ce job dépend du job 'build', il sera exécuté après lui
