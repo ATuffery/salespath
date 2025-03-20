@@ -98,5 +98,5 @@ jobs:
     - name: Clean up remote docker folder  # Nettoyage du répertoire distant
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
-          #rm -rf /ec2-user/home/*  # Supprimer tous les fichiers dans le répertoire Docker
+          rm -rf /ec2-user/home/*  # Supprimer tous les fichiers dans le répertoire Docker
         EOF
