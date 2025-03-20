@@ -56,5 +56,5 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Authentification pour SonarQube
-        run: mvn -B -f ./SalesPathAPI/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ATuffery_salespath
+        run: mvn -B -f ./SalesPathAPI/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ATuffery_salespath -Dsonar.organization=atuffery
 
