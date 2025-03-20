@@ -75,6 +75,8 @@ public class RouteActivity extends AppCompatActivity {
     private MyLocationNewOverlay myLocationOverlay;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private boolean proximityAlertShown = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,6 +238,7 @@ public class RouteActivity extends AppCompatActivity {
         } else {
             this.displayContactInfo();
         }
+        this.proximityAlertShown = false;
         RouteSaver.saveRoute(this, route);
     }
 
@@ -405,19 +408,21 @@ public class RouteActivity extends AppCompatActivity {
         ContactData.getProximityClients(this, apiKey, accountId, loc, new ContactData.OnContactsLoadedListener() {
             @Override
             public void onContactsLoaded(ArrayList<JSONObject> contacts) {
-                if (contacts.isEmpty()) {
+                if (contacts.isEmpty() || proximityAlertShown || route.getCurrentStep() == -1) {
                     return;
                 }
 
+                proximityAlertShown = true;
+
                 String name = "";
                 try {
-                    for (JSONObject contact:
-                            contacts) {
-
+                    for (JSONObject contact : contacts) {
                         if (contact.getString("id").equals(route.getCurrentContact().getId())) {
-                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getBaseContext());
+                            // Utilisation du bon contexte : RouteActivity.this
+                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RouteActivity.this);
                             builder.setTitle("Alerte de proximité");
                             builder.setMessage("Vous êtes à moins de 200m de votre prochain client.");
+                            builder.setPositiveButton("OK", null);
                             android.app.AlertDialog dialog = builder.create();
                             dialog.show();
                         }
@@ -427,13 +432,14 @@ public class RouteActivity extends AppCompatActivity {
                         }
                     }
                 } catch (Exception e) {
-                    Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la récupération des contacts à proximité.");
+                    Utils.displayToast(RouteActivity.this, "Une erreur s'est produite lors de la récupération des contacts à proximité.");
                 }
 
-                if (name != "") {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getBaseContext());
+                if (!name.isEmpty()) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RouteActivity.this);
                     builder.setTitle("Alerte de proximité");
-                    builder.setMessage("Vous êtes à moins de 1km des/du propect(s) suivant : " + name);
+                    builder.setMessage("Vous êtes à moins de 1km des/du prospect(s) suivant : " + name);
+                    builder.setPositiveButton("OK", null);
                     android.app.AlertDialog dialog = builder.create();
                     dialog.show();
                 }
@@ -441,10 +447,11 @@ public class RouteActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Utils.displayToast(getBaseContext(), errorMessage);
+                Utils.displayToast(RouteActivity.this, errorMessage);
             }
         });
     }
+
 
     /**
      * Pop up de confirmation de fin de tournée
