@@ -1,6 +1,7 @@
 package fr.iutrodez.salespathapp.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -129,8 +130,8 @@ public class ItineraryData {
                                     String idClient = stepObject.optString("idClient", "");
                                     String clientName = stepObject.optString("clientName", "Client inconnu");
                                     String clientAddress = stepObject.optString("clientAddress", "Client inconnu");
-                                    double clientLatitude = stepObject.optDouble("clientLatitude", 0);
-                                    double clientLongitude = stepObject.optDouble("clientLongitude", 0);
+                                    double clientLongitude = stepObject.optDouble("clientLatitude", 0);
+                                    double clientLatitude = stepObject.optDouble("clientLongitude", 0);
                                     String company = stepObject.optString("companyName");
                                     boolean isClient = stepObject.optBoolean("isClient");
 

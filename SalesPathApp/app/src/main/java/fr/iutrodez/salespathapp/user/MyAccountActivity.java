@@ -147,8 +147,8 @@ public class MyAccountActivity extends BaseActivity {
         }
 
         // En cas de modif de mot de passe
-        if (oldPassword.isEmpty() || newPassword.isEmpty()
-            || !CheckInput.text(newPassword, 8, 50)) {
+        if (!oldPassword.isEmpty() && !newPassword.isEmpty()
+            && !CheckInput.text(newPassword, 8, 50)) {
             Utils.displayToast(getBaseContext(), getString(R.string.error_passwordLenght));
             return;
         }
@@ -167,7 +167,7 @@ public class MyAccountActivity extends BaseActivity {
             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
 
-        queue.add(requestUpdate(this.URL + "update/" + getAccountId(),
+        queue.add(requestUpdate(this.URL + getAccountId(),
                                 jsonBody));
     }
 

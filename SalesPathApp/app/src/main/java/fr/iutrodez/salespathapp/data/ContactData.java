@@ -96,22 +96,24 @@ public class ContactData {
      * @param listener la fonction qui va se déclancher au retour des données
      */
     public static void getProximityClients(Context context, String apiKey, String id, GeoPoint localisation, OnContactsLoadedListener listener) {
-        String url = Config.API_URL + "proximity?latitude=" + localisation.getLatitude() + "&longitude=" + localisation.getLongitude() + "&id=" + id;
+        String url = Config.API_URL + "client/proximity?latitude=" + localisation.getLatitude() + "&longitude=" + localisation.getLongitude() + "&id=" + id;
 
         // Création de la requête réseau
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        ArrayList<JSONObject> contacts = new ArrayList<>();
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-                                contacts.add(response.getJSONObject(i));
+                        if (response.length() > 0) {
+                            ArrayList<JSONObject> contacts = new ArrayList<>();
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    contacts.add(response.getJSONObject(i));
+                                }
+                                // Notifier que les contacts sont chargés
+                                listener.onContactsLoaded(contacts);
+                            } catch (JSONException e) {
+                                listener.onError("Une erreur s'est produite lors de la lecture des données.");
                             }
-                            // Notifier que les contacts sont chargés
-                            listener.onContactsLoaded(contacts);
-                        } catch (JSONException e) {
-                            listener.onError("Une erreur s'est produite lors de la lecture des données.");
                         }
                     }
                 },
