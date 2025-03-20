@@ -409,7 +409,6 @@ public class RouteData {
         } else {
             errorMessage = "Une erreur réseau est survenue.";
         }
-        Log.e("Erreur", errorMessage);
 
         if (listener instanceof OnRouteDetailsLoadedListener) {
             ((OnRouteDetailsLoadedListener) listener).onError(errorMessage);

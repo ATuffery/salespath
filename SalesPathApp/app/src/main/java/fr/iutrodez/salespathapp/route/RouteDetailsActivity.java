@@ -120,7 +120,6 @@ public class RouteDetailsActivity extends BaseActivity {
         ArrayList<GeoPoint> points = this.route.getLocalisation();
 
         if (points == null || points.size() < 2) {
-            Log.e("MapDebug", "Pas assez de points pour tracer la route.");
             return;
         }
 

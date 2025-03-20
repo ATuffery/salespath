@@ -35,7 +35,6 @@ public class RouteSaver {
     public static Route loadRoute(Context context, String accountId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String routeJson = prefs.getString(ROUTE_KEY + "#" + accountId, null);
-        Log.d("RouteSaver", "Route saved: " + routeJson);
         if (routeJson == null) {
             return null;
         }

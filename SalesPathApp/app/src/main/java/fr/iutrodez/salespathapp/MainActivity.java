@@ -65,16 +65,10 @@ public class MainActivity extends BaseActivity {
 
         Route backup = RouteSaver.loadRoute(this, getAccountId());
         if (backup != null) {
-            Log.d("MainActivity", "Saved route accountId: " + backup.getAccountId() + ", Current accountId: " + getAccountId());
             if (backup.getAccountId().equals(getAccountId())) {
                 showResumePopup(backup);
-            } else {
-                Log.d("MainActivity", "Account mismatch.");
             }
-        } else {
-            Log.d("MainActivity", "No route found.");
         }
-
     }
 
     private void showResumePopup(Route savedRoute) {

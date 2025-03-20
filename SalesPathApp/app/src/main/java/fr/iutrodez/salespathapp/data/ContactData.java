@@ -63,7 +63,6 @@ public class ContactData {
                         String errorMessage;
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
-                            Log.e("CODE", statusCode + "");
                             if (statusCode == 404) {
                                 errorMessage = context.getString(R.string.error_find_account);
                             } else {
@@ -72,7 +71,6 @@ public class ContactData {
                         } else {
                             errorMessage = "Une erreur réseau est survenue.";
                         }
-                        Log.e("Erreur", errorMessage);
                         listener.onError(errorMessage);
                     }
                 }) {
@@ -124,7 +122,6 @@ public class ContactData {
                         String errorMessage;
                         if (error.networkResponse != null) {
                             int statusCode = error.networkResponse.statusCode;
-                            Log.e("CODE", statusCode + "");
                             if (statusCode == 404) {
                                 errorMessage = context.getString(R.string.error_find_account);
                             } else {
@@ -133,7 +130,6 @@ public class ContactData {
                         } else {
                             errorMessage = "Une erreur réseau est survenue.";
                         }
-                        Log.e("Erreur", errorMessage);
                         listener.onError(errorMessage);
                     }
                 }) {

@@ -126,8 +126,6 @@ public class CreateItineraryActivity extends BaseActivity {
             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
 
-        Log.e("DATA", jsonBody.toString());
-
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(requestCreation(this.urlAdd, jsonBody));
     }
@@ -152,7 +150,6 @@ public class CreateItineraryActivity extends BaseActivity {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
                 headers.put("X-API-KEY", getApiKey());
-                Log.e("APIKEY", getApiKey());
                 return headers;
             }
         };

@@ -221,7 +221,6 @@ public class ItineraryData {
         } else {
             errorMessage = "Une erreur réseau est survenue.";
         }
-        Log.e("Erreur", errorMessage);
 
         if (listener instanceof OnItinerariesLoadedListener) {
             ((OnItinerariesLoadedListener) listener).onError(errorMessage);

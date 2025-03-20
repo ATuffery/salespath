@@ -168,8 +168,6 @@ public class MyAccountActivity extends BaseActivity {
             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
 
-        Log.e("DATA", jsonBody.toString());
-
         queue.add(requestUpdate(this.URL + "update/" + getAccountId(),
                                 jsonBody));
     }
