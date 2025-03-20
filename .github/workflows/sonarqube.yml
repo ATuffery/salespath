@@ -44,6 +44,14 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}  # Clé unique basée sur le fichier pom.xml
           restore-keys: ${{ runner.os }}-m2  # Clé de secours si la clé principale ne correspond pas
 
+      - name: Update application.properties with MySQL credentials  # Mise à jour du fichier application.properties avec les identifiants MySQL
+        run: |
+          sed -i "s/<db_username>/${{ secrets.MYSQL_USER }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s/<db_password>/${{ secrets.MYSQL_PASSWORD }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s|<db_url>|${{ secrets.MYSQL_URL }}|g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s|<mongo>|${{ secrets.MONGO }}|g" SalesPathAPI/src/main/resources/application.properties
+
       # Étape 5 : Compilation du projet et analyse du code avec SonarQube
       - name: Build and analyze
         env:
