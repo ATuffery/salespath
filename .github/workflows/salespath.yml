@@ -26,9 +26,13 @@ jobs:
         distribution: 'corretto'  # Utilisation de la distribution Amazon Corretto de Java
         cache: maven  # Mise en cache des dépendances Maven pour améliorer la performance
 
-    - name: Check Maven Tests  # Lancer seulement les tests pour voir les erreurs exactes
-      run: mvn test -B --file pom.xml
-      working-directory: SalesPathAPI
+    - name: Update application.properties with MySQL credentials  # Mise à jour du fichier application.properties avec les identifiants MySQL
+      run: |
+        sed -i "s/<db_username>/${{ secrets.MYSQL_USER }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<db_password>/${{ secrets.MYSQL_PASSWORD }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<db_url>|${{ secrets.MYSQL_URL }}|g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/g" SalesPathAPI/src/main/resources/application.properties
+        sed -i "s|<mongo>|${{ secrets.MONGO }}|g" SalesPathAPI/src/main/resources/application.properties
 
     - name: Build with Maven  # Exécution de la commande de build Maven
       run: mvn -B package --file pom.xml  # Lancer la commande Maven pour empaqueter le projet
