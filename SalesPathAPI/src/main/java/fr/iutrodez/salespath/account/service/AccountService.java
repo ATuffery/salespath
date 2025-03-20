@@ -77,8 +77,8 @@ public class AccountService {
             // On récupère les coordonnées de l'adresse
             double[] coord = Utils.GetCoordByAddress(salesPerson.getAddress());
 
-            salesPerson.setLatitude(coord[0]);
-            salesPerson.setLongitude(coord[1]);
+            salesPerson.setLatitude(coord[1]);
+            salesPerson.setLongitude(coord[0]);
 
             accountRepository.save(salesPerson);
         } catch (CoordinatesException e) {
