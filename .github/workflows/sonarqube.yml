@@ -47,5 +47,6 @@ jobs:
       # Étape 5 : Compilation du projet et analyse du code avec SonarQube
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Token d'authentification pour SonarQube (stocké dans les secrets GitHub)
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ATuffery_salespath
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Authentification pour SonarQube
+        run: mvn -B -f ./SalesPathAPI/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ATuffery_salespath
+
