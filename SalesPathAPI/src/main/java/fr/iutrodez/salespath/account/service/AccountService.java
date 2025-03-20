@@ -133,8 +133,8 @@ public class AccountService {
             // On récupère les coordonnées de l'adresse
             double[] coord = Utils.GetCoordByAddress(existing.getAddress());
 
-            existing.setLatitude(coord[0]);
-            existing.setLongitude(coord[1]);
+            existing.setLatitude(coord[1]);
+            existing.setLongitude(coord[0]);
         } catch (CoordinatesException e) {
             throw new RuntimeException("Error while getting coordinates : " + e.getMessage());
 
