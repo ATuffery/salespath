@@ -52,6 +52,11 @@ public class RouteData {
         void onError(String errorMessage);
     }
 
+    public interface OnRouteDeletedListener {
+        void onRouteDeleted();
+        void onError(String errorMessage);
+    }
+
 
     /**
      * Récupère le détails d'un parcours
@@ -190,6 +195,13 @@ public class RouteData {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * Requete permetant de mettre à jour un parcours
+     * @param context le contexte de l'activité
+     * @param apiKey l'api key
+     * @param route les infos sur le parcours
+     * @param listener évènement notifiant d'une erreur ou du success
+     */
     public static void updateRoute(Context context, String apiKey, Route route, OnRouteUpdatedListener listener) {
         String url = Config.API_URL + "route";
 
@@ -257,7 +269,13 @@ public class RouteData {
         requestQueue.add(jsonObjectRequest);
     }
 
-
+    /**
+     * Requete permetant recupérer la liste des tournée d'un compte
+     * @param baseContext le contexte de l'activité
+     * @param apiKey l'api key
+     * @param accountId le numéro de compte du commercial
+     * @param OnRouteListLoadedListener évènement notifiant d'une erreur ou du success
+     */
     public static void getRoutesForAccount(Context baseContext, String apiKey, String accountId, OnRouteListLoadedListener OnRouteListLoadedListener) {
         String url = Config.API_URL + "route/" + accountId;
 
@@ -265,7 +283,6 @@ public class RouteData {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("resp", response.toString());
                         ArrayList<Route> routes = new ArrayList<>();
 
                         try {
@@ -311,7 +328,6 @@ public class RouteData {
                                 routes.add(route);
                             }
                         } catch (Exception e) {
-                            Log.e("JSON", e.getMessage());
                             OnRouteListLoadedListener.onError("Erreur lors de la création du JSON : " + e.getMessage());
                             return;
                         }
@@ -338,6 +354,44 @@ public class RouteData {
         // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(baseContext);
         requestQueue.add(jsonArrayRequest);
+    }
+
+
+    /**
+     * Supprime une tournée à partir de son ID.
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param routeId L'ID de la tournée à supprimer
+     * @param listener la fonction qui va se déclencher au retour des données
+     */
+    public static void deleteRoute(Context context, String apiKey, String routeId, OnRouteDeletedListener listener) {
+        String url = Config.API_URL + "route/" + routeId;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Utils.displayToast(context, "Tournée supprimée avec succès !");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        handleError(context, error, listener);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajoute la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonObjectRequest);
     }
 
 
