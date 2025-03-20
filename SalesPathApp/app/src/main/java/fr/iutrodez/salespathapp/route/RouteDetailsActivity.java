@@ -152,6 +152,8 @@ public class RouteDetailsActivity extends BaseActivity {
 
         builder.setPositiveButton("Oui, supprimer", (dialog, which) -> {
             deleteRoute();
+            Intent intent = new Intent(getBaseContext(), RouteListActivity.class);
+            startActivity(intent);
         });
 
         builder.setNegativeButton("Non, conserver", (dialog, which) -> {

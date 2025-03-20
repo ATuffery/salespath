@@ -90,8 +90,8 @@ public class RouteData {
                                     clientName += " " + clientObject.optString("lastName", "Client inconnu");
                                     String clientAddress = clientObject.optString("address", "Client inconnu");
                                     JSONArray coord = clientObject.getJSONArray("coordonates");
-                                    double clientLatitude = coord.getDouble(0);
-                                    double clientLongitude = coord.getDouble(1);
+                                    double clientLatitude = coord.getDouble(1);
+                                    double clientLongitude = coord.getDouble(0);
                                     String company = clientObject.optString("enterpriseName");
                                     boolean isClient = clientObject.optBoolean("client");
                                     ContactStatus status = ContactStatus.valueOf(stepObject.optString("status"));
@@ -309,8 +309,8 @@ public class RouteData {
                                         String clientAddress = clientObject.optString("address", "Client inconnu");
 
                                         JSONArray coord = clientObject.getJSONArray("coordonates");
-                                        double clientLatitude = coord.getDouble(0);
-                                        double clientLongitude = coord.getDouble(1);
+                                        double clientLatitude = coord.getDouble(1);
+                                        double clientLongitude = coord.getDouble(0);
 
                                         String company = clientObject.optString("enterpriseName");
                                         boolean isClient = clientObject.optBoolean("client");
