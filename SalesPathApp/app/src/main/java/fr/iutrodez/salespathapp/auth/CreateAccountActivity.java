@@ -1,6 +1,7 @@
 package fr.iutrodez.salespathapp.auth;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_create_account);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.lastNameInput = findViewById(R.id.lastName);
         this.firstNameInput = findViewById(R.id.firstName);
@@ -51,14 +53,25 @@ public class CreateAccountActivity extends AppCompatActivity {
         this.msgError = findViewById(R.id.msgError);
     }
 
+    /**
+     * Retourne à la vue de connexion suite au clic d'un bouton
+     * @param button
+     */
     public void goToLogin(View button) {
         goToLogin();
     }
 
+    /**
+     * Retourne à la vue de connexion
+     */
     public void goToLogin() {
         finish();
     }
 
+    /**
+     * Créer le compte à partir des données saisie
+     * @param button Le bouton de création
+     */
     public void createAccount(View button) {
         String lastName = lastNameInput.getText().toString().trim();
         String firstName = firstNameInput.getText().toString().trim();

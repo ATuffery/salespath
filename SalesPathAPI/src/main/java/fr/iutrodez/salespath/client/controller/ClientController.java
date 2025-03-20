@@ -4,6 +4,7 @@ import fr.iutrodez.salespath.client.service.ClientService;
 import fr.iutrodez.salespath.client.model.Client;
 import fr.iutrodez.salespath.itinerary.service.ItineraryClientService;
 import fr.iutrodez.salespath.itinerarystep.service.ItineraryStepService;
+import fr.iutrodez.salespath.route.dto.Coordinates;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -234,6 +235,41 @@ public class ClientController {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Modification non effectué : " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Récupère liste client et prospects a proximité
+     * @param coordinates list de coordonner de client
+     * @return la liste des clients
+     */
+    @Operation(summary = "Récupérer les clients et prospects à proximité",
+            description = "Renvoie une liste de clients et prospects situés respectivement à moins de 200m et 1km des coordonnées fournies.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Liste des clients et prospects récupérée avec succès",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))),
+            @ApiResponse(responseCode = "400", description = "Requête invalide (coordonnées incorrectes ou manquantes)",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                 {
+                                     "error": "Invalid request: missing or incorrect coordinates"
+                                 }
+                             """))),
+            @ApiResponse(responseCode = "500", description = "Erreur serveur ou base de données",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                {
+                                    "error": "Erreur serveur ou base de données : ..."
+                                }
+                             """)))
+    })
+    @GetMapping(value = "/proximity")
+    public ResponseEntity<?> searchProximity(@RequestParam double latitude, @RequestParam double longitude, @RequestParam Long id) {
+        try {
+            return ResponseEntity.status(200).body(clientService.getClientProximity(latitude, longitude, id));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de l'alerte de proximite :"
+                    + e.getMessage()));
         }
     }
 }

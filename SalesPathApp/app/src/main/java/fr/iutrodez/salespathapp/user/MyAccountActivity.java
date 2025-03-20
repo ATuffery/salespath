@@ -1,7 +1,6 @@
 package fr.iutrodez.salespathapp.user;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -128,7 +127,7 @@ public class MyAccountActivity extends BaseActivity {
 
     /**
      * Permet de mettre à jour les informations du compte courant
-     * @param button
+     * @param button bouton cliqué
      */
     public void updateAccount(View button) {
         String lastName = Utils.inputValueFormatted(lastNameInput);
@@ -167,8 +166,6 @@ public class MyAccountActivity extends BaseActivity {
         } catch (JSONException e) {
             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
-
-        Log.e("DATA", jsonBody.toString());
 
         queue.add(requestUpdate(this.URL + "update/" + getAccountId(),
                                 jsonBody));

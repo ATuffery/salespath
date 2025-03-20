@@ -31,7 +31,7 @@ public class ClientService {
             double[] coord = Utils.GetCoordByAddress(client.getAddress());
 
             if (coord[0] != 0) {
-                client.setCoordonates(new Double[]{coord[0], coord[1]});
+                client.setCoordonates(new Double[]{coord[1], coord[0]});
             }
 
             clientRepository.save(client);
@@ -67,5 +67,29 @@ public class ClientService {
     public Client getClientById(String id) {
         return clientRepository.findById(id)
                                .orElseThrow(() -> new NoSuchElementException("Client non trouvé avec l'ID : " + id));
+    }
+
+
+    /**
+     * Récupère client et prospects a une distance inférieur à 200m et 1km
+     * @param lat latitude du user
+     * @param lon longitude du user
+     * @return la liste client et prospects
+     */
+    public List<Client> getClientProximity(double lat, double lon, Long id) {
+        try {
+            // Récupérer les clients et prospects séparément
+            List<Client> clientProximity = clientRepository.findClientsWithin200m(lon, lat, id);
+            List<Client> prospectProximity = clientRepository.findProspectsWithin1Km(lon, lat, id);
+
+            // Fusionner les deux listes sans doublon
+            Set<Client> proximitySet = new HashSet<>(clientProximity);
+            proximitySet.addAll(prospectProximity);
+
+            return new ArrayList<>(proximitySet);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la récupération des clients : " + e.getMessage());
+        }
+
     }
 }

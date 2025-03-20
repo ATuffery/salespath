@@ -1,7 +1,6 @@
 package fr.iutrodez.salespathapp.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -221,7 +220,6 @@ public class ItineraryData {
         } else {
             errorMessage = "Une erreur réseau est survenue.";
         }
-        Log.e("Erreur", errorMessage);
 
         if (listener instanceof OnItinerariesLoadedListener) {
             ((OnItinerariesLoadedListener) listener).onError(errorMessage);

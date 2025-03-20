@@ -33,6 +33,7 @@ public class CardWithTwoLinesAdapteur extends RecyclerView.Adapter<CardWithTwoLi
             cardBtn = itemView.findViewById(R.id.cardBtn);
         }
     }
+
     @NonNull
     @Override
     public ItineraryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

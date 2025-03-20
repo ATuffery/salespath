@@ -1,9 +1,10 @@
 package fr.iutrodez.salespathapp.route;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -118,7 +119,6 @@ public class RouteDetailsActivity extends BaseActivity {
         ArrayList<GeoPoint> points = this.route.getLocalisation();
 
         if (points == null || points.size() < 2) {
-            Log.e("MapDebug", "Pas assez de points pour tracer la route.");
             return;
         }
 
@@ -139,6 +139,43 @@ public class RouteDetailsActivity extends BaseActivity {
         // Rafraîchir la carte
         map.postInvalidate();
 
+    }
+
+    /**
+     * Pop up de confirmation de suppression d'une tournée
+     * @param btn bouton cliqué
+     */
+    public void confirmDeleteRoute(View btn) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Suppression définitive");
+        builder.setMessage("Etes-vous sur de vouloir supprimer cette tournée définitivement ?");
+
+        builder.setPositiveButton("Oui, supprimer", (dialog, which) -> {
+            deleteRoute();
+            Intent intent = new Intent(getBaseContext(), RouteListActivity.class);
+            startActivity(intent);
+        });
+
+        builder.setNegativeButton("Non, conserver", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteRoute() {
+        RouteData.deleteRoute(getBaseContext(), getApiKey(), routeId, new RouteData.OnRouteDeletedListener() {
+            @Override
+            public void onRouteDeleted() {
+                Intent intent = new Intent(getBaseContext(), RouteListActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
     }
 
 }

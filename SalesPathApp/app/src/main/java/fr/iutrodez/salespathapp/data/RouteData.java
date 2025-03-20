@@ -1,7 +1,6 @@
 package fr.iutrodez.salespathapp.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -52,6 +51,11 @@ public class RouteData {
         void onError(String errorMessage);
     }
 
+    public interface OnRouteDeletedListener {
+        void onRouteDeleted();
+        void onError(String errorMessage);
+    }
+
 
     /**
      * Récupère le détails d'un parcours
@@ -86,8 +90,8 @@ public class RouteData {
                                     clientName += " " + clientObject.optString("lastName", "Client inconnu");
                                     String clientAddress = clientObject.optString("address", "Client inconnu");
                                     JSONArray coord = clientObject.getJSONArray("coordonates");
-                                    double clientLatitude = coord.getDouble(0);
-                                    double clientLongitude = coord.getDouble(1);
+                                    double clientLatitude = coord.getDouble(1);
+                                    double clientLongitude = coord.getDouble(0);
                                     String company = clientObject.optString("enterpriseName");
                                     boolean isClient = clientObject.optBoolean("client");
                                     ContactStatus status = ContactStatus.valueOf(stepObject.optString("status"));
@@ -107,7 +111,6 @@ public class RouteData {
                                     JSONObject obj = (JSONObject) loc.get(y);
                                     double clientLatitude = obj.getDouble("latitude");
                                     double clientLongitude = obj.getDouble("longitude");
-                                    Log.e("LOC", clientLatitude + ";" + clientLongitude);
                                     route.addLocation(new GeoPoint(clientLatitude, clientLongitude));
                                 }
                             }
@@ -134,7 +137,7 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
@@ -186,11 +189,18 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * Requete permetant de mettre à jour un parcours
+     * @param context le contexte de l'activité
+     * @param apiKey l'api key
+     * @param route les infos sur le parcours
+     * @param listener évènement notifiant d'une erreur ou du success
+     */
     public static void updateRoute(Context context, String apiKey, Route route, OnRouteUpdatedListener listener) {
         String url = Config.API_URL + "route";
 
@@ -253,12 +263,18 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
 
-
+    /**
+     * Requete permetant recupérer la liste des tournée d'un compte
+     * @param baseContext le contexte de l'activité
+     * @param apiKey l'api key
+     * @param accountId le numéro de compte du commercial
+     * @param OnRouteListLoadedListener évènement notifiant d'une erreur ou du success
+     */
     public static void getRoutesForAccount(Context baseContext, String apiKey, String accountId, OnRouteListLoadedListener OnRouteListLoadedListener) {
         String url = Config.API_URL + "route/" + accountId;
 
@@ -266,7 +282,6 @@ public class RouteData {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("resp", response.toString());
                         ArrayList<Route> routes = new ArrayList<>();
 
                         try {
@@ -294,8 +309,8 @@ public class RouteData {
                                         String clientAddress = clientObject.optString("address", "Client inconnu");
 
                                         JSONArray coord = clientObject.getJSONArray("coordonates");
-                                        double clientLatitude = coord.getDouble(0);
-                                        double clientLongitude = coord.getDouble(1);
+                                        double clientLatitude = coord.getDouble(1);
+                                        double clientLongitude = coord.getDouble(0);
 
                                         String company = clientObject.optString("enterpriseName");
                                         boolean isClient = clientObject.optBoolean("client");
@@ -312,7 +327,6 @@ public class RouteData {
                                 routes.add(route);
                             }
                         } catch (Exception e) {
-                            Log.e("JSON", e.getMessage());
                             OnRouteListLoadedListener.onError("Erreur lors de la création du JSON : " + e.getMessage());
                             return;
                         }
@@ -336,9 +350,47 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(baseContext);
         requestQueue.add(jsonArrayRequest);
+    }
+
+
+    /**
+     * Supprime une tournée à partir de son ID.
+     * @param context le contexte de l'activité
+     * @param apiKey l'API Key
+     * @param routeId L'ID de la tournée à supprimer
+     * @param listener la fonction qui va se déclencher au retour des données
+     */
+    public static void deleteRoute(Context context, String apiKey, String routeId, OnRouteDeletedListener listener) {
+        String url = Config.API_URL + "route/" + routeId;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Utils.displayToast(context, "Tournée supprimée avec succès !");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        handleError(context, error, listener);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-API-KEY", apiKey);
+                return headers;
+            }
+        };
+
+        // Ajoute la requête à la file d'attente Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonObjectRequest);
     }
 
 
@@ -356,7 +408,6 @@ public class RouteData {
         } else {
             errorMessage = "Une erreur réseau est survenue.";
         }
-        Log.e("Erreur", errorMessage);
 
         if (listener instanceof OnRouteDetailsLoadedListener) {
             ((OnRouteDetailsLoadedListener) listener).onError(errorMessage);

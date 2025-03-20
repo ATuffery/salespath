@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -65,16 +64,10 @@ public class MainActivity extends BaseActivity {
 
         Route backup = RouteSaver.loadRoute(this, getAccountId());
         if (backup != null) {
-            Log.d("MainActivity", "Saved route accountId: " + backup.getAccountId() + ", Current accountId: " + getAccountId());
             if (backup.getAccountId().equals(getAccountId())) {
                 showResumePopup(backup);
-            } else {
-                Log.d("MainActivity", "Account mismatch.");
             }
-        } else {
-            Log.d("MainActivity", "No route found.");
         }
-
     }
 
     private void showResumePopup(Route savedRoute) {
@@ -158,6 +151,10 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Redirige vers la page d'ajout d'un itinéraire
+     * @param btn bouton cliqué
+     */
     public void gotToAddItinerary(View btn) {
         Intent intent = new Intent(this, CreateItineraryActivity.class);
         startActivity(intent);
@@ -170,8 +167,8 @@ public class MainActivity extends BaseActivity {
             try {
                 JSONObject contactJson = contactsJson.get(i);
                 JSONArray coordinates = contactJson.getJSONArray("coordonates");
-                double latitude = coordinates.getDouble(0);
-                double longitude = coordinates.getDouble(1);
+                double latitude = coordinates.getDouble(1);
+                double longitude = coordinates.getDouble(0);
 
                 GeoPoint contactPoint = new GeoPoint(latitude, longitude);
 
@@ -196,15 +193,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        map.onResume(); // Nécessaire pour OSMDroid
+        map.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        map.onPause(); // Nécessaire pour OSMDroid
+        map.onPause();
     }
 
+    /**
+     * Bloque le retour en arrière vers la page de login
+     */
     @Override
     public void onBackPressed() {
         // Ne rien faire ici pour bloquer l'action du bouton de retour

@@ -49,6 +49,10 @@ public class Route {
         return localisation;
     }
 
+    /**
+     * Ajoute les coordonnées du commercial si il a bougé depuis ça dernière position enregistrée
+     * @param localisation le point de coordonnée correspondant à la position du commercial
+     */
     public void addLocation(GeoPoint localisation) {
         if (this.localisation.isEmpty() || !Utils.isSameLocation(this.localisation.get(this.localisation.size() - 1), localisation)) {
             this.localisation.add(localisation);
