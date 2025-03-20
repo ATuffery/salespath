@@ -422,7 +422,7 @@ public class RouteActivity extends AppCompatActivity {
                             dialog.show();
                         }
 
-                        if (!contact.getBoolean("isClient")) {
+                        if (!contact.getBoolean("client")) {
                             name += contact.getString("lastName") + " " + contact.getString("firstName") + "\n";
                         }
                     }
