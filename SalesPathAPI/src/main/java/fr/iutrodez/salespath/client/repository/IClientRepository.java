@@ -39,8 +39,8 @@ public interface IClientRepository extends MongoRepository<Client, String> {
      * @param longitude
      * @return la liste des prospects
      */
-    @Query("{ location: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 1000 }, isClient: false } }")
-    List<Client> findProspectsWithin1Km(double latitude, double longitude);
+    @Query("{ coordinates: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 1000 } }, isClient: false, idPerson : ?2 }")
+    List<Client> findProspectsWithin1Km(double longitude, double latitude, Long id);
 
     /**
      * Recherche si le client est a moins de 200m
@@ -48,6 +48,6 @@ public interface IClientRepository extends MongoRepository<Client, String> {
      * @param longitude
      * @return
      */
-    @Query("{ location: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 200 }, isClient: true } }")
-    List<Client> findClientsWithin200m(double latitude, double longitude);
+    @Query("{ coordinates: { $nearSphere: { $geometry: { type: 'Point', coordinates: [?0, ?1] }, $maxDistance: 200 } }, isClient: true, idPerson : ?2 }")
+    List<Client> findClientsWithin200m(double longitude, double latitude, Long id);
 }
