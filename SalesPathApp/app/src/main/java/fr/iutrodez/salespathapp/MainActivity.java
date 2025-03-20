@@ -158,6 +158,10 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Redirige vers la page d'ajout d'un itinéraire
+     * @param btn bouton cliqué
+     */
     public void gotToAddItinerary(View btn) {
         Intent intent = new Intent(this, CreateItineraryActivity.class);
         startActivity(intent);
@@ -196,15 +200,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        map.onResume(); // Nécessaire pour OSMDroid
+        map.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        map.onPause(); // Nécessaire pour OSMDroid
+        map.onPause();
     }
 
+    /**
+     * Bloque le retour en arrière vers la page de login
+     */
     @Override
     public void onBackPressed() {
         // Ne rien faire ici pour bloquer l'action du bouton de retour

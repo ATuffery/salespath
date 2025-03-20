@@ -108,6 +108,10 @@ public class DetailsItineraryActivity extends BaseActivity {
         mapController.setCenter(new GeoPoint(Config.MAP_DEFAULT_LATITUDE, Config.MAP_DEFAULT_LONGITUDE));
     }
 
+    /**
+     * Débute la tournée à partir de l'itinéraire courant
+     * @param btn clic sur le bouton "Commencer la tournée"
+     */
     public void startRoute(View btn) {
         RouteData.createRoute(this, getApiKey(), getAccountId(), itineraryId, new RouteData.OnRouteCreatedListener() {
             @Override

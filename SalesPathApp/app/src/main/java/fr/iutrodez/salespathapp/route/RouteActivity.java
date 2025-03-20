@@ -41,6 +41,7 @@ import java.util.List;
 
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.data.ContactData;
 import fr.iutrodez.salespathapp.entity.Contact;
 import fr.iutrodez.salespathapp.enums.ContactStatus;
 import fr.iutrodez.salespathapp.data.RouteData;
@@ -385,6 +386,7 @@ public class RouteActivity extends AppCompatActivity {
                                 GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
                                 route.addLocation(currentPosition);
                                 drawRouteOnMap();
+                                proximityAlert(currentPosition);
                                 RouteSaver.saveRoute(getBaseContext(), route);
                             }
                         }
@@ -395,6 +397,55 @@ public class RouteActivity extends AppCompatActivity {
         }, Config.LOCATION_UPDATE_INTERVAL);
     }
 
+    private void proximityAlert(GeoPoint loc) {
+        ContactData.getProximityClients(this, apiKey, accountId, loc, new ContactData.OnContactsLoadedListener() {
+            @Override
+            public void onContactsLoaded(ArrayList<JSONObject> contacts) {
+                if (contacts.isEmpty()) {
+                    return;
+                }
+
+                String name = "";
+                try {
+                    for (JSONObject contact:
+                            contacts) {
+
+                        if (contact.getString("id").equals(route.getCurrentContact().getId())) {
+                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getBaseContext());
+                            builder.setTitle("Alerte de proximité");
+                            builder.setMessage("Vous êtes à moins de 200m de votre prochain client.");
+                            android.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+
+                        if (!contact.getBoolean("isClient")) {
+                            name += contact.getString("lastName") + " " + contact.getString("firstName") + "\n";
+                        }
+                    }
+                } catch (Exception e) {
+                    Utils.displayToast(getBaseContext(), "Une erreur s'est produite lors de la récupération des contacts à proximité.");
+                }
+
+                if (name != "") {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getBaseContext());
+                    builder.setTitle("Alerte de proximité");
+                    builder.setMessage("Vous êtes à moins de 1km des/du propect(s) suivant : " + name);
+                    android.app.AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Utils.displayToast(getBaseContext(), errorMessage);
+            }
+        });
+    }
+
+    /**
+     * Pop up de confirmation de fin de tournée
+     * @param btn bouton cliqué
+     */
     public void confirmEndRoute(View btn) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle("Terminer la tournée");
@@ -412,6 +463,9 @@ public class RouteActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Bloque le retour arrière pour eviter de terminer sans le vouloir une tournée en cours
+     */
     @Override
     public void onBackPressed() {
         // Empêche le retour arrière

@@ -88,6 +88,10 @@ public class ItinerariesActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Redirige vers la page de création d'un itinéraire
+     * @param btn clic sur le bouton d'ajout
+     */
     public void goToCreateItinerary(View btn) {
         Intent intent = new Intent(this, CreateItineraryActivity.class);
         startActivity(intent);

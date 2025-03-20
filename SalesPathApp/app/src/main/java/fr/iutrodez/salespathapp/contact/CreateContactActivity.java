@@ -57,11 +57,18 @@ public class CreateContactActivity extends BaseActivity {
         findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Redigire vers la liste des contacts
+     */
     public void goToContacts() {
         Intent intent = new Intent(this, ContactsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Créer un contact à partir des données saisies par l'utilisateur
+     * @param button le bouton de création
+     */
     public void create(View button) {
         String companyName = companyNameInput.getText().toString().trim();
         String address = companyAddressInput.getText().toString().trim();

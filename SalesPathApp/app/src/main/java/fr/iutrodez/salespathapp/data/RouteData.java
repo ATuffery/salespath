@@ -107,7 +107,6 @@ public class RouteData {
                                     JSONObject obj = (JSONObject) loc.get(y);
                                     double clientLatitude = obj.getDouble("latitude");
                                     double clientLongitude = obj.getDouble("longitude");
-                                    Log.e("LOC", clientLatitude + ";" + clientLongitude);
                                     route.addLocation(new GeoPoint(clientLatitude, clientLongitude));
                                 }
                             }
@@ -134,7 +133,7 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
@@ -186,7 +185,7 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
@@ -253,7 +252,7 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }
@@ -336,7 +335,7 @@ public class RouteData {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
+        // Ajoute la requête à la file d'attente Volley
         RequestQueue requestQueue = Volley.newRequestQueue(baseContext);
         requestQueue.add(jsonArrayRequest);
     }

@@ -43,18 +43,25 @@ public class LoginActivity extends AppCompatActivity {
         errorMsg = findViewById(R.id.error);
     }
 
-
+    /**
+     * Clic sur le bouton de connexion
+     * @param btn
+     */
     public void connect(View btn) {
-        Thread req = new Thread(() -> {
-            checkLogin(btn);
-        });
-        req.start();
+        checkLogin(btn);
     }
 
+    /**
+     * Affiche un message d'erreur
+     */
     public void displayServerError() {
         this.errorMsg.setText(R.string.error_server);
     }
 
+    /**
+     * Teste la connexion via l'API
+     * @param button
+     */
     public void checkLogin(View button) {
         String login = loginEntry.getText().toString();
         String password = passwordEntry.getText().toString();
@@ -114,11 +121,18 @@ public class LoginActivity extends AppCompatActivity {
         return jsonObjectRequest;
     }
 
+    /**
+     * Redirection vers la page d'acceuil
+     */
     public void goToHomePage() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Clic sur le bouton de création d'un compte
+     * @param button bouton de création d'un compte
+     */
     public void goToCreateAccount(View button) {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);

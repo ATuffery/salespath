@@ -77,6 +77,10 @@ public class ContactsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Redirection vers la page de création d'un contact
+     * @param btn bouton cliqué
+     */
     public void goToCreateContact(View btn) {
         Intent intent = new Intent(this, CreateContactActivity.class);
         startActivity(intent);

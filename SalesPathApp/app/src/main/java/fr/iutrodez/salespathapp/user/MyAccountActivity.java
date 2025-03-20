@@ -128,7 +128,7 @@ public class MyAccountActivity extends BaseActivity {
 
     /**
      * Permet de mettre à jour les informations du compte courant
-     * @param button
+     * @param button bouton cliqué
      */
     public void updateAccount(View button) {
         String lastName = Utils.inputValueFormatted(lastNameInput);
