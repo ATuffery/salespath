@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -92,7 +91,6 @@ public class DetailsItineraryActivity extends BaseActivity {
         Drawable markerIcon = ContextCompat.getDrawable(this, R.drawable.marker);
 
         for (Contact contact : itinerary.getSteps()) {
-            Log.e("LC", contact.getLatitude() + " " + contact.getLongitude());
             GeoPoint point = new GeoPoint(contact.getLatitude(), contact.getLongitude());
             Marker marker = new Marker(map);
             marker.setPosition(point);

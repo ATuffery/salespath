@@ -1,7 +1,6 @@
 package fr.iutrodez.salespathapp.user;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -167,8 +166,6 @@ public class MyAccountActivity extends BaseActivity {
         } catch (JSONException e) {
             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
         }
-
-        Log.e("JSON", String.valueOf(jsonBody));
 
         queue.add(requestUpdate(this.URL + getAccountId(),
                                 jsonBody));
