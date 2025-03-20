@@ -96,7 +96,7 @@ public class ContactData {
      * @param listener la fonction qui va se déclancher au retour des données
      */
     public static void getProximityClients(Context context, String apiKey, String id, GeoPoint localisation, OnContactsLoadedListener listener) {
-        String url = Config.API_URL + "client/" + id;
+        String url = Config.API_URL + "proximity?latitude=" + localisation.getLatitude() + "&longitude=" + localisation.getLongitude() + "&id=" + id;
 
         // Création de la requête réseau
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
