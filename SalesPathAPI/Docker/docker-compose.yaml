@@ -7,8 +7,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - MONGO=mongodb://root:salespath2025@51.44.24.12:27017/salespath?retryWrites=true&w=majority
-      - MYSQL_URL=jdbc:mysql://51.44.24.12:3306/salespath?useSSL=false
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=salespath
-      - JOPENCAGE_API_KEY=0b425231f4af4fd3a2bf06d886f944fa
+      - MONGO=
+      - MYSQL_URL=
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=
+      - JOPENCAGE_API_KEY=

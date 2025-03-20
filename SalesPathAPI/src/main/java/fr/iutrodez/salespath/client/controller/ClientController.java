@@ -264,11 +264,11 @@ public class ClientController {
                              """)))
     })
     @GetMapping(value = "/proximity")
-    public ResponseEntity<?> searchProximity(@RequestBody double[] coordinates) {
+    public ResponseEntity<?> searchProximity(@RequestParam double latitude, @RequestParam double longitude, @RequestParam Long id) {
         try {
-            return ResponseEntity.status(200).body(clientService.getClientProximity(coordinates[0], coordinates[1]));
+            return ResponseEntity.status(200).body(clientService.getClientProximity(latitude, longitude, id));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de la mise à jour du parcours :"
+            return ResponseEntity.status(500).body(Map.of("error", "Erreur lors de l'alerte de proximite :"
                     + e.getMessage()));
         }
     }
