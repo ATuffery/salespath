@@ -100,7 +100,7 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key  # Sauvegarde la clé privée dans un fichier temporaire
         chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
         
-        ssh -i /tmp/private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
+        ssh -i private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
         
         rm -rf /ec2-user/home/Docker/*  # Supprimer tous les fichiers dans le répertoire Docker
         EOF
