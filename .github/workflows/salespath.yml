@@ -98,7 +98,7 @@ jobs:
     - name: Clean up remote docker folder  # Nettoyage du répertoire distant
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key  # Sauvegarde la clé privée dans un fichier temporaire
-        chmod 600 /tmp/private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+        chmod 600 private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
         
         ssh -i private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
         
