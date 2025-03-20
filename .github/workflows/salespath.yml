@@ -1,16 +1,13 @@
 name: Salespath API
 
-# on:
-#   push:
-#     branches: [ "*" ]  # Lors d'un push sur n'importe quelle branche
-#   pull_request:
-#     branches: [ "*" ]  # Lors d'une demande de pull sur n'importe quelle branche
 on:
   workflow_dispatch:
     inputs:
       branch:
         required: true
         default: "DEV"
+  push:
+     branches: [ "*" ]  # Lors d'un push sur n'importe quelle branche
 
 jobs:
   build:
@@ -42,7 +39,7 @@ jobs:
   deploy:
     needs: build  # Ce job dépend du job 'build', il sera exécuté après lui
     runs-on: ubuntu-latest  # Le job s'exécute sur la dernière version d'Ubuntu disponible
-    # if: github.ref == 'refs/heads/main'  # Ce job ne s'exécute que si la branche est 'main'
+    if: github.ref == 'refs/heads/main'  # Ce job ne s'exécute que si la branche est 'main'
 
     steps:
     - uses: actions/checkout@v4  # Action pour récupérer le code source du dépôt
@@ -97,6 +94,10 @@ jobs:
 
     - name: Clean up remote docker folder  # Nettoyage du répertoire distant
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
-          #rm -rf /ec2-user/home/*  # Supprimer tous les fichiers dans le répertoire Docker
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key  # Sauvegarde la clé privée dans un fichier temporaire
+        chmod 600 private_key  # Modifie les permissions du fichier pour qu'il soit uniquement lisible par l'utilisateur
+        
+        ssh -i private_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.REMOTE_HOST }} << 'EOF'
+        
+        rm -rf /ec2-user/home/Docker/*  # Supprimer tous les fichiers dans le répertoire Docker
         EOF
