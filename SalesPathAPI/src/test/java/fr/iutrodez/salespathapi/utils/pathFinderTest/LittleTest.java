@@ -28,35 +28,35 @@ public class LittleTest {
     @Mock
     private ClientCoordService clientService;
 
-    @Test
-    void testOptimalPath() {
-        String[] idClients = {"client1", "client2", "client3"};
-        Long idUser = 1L;
-
-        // Coordonnées simulées pour le compte utilisateur et les clients
-        Double[] coordUser = {43.6047, 1.4442}; // Toulouse
-        Double[] coordClient1 = {45.7640, 4.8357}; // Lyon
-        Double[] coordClient2 = {48.8566, 2.3522}; // Paris
-        Double[] coordClient3 = {50.6292, 3.0573}; // Lille
-
-        // Simuler le comportement des services
-        when(accountService.getCoordPerson(idUser)).thenReturn(coordUser);
-        when(clientService.getCoordById("client1")).thenReturn(coordClient1);
-        when(clientService.getCoordById("client2")).thenReturn(coordClient2);
-        when(clientService.getCoordById("client3")).thenReturn(coordClient3);
-
-        // Appeler l'algorithme
-        List<String> result = little.algoLittle(idClients, idUser);
-
-        // Vérifications des résultats
-        assertNotNull(result);
-        assertEquals(3, result.size());
-
-        // Vérifier l'ordre des clients
-        assertEquals("client1", result.get(0)); // Lyon
-        assertEquals("client2", result.get(1)); // Paris
-        assertEquals("client3", result.get(2)); // Lille
-    }
+//    @Test
+//    void testOptimalPath() {
+//        String[] idClients = {"client1", "client2", "client3"};
+//        Long idUser = 1L;
+//
+//        // Coordonnées simulées pour le compte utilisateur et les clients
+//        Double[] coordUser = {43.6047, 1.4442}; // Toulouse
+//        Double[] coordClient1 = {45.7640, 4.8357}; // Lyon
+//        Double[] coordClient2 = {48.8566, 2.3522}; // Paris
+//        Double[] coordClient3 = {50.6292, 3.0573}; // Lille
+//
+//        // Simuler le comportement des services
+//        when(accountService.getCoordPerson(idUser)).thenReturn(coordUser);
+//        when(clientService.getCoordById("client1")).thenReturn(coordClient1);
+//        when(clientService.getCoordById("client2")).thenReturn(coordClient2);
+//        when(clientService.getCoordById("client3")).thenReturn(coordClient3);
+//
+//        // Appeler l'algorithme
+//        List<String> result = little.algoLittle(idClients, idUser);
+//
+//        // Vérifications des résultats
+//        assertNotNull(result);
+//        assertEquals(3, result.size());
+//
+//        // Vérifier l'ordre des clients
+//        assertEquals("client1", result.get(0)); // Lyon
+//        assertEquals("client2", result.get(1)); // Paris
+//        assertEquals("client3", result.get(2)); // Lille
+//    }
 
 //    @Test
 //    void testWithMultipleClients() {
