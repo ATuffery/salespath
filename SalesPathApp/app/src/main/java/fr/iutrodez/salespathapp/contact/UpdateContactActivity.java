@@ -1,5 +1,7 @@
 package fr.iutrodez.salespathapp.contact;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.Map;
 import fr.iutrodez.salespathapp.BaseActivity;
 import fr.iutrodez.salespathapp.Config;
 import fr.iutrodez.salespathapp.R;
+import fr.iutrodez.salespathapp.route.RouteActivity;
 import fr.iutrodez.salespathapp.utils.CheckInput;
 import fr.iutrodez.salespathapp.utils.Utils;
 
@@ -49,6 +52,7 @@ public class UpdateContactActivity extends BaseActivity {
     private String contactId;
     private RadioButton client;
     private RadioButton prospect;
+    private String baseAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class UpdateContactActivity extends BaseActivity {
         this.intent = getIntent();
         this.contactId = intent.getStringExtra("contactId");
 
+        this.baseAddress = "";
         this.title = findViewById(R.id.title);
         this.delete = findViewById(R.id.delete_button);
         this.modify = findViewById(R.id.create_button);
@@ -78,7 +83,29 @@ public class UpdateContactActivity extends BaseActivity {
         modify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyContact();
+
+                String newAddress = companyAddressInput.getText().toString().trim();
+
+                if (!newAddress.equals(baseAddress)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UpdateContactActivity.this);
+                    builder.setTitle("Attention");
+                    builder.setMessage("En modifiant le l'adresse de l'entreprise vos itinéraires référencant cette dernière sera également supprimé.");
+
+                    builder.setPositiveButton("Confirmer", (dialog, which) -> {
+                        modifyContact();
+                    });
+
+                    builder.setNegativeButton("Annuler", (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                } else {
+                    modifyContact();
+                }
+
             }
         });
         delete.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +141,7 @@ public class UpdateContactActivity extends BaseActivity {
                             } else {
                                 typeInput.check(prospect.getId());
                             }
+                            baseAddress = response.getString("address");
 
                         } catch (JSONException e) {
                             Utils.displayToast(getBaseContext(), getString(R.string.error_server));
