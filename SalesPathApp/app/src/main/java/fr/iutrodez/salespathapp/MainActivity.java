@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -166,6 +167,7 @@ public class MainActivity extends BaseActivity {
         for (int i = 0; i < contactsJson.size(); i++) {
             try {
                 JSONObject contactJson = contactsJson.get(i);
+                Log.e("JSON", contactJson.toString());
                 JSONArray coordinates = contactJson.getJSONArray("coordonates");
                 double latitude = coordinates.getDouble(1);
                 double longitude = coordinates.getDouble(0);
@@ -179,7 +181,7 @@ public class MainActivity extends BaseActivity {
                 marker.setIcon(markerIcon);
                 map.getOverlays().add(marker);
             } catch (JSONException e) {
-                Utils.displayToast(getBaseContext(), getString(R.string.error_server));
+                Log.e("ERR", e.getMessage());
             }
         }
 
