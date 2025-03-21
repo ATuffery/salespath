@@ -63,7 +63,7 @@ public class ItineraryClientService {
                 double[] coord = Utils.GetCoordByAddress(updatedClient.getAddress());
 
                 if (coord[0] != 0) {
-                    updatedClient.setCoordonates(new Double[]{coord[0], coord[1]});
+                    updatedClient.setCoordonates(new Double[]{coord[1], coord[0]});
                 }
             } catch (CoordinatesException e) {
                 throw new RuntimeException("Erreur lors de la récupération des coordonnées : " + e.getMessage());
