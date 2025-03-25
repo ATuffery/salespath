@@ -1,35 +1,56 @@
 <resources>
+
+    <!-- Application -->
     <string name="app_name">SalesPath</string>
+
+    <!-- Authentification -->
     <string name="newAccount">Créez un compte</string>
-    <string name="error_server">"Une erreur inatendue s'est produite."</string>
-    <string name="error_login">"Vos informations de connexion semblent incorrectes. Veuillez réessayer."</string>
-    <string name="error_loginEmpty">"Veuillez saisir votre email et mot de passe pour vous connecter."</string>
-    <string name="error_badPassword">"Votre mot de passe actuel ne correspond pas à celui renseigné."</string>
-    <string name="error_passwordLenght">"Votre nouveau mot de passe doit contenir entre 8 et 50 caractères."</string>
-    <string name="error_emailAlreadyUsed">"Cette adresse email est déjà rattachée à un compte. Connectez-vous ou utilisez une autre email."</string>
     <string name="createAccount">Pas de compte ? Créez-en un.</string>
     <string name="login">Déjà un compte ? Connectez-vous.</string>
+
+    <!-- Erreurs générales -->
+    <string name="error_server">Une erreur inattendue s\'est produite.</string>
+    <string name="error_find_account">Le compte n\'existe pas.</string>
+    <string name="typing_error">Des champs sont invalides, veuillez vérifier votre saisie.</string>
+
+    <!-- Erreurs d'authentification -->
+    <string name="error_login">Vos informations de connexion semblent incorrectes. Veuillez réessayer.</string>
+    <string name="error_loginEmpty">Veuillez saisir votre email et mot de passe pour vous connecter.</string>
+    <string name="error_badPassword">Votre mot de passe actuel ne correspond pas à celui renseigné.</string>
+    <string name="error_passwordLenght">Votre nouveau mot de passe doit contenir entre 8 et 50 caractères.</string>
+    <string name="error_emailAlreadyUsed">Cette adresse email est déjà rattachée à un compte. Connectez-vous ou utilisez une autre email.</string>
+
+    <!-- Gestion du compte -->
+    <string name="modif_password">Modifier votre mot de passe</string>
+    <string name="success_account_update">Votre compte a bien été mis à jour.</string>
+
+    <!-- Navigation -->
     <string name="contacts">Mes contacts</string>
     <string name="itineraries">Mes itinéraires</string>
     <string name="tours">Mes tournées</string>
+
+    <!-- Contacts et entreprises -->
     <string name="add">Ajouter</string>
     <string name="addContact">Ajouter un contact</string>
     <string name="editContact">Modifier un contact</string>
     <string name="type">Type</string>
+    <string name="customer">Client</string>
+    <string name="prospect">Prospect</string>
+
+    <!-- Informations entreprise -->
     <string name="company">Entreprise</string>
-    <string name="companyName">"Nom de l'entreprise"</string>
-    <string name="companyAddress">"Adresse de l'entreprise"</string>
-    <string name="companyDescription">"Description de l'entreprise"</string>
-    <string name="lat">Latitude</string>
-    <string name="lon">Longitude</string>
+    <string name="companyName">Nom de l\'entreprise</string>
+    <string name="companyAddress">Adresse de l\'entreprise</string>
+    <string name="companyDescription">Description de l\'entreprise</string>
+
+    <!-- Informations contact -->
     <string name="contactFirstName">Prénom du contact</string>
     <string name="contactLastName">Nom du contact</string>
     <string name="contactPhoneNumber">Numéro de téléphone du contact</string>
-    <string name="customer">Client</string>
-    <string name="prospect">Prospect</string>
-    <string name="typing_error">Des champs sont invalides, veuillez vérifier votre saisie.</string>
-    <string name="success_account_update">Votre compte a bien été mis à jour.</string>
-    <string name="error_find_account">Le compte n\'existe pas.</string>
-    <string name="modif_password">Modifier votre mot de passe</string>
+
+    <!-- Itinéraire -->
     <string name="your_itinerary">Ordre de visite des clients/prospects</string>
+    <string name="lat">Latitude</string>
+    <string name="lon">Longitude</string>
+
 </resources>
