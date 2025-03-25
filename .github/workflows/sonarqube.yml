@@ -1,0 +1,60 @@
+# Nom du workflow
+name: SonarQube
+
+# Déclencheur du workflow : 
+on:
+  push: # Déclenché lorsqu'un push est effectué sur les branches spécifiées
+    branches:
+      - PROD  # Branche de production
+      - DEV   # Branche de développement
+  pull_request: # Déclenché lorsqu'une pull request est ouverte, synchronisée ou réouverte
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:  # Nom du job qui va être exécuté
+    name: Build and analyze  # Nom affiché pour ce job dans l'interface GitHub Actions
+    runs-on: ubuntu-latest  # Environnement utilisé pour exécuter le job (système Linux récent)
+
+    steps:
+      # Étape 1 : Récupération du code source du dépôt
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Désactivation du clonage superficiel pour une meilleure analyse par SonarQube
+
+      # Étape 2 : Configuration de l'environnement Java (JDK 17)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17  # Version du JDK à utiliser
+          distribution: 'corretto'  # Distribution utilisée (Amazon Corretto), d'autres options sont disponibles
+
+      # Étape 3 : Mise en cache des paquets utilisés par SonarQube
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache  # Répertoire contenant le cache de SonarQube
+          key: ${{ runner.os }}-sonar  # Clé unique pour identifier le cache
+          restore-keys: ${{ runner.os }}-sonar  # Clé de secours si la clé principale ne correspond pas
+
+      # Étape 4 : Mise en cache des dépendances Maven pour réduire le temps de build
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2  # Répertoire contenant les dépendances Maven téléchargées
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}  # Clé unique basée sur le fichier pom.xml
+          restore-keys: ${{ runner.os }}-m2  # Clé de secours si la clé principale ne correspond pas
+
+      - name: Update application.properties with MySQL credentials  # Mise à jour du fichier application.properties avec les identifiants MySQL
+        run: |
+          sed -i "s/<db_username>/${{ secrets.MYSQL_USER }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s/<db_password>/${{ secrets.MYSQL_PASSWORD }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s|<db_url>|${{ secrets.MYSQL_URL }}|g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s/<jopencage_api_key>/${{ secrets.JOPENCAGE_API_KEY }}/g" SalesPathAPI/src/main/resources/application.properties
+          sed -i "s|<mongo>|${{ secrets.MONGO }}|g" SalesPathAPI/src/main/resources/application.properties
+
+      # Étape 5 : Compilation du projet et analyse du code avec SonarQube
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Authentification pour SonarQube
+        run: mvn -B -f ./SalesPathAPI/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ATuffery_salespath -Dsonar.organization=atuffery
+
